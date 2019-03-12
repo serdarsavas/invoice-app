@@ -19,6 +19,31 @@ const userSchema = new Schema({
     type: String,
     required: true,
     trim: true
+  },
+  address: {
+    street: {
+      type: String,
+      trim: true
+    },
+    zip: {
+      type: Number,
+    },
+    city: {
+      type: String,
+      trim: true
+    }
+  },
+  registrationNumber: {
+    type: String,
+    trim: true
+  },
+  VATnumber: {
+    type: String,
+    trim: true
+  },
+  bankAccountNo: {
+    type: String,
+    trim: true
   }
 })
 
