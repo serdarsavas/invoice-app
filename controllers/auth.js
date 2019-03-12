@@ -32,7 +32,7 @@ exports.postLogin = async (req, res) => {
     })
   }
   try {
-    const user = await User.findOne({ email: email })
+    const user = await User.findOne({ email })
     if (!user) {
       return res.status(422).render('auth/login', {
         errorMessage: 'Felaktig epost eller lösenord.',

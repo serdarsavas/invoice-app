@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ny Faktura</title>
+</head>
+<body>
+  <h1>Ny Faktura</h1>
+  <form action="/new-invoice" method="post" novalidate>
+    <fieldset>
+      <legend>Mottagaruppgifter: </legend>
+      <div>
+        <label for="recipient">Mottagare</label>
+        <input type="text" name="recipient" id="recipient">
+      </div>
+      <div>
+        <label for="recipient-address">Address</label>
+        <input type="text" name="recipientAddress" id="recipient-address">
+      </div>
+      <div>
+        <button type="submit">Skicka</button>
+      </div>
+    </fieldset>
+  </form>
+</body>
+</html>

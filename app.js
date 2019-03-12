@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 
+const User = require('./models/user')
 const authRoutes = require('./routes/auth')
 const invoiceRoutes = require('./routes/invoice')
 const config = require('./config')
