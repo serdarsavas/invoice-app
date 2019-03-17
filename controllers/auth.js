@@ -82,15 +82,23 @@ exports.postSignup = async (req, res) => {
       errorMessage: errors.array()[0].msg
     })
   }
-  const username = req.body.username
-  const email = req.body.email
   const password = req.body.password
-
   try {
     const hashedPassword = await bcrypt.hash(password, 8)
     const user = new User({
-      username,
-      email,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      telephone: req.body.telephone,
+      position: req.body.position,
+      address: {
+        street: req.body.street,
+        zip: req.body.zip,
+        city: req.body.city
+      },
+      registrationNumber: req.body.registrationNumber,
+      vatNumber: req.body.vatNumber,
+      bankgiro: req.body.bankgiro,
       password: hashedPassword
     })
     await user.save()

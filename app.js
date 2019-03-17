@@ -11,17 +11,17 @@ const authRoutes = require('./routes/auth')
 const invoiceRoutes = require('./routes/invoice')
 const config = require('./config')
 
+const app = express()
+
 const store = new MongoDBStore({
   uri: config.dbUri,
   collection: 'sessions'
 })
 
-const app = express()
-
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(
   session({
@@ -31,8 +31,6 @@ app.use(
     store: store
   })
 )
-app.use(authRoutes)
-app.use(invoiceRoutes)
 
 app.use(async (req, res, next) => {
   if (!req.session.user) {
@@ -50,6 +48,9 @@ app.use(async (req, res, next) => {
   }
 })
 
+app.use(authRoutes)
+app.use(invoiceRoutes)
+
 mongoose
   .connect(config.dbUri, {
     useNewUrlParser: true
@@ -59,6 +60,4 @@ mongoose
       console.log('App is connected')
     })
   })
-  .catch(err => {
-    console.log(err)
-  })
+  .catch(e => console.log(e))

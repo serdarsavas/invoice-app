@@ -1,28 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Ny Faktura</title>
-</head>
-<body>
-  <h1>Ny Faktura</h1>
-  <form action="/new-invoice" method="post" novalidate>
-    <fieldset>
-      <legend>Mottagaruppgifter: </legend>
-      <div>
-        <label for="recipient">Mottagare</label>
-        <input type="text" name="recipient" id="recipient">
-      </div>
-      <div>
-        <label for="recipient-address">Address</label>
-        <input type="text" name="recipientAddress" id="recipient-address">
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Ny Faktura</title>
+  </head>
+  <body>
+    <h1>Ny Faktura</h1>
+    <form action="/new-invoice" method="post" novalidate>
+      <fieldset>
+        <legend>Mottagaruppgifter:</legend>
+        <div>
+          <label for="invoice-number">Fakturanummer</label>
+          <input type="number" name="invoiceNumber" id="invoice-number" />
+        </div>
+        <div>
+          <label for="assignment-number">Uppdragsnummer</label>
+          <input type="number" name="assignmentNumber" id="assignment-number" />
+        </div>
+        <div>
+          <label for="authority">Mottagare: </label>
+          <input type="text" name="authority" id="authority" />
+        </div>
+        <div>
+          <label for="ref-person">Referensperson: </label>
+          <input type="text" name="refPerson" id="ref-person" />
+        </div>
+        <div>
+          <label for="street">Gatuaddress:</label>
+          <input type="text" name="street" id="street" />
+        </div>
+        <div>
+          <label for="zip">Postkod:</label>
+          <input type="text" name="zip" id="zip" />
+        </div>
+        <div>
+          <label for="city">Postort:</label>
+          <input type="text" name="city" id="city" />
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Kostnadsuppgifter:</legend>
+        <h5>Rad 1</h5>
+        <div id="rows">
+          <div>
+            <label for="description">Beskrivning</label>
+            <input type="text" name="description[]" id="description" />
+          </div>
+          <div>
+            <label for="quantity">Antal: </label>
+            <input type="text" name="quantity[]" id="quantity" />
+          </div>
+          <div>
+            <label for="unit">Enhet:</label>
+            <input type="text" name="unit[]" id="unit" />
+          </div>
+          <div>
+            <label for="price">Pris:</label>
+            <input type="text" name="price[]" id="price" />
+          </div>
+        </div>
+        <input type="button" id="add-row" value="Ny rad">
+      </fieldset>
       <div>
         <button type="submit">Skicka</button>
       </div>
-    </fieldset>
-  </form>
-</body>
+    </form>
+    <script src="/js/main.js"></script>
+  </body>
 </html>

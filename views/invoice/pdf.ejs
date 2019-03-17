@@ -1,12 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-  <h1><%= address %></h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>PDF</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .wrapper {
+        width: 200mm;
+        height: 290mm;
+        font-family: Arial, Helvetica, sans-serif;
+        border: 1px solid black;
+        margin: 10px auto;
+      }
+
+      .flex {
+        margin: 0 auto;
+        width: 90%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+
+      .header {
+        border-bottom: 1.5px solid black;
+        padding-bottom: 20px;
+      }
+
+      .header-col1 {
+        width: 30%;
+      }
+      .header-col2 {
+        width: 35%;
+        margin-top: 10px;
+      }
+      .header-col3 {
+        width: 20%;
+        margin-top: 20px;
+      }
+
+      .author {
+        margin-top: 70px;
+        font-weight: bold;
+        font-size: 23px;
+      }
+
+      table {
+        width: 90%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        padding-bottom: 200px;
+      }
+
+      thead {
+        border-bottom: 2px solid black;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .invoice-footer {
+        margin-top: 200px;
+        border-top: 3px solid black;
+        justify-content: flex-end;
+      }
+      .invoice-footer .right {
+        padding: 0 20px;
+      }
+
+      footer {
+        border-top: 3px solid black;
+      }
+
+      .footer-col {
+        padding: 0 15px;
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      .italic {
+        font-style: italic;
+      }
+
+      .address-header {
+        font-weight: bold;
+        line-height: 0.6;
+        font-size: 15px;
+      }
+
+      .large-header {
+        font-size: 43px;
+      }
+
+      p {
+        line-height: 1.2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="flex header">
+        <div class="header-col1">
+          <h2 class="author"><%= user.firstName %> <%= user.lastName %></h2>
+          <div class="header-sub-col">
+            <h4><%= user.position %></h4>
+          </div>
+        </div>
+        <div class="header-col2">
+          <h1 class="large-header">Faktura</h1>
+          <p class="italic">Fakturanummer: <%= invoice.invoiceNumber %></p>
+          <div>
+            <h3 class="address-header">Fakturaddress:</h3>
+            <p>
+              <%= invoice.recipient.authority %><br />
+              <%= invoice.recipient.street %><br />
+              <%= invoice.recipient.zip %> <%= invoice.recipient.city %>
+            </p>
+          </div>
+        </div>
+        <div class="header-col3">
+          <p>
+            <span class="bold">Fakturadatum:</span><br />
+            <%= invoice.createdAt.toISOString().substring(0, 10) %>
+          </p>
+          <p>
+            <span class="bold">Uppdragsnummer:</span><br />
+            <%= invoice.assignmentNumber %>
+          </p>
+          <p>
+            <span class="italic">Vår referens:</span><br />
+            <%= user.firstName %> <%= user.lastName %>
+          </p>
+          <p>
+            <span class="italic">Er referens:</span><br />
+            <%= invoice.recipient.refPerson %>
+          </p>
+          <p>
+            <span class="italic">Betalningsvillkor:</span><br />30 dagar netto
+          </p>
+        </div>
+      </header>
+
+      <main>
+        <table>
+          <thead>
+            <tr>
+              <th>Beskrivning</th>
+              <th>Antal</th>
+              <th>Enhet</th>
+              <th>à pris</th>
+              <th>Belopp (SEK)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% invoice.rows.forEach(row => { %>
+            <tr>
+              <td><%= row.description %></td>
+              <td><%= row.quantity %></td>
+              <td><%= row.unit %></td>
+              <td><%= row.price %></td>
+              <td><%= row.amount %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+
+        <div class="flex invoice-footer">
+          <div class="left">
+            <p>Belopp före moms</p>
+            <p>Total moms</p>
+            <p class="bold">Att betala</p>
+          </div>
+          <div class="right">
+            <p><%= invoice.totalBeforeVAT %> SEK</p>
+            <p><%= invoice.VAT %> %</p>
+            <p class="bold"><%= invoice.totalAfterVAT %> kr</p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="flex footer">
+        <div class="footer-col">
+          <p>
+            Adress:<br />
+            <%= user.firstName %> <%= user.lastName %><br />
+            <%= user.address.street %><br />
+            <%= user.address.zip %> <%= user.address.city %>
+          </p>
+        </div>
+        <div class="footer-col">
+          <p>Telefonnummer:<br /><%= user.telephone %></p>
+          <p>Epost:<br /><%= user.email %></p>
+        </div>
+        <div class="footer-col">
+          <p>Bankgiro:<br /><%= user.bankgiro %></p>
+          <p>Godkänd för F-skatt</p>
+        </div>
+        <div class="footer-col">
+          <p>Organisationsnr:<br /><%= user.registrationNumber %></p>
+          <p>Momsregnr:<br /><%= user.vatNumber %></p>
+        </div>
+      </footer>
+    </div>
+  </body>
 </html>

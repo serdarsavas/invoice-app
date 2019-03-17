@@ -7,10 +7,15 @@ const invoiceSchema = new Schema(
     invoiceNumber: {
       type: Number,
       required: true,
-      trim: true
     },
+    assignmentNumber: Number,
     recipient: {
-      name: {
+      authority: {
+        type: String,
+        required: true,
+        trim: true
+      },
+      refPerson: {
         type: String,
         required: true,
         trim: true
@@ -60,11 +65,11 @@ const invoiceSchema = new Schema(
         }
       }
     ],
-    totalAmount: {
-      type: Number
-    },
+    totalBeforeVAT: Number,
+    VAT: Number,
+    totalAfterVAT: Number,
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'User'
     }

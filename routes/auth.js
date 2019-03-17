@@ -29,20 +29,6 @@ router.get('/signup', authController.getSignup)
 
 router.post('/signup',
   [
-    body('username')
-      .isAlphanumeric()
-      .withMessage('Användarnamnet får endast innehålla bokstäver och siffror')
-      .trim()
-      .custom(async username => {
-        try {
-          const userDocument = await User.findOne({ username })
-          if (userDocument) {
-            return Promise.reject('Användarnamnet existerar redan.')
-          }
-        } catch (e) {
-          console.log(e)
-        }
-      }),
     body('email')
       .isEmail()
       .withMessage('Ange en giltig epostadress.')

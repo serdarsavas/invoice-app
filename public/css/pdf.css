@@ -1,0 +1,107 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  width: 200mm;
+  height: 290mm;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid black;
+  margin: 0 auto;
+}
+
+.flex {
+  margin: 0 auto;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.header {
+  border-bottom: 1.5px solid black;
+  padding-bottom: 20px;
+}
+
+.header-col1 {
+  width: 30%;
+}
+.header-col2 {
+  width: 35%;
+  margin-top: 10px;
+}
+.header-col3 {
+  width: 20%;
+  margin-top: 20px;
+}
+
+.author {
+  margin-top: 70px;
+  font-weight: bold;
+  font-size: 23px;
+}
+
+table {
+  width: 90%;
+  margin: 0 auto;
+  /* table-layout: auto; */
+  border-collapse: collapse;
+  padding-bottom: 200px;
+}
+
+thead {
+  border-bottom: 2px solid black;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.invoice-footer {
+  margin-top: 200px;
+  border-top: 3px solid black;
+  justify-content: flex-end;
+}
+.invoice-footer .right {
+  padding: 0 20px;
+}
+
+footer {
+  border-top: 3px solid black;
+}
+
+
+.footer-col {
+  padding: 0 15px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.address-header {
+  font-weight: bold;
+  line-height: 0.6;
+  font-size: 15px;
+}
+
+.large-header {
+  font-size: 43px;
+}
+
+p {
+  line-height: 1.2;
+}
