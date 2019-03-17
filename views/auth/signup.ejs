@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="sv">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Registrering</title>
+<%- include('../includes/head.ejs') %>
+
   </head>
   <body>
-    <h1>Registrering</h1>
+    <%- include('../includes/navigation.ejs') %>
+
     <% if (errorMessage) { %>
       <div><%= errorMessage %></div>
     <% } %>
@@ -66,5 +62,4 @@
       </div>
       <button type="submit">Registrera dig</button>
     </form>
-  </body>
-</html>
+    <%- include('../includes/end.ejs') %>

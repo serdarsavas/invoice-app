@@ -22,7 +22,9 @@ app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(express.static(path.join(__dirname, 'public')))
+
 app.use(
   session({
     secret: config.sessionSecret,
@@ -31,6 +33,11 @@ app.use(
     store: store
   })
 )
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  next();
+});
 
 app.use(async (req, res, next) => {
   if (!req.session.user) {

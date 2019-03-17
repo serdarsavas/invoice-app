@@ -3,11 +3,16 @@ const User = require('../models/user')
 const { validationResult } = require('express-validator/check')
 
 exports.getIndex = (req, res) => {
-  res.render('index')
+  res.render('index', {
+    path: '/',
+    pageTitle: 'Välkommen'
+  })
 }
 
 exports.getLogin = (req, res) => {
   res.render('auth/login', {
+    path: '/login',
+    pageTitle: 'Logga in',
     errorMessage: null,
     inputData: {
       email: '',
@@ -24,6 +29,8 @@ exports.postLogin = async (req, res) => {
 
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/login', {
+      path: '/login',
+      pageTitle: 'Logga in',
       errorMessage: errors.array()[0].msg,
       inputData: {
         email,
@@ -35,6 +42,8 @@ exports.postLogin = async (req, res) => {
     const user = await User.findOne({ email })
     if (!user) {
       return res.status(422).render('auth/login', {
+        path: '/login',
+        pageTitle: 'Logga in',
         errorMessage: 'Felaktig epost eller lösenord.',
         inputData: {
           email,
@@ -45,6 +54,8 @@ exports.postLogin = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
       return res.status(422).render('auth/login', {
+        path: '/login',
+        pageTitle: 'Logga in',
         errorMessage: 'Felaktig epostadress eller lösenord',
         inputData: {
           email,
@@ -71,6 +82,8 @@ exports.postLogout = (req, res) => {
 
 exports.getSignup = (req, res) => {
   res.render('auth/signup', {
+    path: '/signup',
+    pageTitle: 'Registrering',
     errorMessage: null
   })
 }
@@ -79,6 +92,8 @@ exports.postSignup = async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Registrering',
       errorMessage: errors.array()[0].msg
     })
   }

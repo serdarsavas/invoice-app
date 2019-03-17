@@ -1,32 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Index</title>
+<%- include('../includes/head.ejs') %>
+
   </head>
   <body>
-    <nav>
-      <ul>
-        <li>
-          <a href="">Gamla Fakturor</a>
-        </li>
-        <li>
-          <a href="/new-invoice">Ny Faktura</a>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <form action="/logout" method="post">
-            <button type="submit">Logga ut</button>
-          </form>
-        </li>
-      </ul>
-    </nav>
+    <%- include('../includes/navigation.ejs') %>
+
     <main>
       <h1>Welcome!</h1>
     </main>
     <footer></footer>
-  </body>
-</html>
+    <%- include('../includes/end.ejs') %>
