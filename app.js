@@ -58,6 +58,7 @@ app.use(async (req, res, next) => {
 app.use(authRoutes)
 app.use(invoiceRoutes)
 
+
 mongoose
   .connect(config.dbUri, {
     useNewUrlParser: true

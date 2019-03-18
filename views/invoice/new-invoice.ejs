@@ -3,65 +3,188 @@
   </head>
   <%- include('../includes/navigation.ejs') %>
   <body>
+    <% if (errorMessage) { %>
+      <div><%= errorMessage %></div>
+    <% } %>
     <h1>Ny Faktura</h1>
+
+    <% if (recipients.length > 0) { %>
+    <p>Välj en tidigare mottagare för att fylla i mottagruppgifter</p>
+    <form action="/new-invoice/autofill" method="post">
+      <select name="recipient" id="recipient">
+        <% recipients.forEach(recipient => { %>
+          <option value="<%= recipient.authority %>"> 
+            <%= recipient.authority %>
+          </option>
+        <% }) %>
+      </select>
+      <button type="submit">Hämta uppgifter</button>
+    </form>
+    <% } %>
+
     <form action="/new-invoice" method="post" novalidate>
       <fieldset>
         <legend>Mottagaruppgifter:</legend>
         <div>
-          <label for="invoice-number">Fakturanummer</label>
-          <input type="number" name="invoiceNumber" id="invoice-number" />
-        </div>
-        <div>
-          <label for="assignment-number">Uppdragsnummer</label>
-          <input type="number" name="assignmentNumber" id="assignment-number" />
-        </div>
-        <div>
           <label for="authority">Mottagare: </label>
-          <input type="text" name="authority" id="authority" />
+          <input 
+            type="text" 
+            name="authority" 
+            id="authority"
+            <% if (input) { %>
+              value= "<%= input.authority %>"
+            <% } else { %>
+              value="<%= recipient ? recipient.authority : '' %>" />
+            <% } %>
         </div>
         <div>
           <label for="ref-person">Referensperson: </label>
-          <input type="text" name="refPerson" id="ref-person" />
+          <input 
+            type="text" 
+            name="refPerson" 
+            id="ref-person"
+            <% if (input) { %>
+              value= "<%= input.refPerson %>"
+            <% } else { %>
+              value="<%= recipient ? recipient.refPerson : '' %>" />
+            <% } %>
         </div>
         <div>
           <label for="street">Gatuaddress:</label>
-          <input type="text" name="street" id="street" />
+          <input 
+            type="text" 
+            name="street" 
+            id="street"
+            <% if (input) { %>
+              value= "<%= input.street %>"
+            <% } else { %>
+              value="<%= recipient ? recipient.street : '' %>" />
+            <% } %>
         </div>
         <div>
           <label for="zip">Postkod:</label>
-          <input type="text" name="zip" id="zip" />
+          <input 
+            type="text" 
+            name="zip" 
+            id="zip" 
+            <% if (input) { %>
+              value= "<%= input.zip %>"
+            <% } else { %>
+              value="<%= recipient ? recipient.zip : '' %>" />
+            <% } %>
         </div>
         <div>
           <label for="city">Postort:</label>
-          <input type="text" name="city" id="city" />
+          <input 
+            type="text" 
+            name="city" 
+            id="city"
+            <% if (input) { %>
+              value= "<%= input.city %>"
+            <% } else { %>
+              value="<%= recipient ? recipient.city : '' %>" />
+            <% } %>
         </div>
       </fieldset>
       <fieldset>
         <legend>Kostnadsuppgifter:</legend>
-        <h5>Rad 1</h5>
-        <div id="rows">
-          <div>
-            <label for="description">Beskrivning</label>
-            <input type="text" name="description[]" id="description" />
-          </div>
-          <div>
-            <label for="quantity">Antal: </label>
-            <input type="text" name="quantity[]" id="quantity" />
-          </div>
-          <div>
-            <label for="unit">Enhet:</label>
-            <input type="text" name="unit[]" id="unit" />
-          </div>
-          <div>
-            <label for="price">Pris:</label>
-            <input type="text" name="price[]" id="price" />
-          </div>
+        <div>
+          <label for="invoice-number">Fakturanummer</label>
+          <input 
+            type="number" 
+            name="invoiceNumber" 
+            id="invoice-number"
+            value="<%= input ? input.invoiceNumber : '' %>" />
         </div>
+        <div>
+          <label for="assignment-number">Uppdragsnummer</label>
+          <input 
+            type="number" 
+            name="assignmentNumber" 
+            id="assignment-number" 
+            value="<%= input ? input.assignmentNumber : '' %>" />
+        </div>
+        <h5>Rad 1</h5>
+        
+        <% if (numRows.length > 0) { %>
+          <% for (let i = 0; i < numRows.length; i++) { %>
+          <div id="rows">
+              <div>
+                <label for="description">Beskrivning</label>
+                <input 
+                  type="text" 
+                  name="description[]" 
+                  id="description"
+                  value="<%= input ? input.description[i] : '' %>" />
+              </div>
+              <div>
+                <label for="quantity">Antal: </label>
+                <input 
+                  type="number" 
+                  name="quantity[]" 
+                  id="quantity"
+                  value="<%= input ? input.quantity[i] : '' %>" />
+              </div>
+              <div>
+                <label for="unit">Enhet:</label>
+                <input 
+                  type="text" 
+                  name="unit[]" 
+                  id="unit"
+                  value="<%= input ? input.unit[i] : '' %>" />
+              </div>
+              <div>
+                <label for="price">Pris:</label>
+                <input 
+                  type="number" 
+                  name="price[]" 
+                  id="price"
+                  value="<%= input ? input.quantity[i] : '' %>" />
+              </div>
+            </div>
+          <% } %>
+        <% } else { %>
+          <div id="rows">
+            <div>
+              <label for="description">Beskrivning</label>
+              <input 
+                type="text" 
+                name="description[]" 
+                id="description"
+                value="<%= input ? input.description : '' %>" />
+            </div>
+            <div>
+              <label for="quantity">Antal: </label>
+              <input 
+                type="number" 
+                name="quantity[]" 
+                id="quantity"
+                value="<%= input ? input.quantity : '' %>" />
+            </div>
+            <div>
+              <label for="unit">Enhet:</label>
+              <input 
+                type="text" 
+                name="unit[]" 
+                id="unit"
+                value="<%= input ? input.unit : '' %>" />
+            </div>
+            <div>
+              <label for="price">Pris:</label>
+              <input 
+                type="number" 
+                name="price[]" 
+                id="price"
+                value="<%= input ? input.quantity : '' %>" />
+            </div>
+          </div>
+        <% } %>
         <input type="button" id="add-row" value="Ny rad">
       </fieldset>
       <div>
         <button type="submit">Skicka</button>
       </div>
     </form>
-    <script src="/js/main.js"></script>
+  
+    <script src="/js/new-invoice.js"></script>
     <%- include('../includes/end.ejs') %>

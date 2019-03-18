@@ -1,0 +1,42 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/invoices.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+            <main>
+                <% if (invoices.length > 0) { %>
+                    <div class="grid">
+                        <% invoices.forEach(invoice => { %>
+                            <article class="card invoice-item">
+                                <header class="card__header">
+                                    <h1 class="invoice__title">
+                                        <%= invoice.recipient.authority %>
+                                    </h1>
+                                    <p class="invoice__date">
+                                        <%= invoice.createdAt.toISOString().substring(0, 10) %>
+                                    </p>
+                                </header>
+                                <div class="card__content">
+                                    <h2 class="invoice__total">
+                                        <%= invoice.totalAfterVAT %> kr
+                                    </h2>
+                                    <p class="invoice__number">
+                                        Fakturanr: <%= invoice.invoiceNumber %>
+                                    </p>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="" class="btn">Se faktura</a>
+                                    <form action="/invoice/view-invoice" method="POST">
+                                        <input type="hidden" name="invoiceID" value="<%= invoice._id %>">
+                                        <button class="btn" type="submit">Ladda ner</button>
+                                    </form>
+                                </div>
+                            </article>
+                        <% }) %>
+                    </div>
+                    <% } else { %>
+                        <h1>Inga gamla fakturor!</h1>
+                    <% } %>
+            </main>
+            <%- include('../includes/end.ejs') %>

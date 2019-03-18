@@ -9,23 +9,34 @@ const puppeteer = require('puppeteer')
 const convertInvoiceToPdf = async (invoice, request) => {
   const _readFile = promisify(readFile)
 
-  const template = await _readFile(
-    path.resolve('views/invoice', 'pdf.ejs'),
-    'utf-8'
-  )
-  const html = ejs.render(template, {
-    invoice,
-    user: request.user,
-  })
-  const browser = await puppeteer.launch()
-  const page = await browser.newPage()
-  await page.setContent(html)
-  await page.emulateMedia('screen')
-  await page.pdf({
-    path: __dirname + `/uploads/faktura-${invoice.invoiceNumber}.pdf`,
-    format: 'A4'
-  })
-  await browser.close()
+  try {
+    const template = await _readFile(
+      path.resolve('views/invoice', 'pdf.ejs'),
+      'utf-8'
+    )
+    if (!template) {
+      throw new Error('Could not find template')
+    }
+    const html = ejs.render(template, {
+      invoice,
+      user: request.user,
+    })
+    try {
+      const browser = await puppeteer.launch()
+      const page = await browser.newPage()
+      await page.setContent(html)
+      await page.emulateMedia('screen')
+      await page.pdf({
+        path: __dirname + `/uploads/faktura-${invoice.invoiceNumber}.pdf`,
+        format: 'A4'
+      })
+      await browser.close()
+    } catch (e) {
+      console.log(e)
+    }
+  } catch(e) {
+    console.log(e)
+  }
 }
 
 const createInvoice = async request => {
@@ -40,7 +51,7 @@ const createInvoice = async request => {
       quantity: quantity,
       unit: request.body.unit[i],
       price: price,
-      amount: quantity * price
+      amount: (quantity * price).toFixed(2)
     })
     totalCost += quantity * price
   }
@@ -60,7 +71,11 @@ const createInvoice = async request => {
     totalAfterVAT: totalCost * 1.25,
     owner: request.user._id
   })
-  await invoice.save()
+  try {
+    await invoice.save()
+  } catch (e) {
+    console.log(e)
+  }
   await convertInvoiceToPdf(invoice, request)
 }
 

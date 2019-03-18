@@ -22,11 +22,11 @@ exports.getLogin = (req, res) => {
 }
 
 exports.postLogin = async (req, res) => {
-  const email = req.body.email
-  const password = req.body.password
-
   const errors = validationResult(req)
 
+  const email = req.body.email
+  const password = req.body.password
+  
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/login', {
       path: '/login',
@@ -38,6 +38,7 @@ exports.postLogin = async (req, res) => {
       }
     })
   }
+
   try {
     const user = await User.findOne({ email })
     if (!user) {
