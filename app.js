@@ -9,12 +9,13 @@ const MongoDBStore = require('connect-mongodb-session')(session)
 const User = require('./models/user')
 const authRoutes = require('./routes/auth')
 const invoiceRoutes = require('./routes/invoice')
-const config = require('./config')
 
 const app = express()
 
+const port = process.env.PORT
+
 const store = new MongoDBStore({
-  uri: config.dbUri,
+  uri: process.env.MONGODB_URL,
   collection: 'sessions'
 })
 
@@ -27,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(
   session({
-    secret: config.sessionSecret,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store
@@ -60,12 +61,12 @@ app.use(invoiceRoutes)
 
 
 mongoose
-  .connect(config.dbUri, {
+  .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true
   })
   .then(() => {
-    app.listen(config.port, () => {
-      console.log('App is connected')
+    app.listen(port, () => {
+      console.log('App is connected to port', port)
     })
   })
   .catch(e => console.log(e))

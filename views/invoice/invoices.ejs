@@ -6,6 +6,7 @@
         <%- include('../includes/navigation.ejs') %>
             <main>
                 <% if (invoices.length > 0) { %>
+                    <input type="text" class="invoice-filter" id="filter" placeholder="Sök på titel eller datum (ÅÅ-MM-DD)" />
                     <div class="grid">
                         <% invoices.forEach(invoice => { %>
                             <article class="card invoice-item">
@@ -26,9 +27,9 @@
                                     </p>
                                 </div>
                                 <div class="card__actions">
-                                    <a href="" class="btn">Se faktura</a>
-                                    <form action="/invoice/view-invoice" method="POST">
-                                        <input type="hidden" name="invoiceID" value="<%= invoice._id %>">
+                                    <a href="/view-invoice/<%= invoice._id %>" class="btn" target="_blank">Se faktura</a>
+                                    <form action="/download-invoice" method="POST">
+                                        <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
                                         <button class="btn" type="submit">Ladda ner</button>
                                     </form>
                                 </div>
@@ -39,4 +40,5 @@
                         <h1>Inga gamla fakturor!</h1>
                     <% } %>
             </main>
+            <script src="/js/invoices.js"></script>
             <%- include('../includes/end.ejs') %>

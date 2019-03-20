@@ -1,0 +1,71 @@
+const { promisify } = require('util')
+const { readFile, unlink } = require('fs')
+
+const ejs = require('ejs')
+const puppeteer = require('puppeteer')
+const sendMail = require('../emails/email')
+
+const _readFile = promisify(readFile)
+const FILE_PATH = __dirname + '/invoice.pdf'
+
+const emailPdf = async (invoice, user) => {
+  try {
+    const file = await _readFile(FILE_PATH)
+    sendMail({
+      to: user.email,
+      from: {
+        email: user.email,
+        name:  user.firstName
+      },
+      subject: `Faktura nr ${invoice.invoiceNumber} från Fakturameistern!`,
+      content: [
+        {
+          type: 'text/html',
+          value: `<p>Hej ${user.firstName}!. Bifogat finns fakturan du nyss skapade i Fakturameistern.</p>`
+        }
+      ],
+      attachments: [
+        {
+          content: Buffer.from(file).toString('base64'),
+          type: 'application/pdf',
+          filename: `faktura-${invoice.invoiceNumber}.pdf`,
+          disposition: 'attachment'
+        }
+      ]
+    })
+    unlink(FILE_PATH, err => {
+      if (err) throw new Error(err)
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+const convertInvoiceToPdf = async (invoice, user) => {
+  try {
+    const template = await _readFile((__dirname + '/pdf.ejs'), 'utf-8')
+    if (!template) {
+      throw new Error('Could not find template')
+    }
+    const html = ejs.render(template, {
+      invoice,
+      user
+    })
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+    await page.setContent(html)
+    await page.emulateMedia('screen')
+    await page.pdf({
+      path: FILE_PATH,
+      format: 'A4'
+    })
+    await browser.close()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+module.exports = {
+  convertInvoiceToPdf,
+  emailPdf
+}

@@ -1,8 +1,48 @@
 const { validationResult } = require('express-validator/check')
 
-const createInvoice = require('../pdf/convert')
+const { convertInvoiceToPdf, emailPdf } = require('../pdf/pdf')
 const User = require('../models/user')
 const Invoice = require('../models/invoice')
+
+const createInvoice = async req => {
+  const numRows = req.body.description.length
+  let rows = []
+  let totalCost = 0
+  for (let i = 0; i < numRows; i++) {
+    let quantity = Math.ceil(Number(req.body.quantity[i]))
+    let price = Number(req.body.price[i])
+    rows.push({
+      description: req.body.description[i],
+      quantity: quantity,
+      unit: req.body.unit[i],
+      price: price,
+      amount: (quantity * price).toFixed(2)
+    })
+    totalCost += (quantity * price).toFixed(2)
+  }
+  const invoice = new Invoice({
+    invoiceNumber: req.body.invoiceNumber,
+    assignmentNumber: req.body.assignmentNumber,
+    recipient: {
+      authority: req.body.authority,
+      refPerson: req.body.refPerson,
+      street: req.body.street,
+      zip: req.body.zip,
+      city: req.body.city
+    },
+    rows: rows,
+    totalBeforeVAT: totalCost,
+    VAT: 25,
+    totalAfterVAT: (totalCost * 1.25).toFixed(2),
+    owner: req.user._id
+  })
+  try {
+    await invoice.save()
+    return invoice
+  } catch (e) {
+    return console.log(e)
+  }
+}
 
 const getUniqueRecipients = async (req, res) => {
   try {
@@ -31,6 +71,8 @@ const getUniqueRecipients = async (req, res) => {
   }
 }
 
+
+
 exports.getStartPage = (req, res) => {
   res.render('invoice/start', {
     path: '/start',
@@ -40,6 +82,7 @@ exports.getStartPage = (req, res) => {
 
 exports.getNewInvoice = async (req, res) => {
   res.render('invoice/new-invoice', {
+    errorMessage:'',
     path: '/new-invoice',
     pageTitle: 'Ny faktura',
     recipients: await getUniqueRecipients(req),
@@ -66,7 +109,9 @@ exports.postNewInvoice = async (req, res) => {
     })
   }
   try {
-    await createInvoice(req)
+    const invoice = await createInvoice(req)
+    await convertInvoiceToPdf(invoice, req.user)
+    await emailPdf(invoice, req.user)
     res.redirect('/start')
   } catch (e) {
     res.send(e)
@@ -81,6 +126,7 @@ exports.postInvoiceRecipientData = async (req, res) => {
     })
     if (!invoice) {
       return res.status(422).render('invoice/new-invoice', {
+        errorMessage: '',
         path: '/new-invoice',
         pageTitle: 'Ny faktura',
         recipients: await getUniqueRecipients(req),
@@ -91,6 +137,7 @@ exports.postInvoiceRecipientData = async (req, res) => {
     }
     const { recipient } = invoice
     res.render('invoice/new-invoice', {
+      errorMessage: '',
       path: '/new-invoice',
       pageTitle: 'Ny faktura',
       recipients: await getUniqueRecipients(req),
@@ -114,4 +161,8 @@ exports.getInvoices = async (req, res) => {
   } catch (e) {
     console.log(e)
   }
+}
+
+exports.postViewInvoice = async (req, res) => {
+
 }
