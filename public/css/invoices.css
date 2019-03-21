@@ -6,12 +6,12 @@
 }
 
 .card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 2px 8px #00000042;
+  position: relative;
 }
 
-.card__header,
-.card__content {
-  padding: 1rem;
+.card__header {
+  padding: 1rem 1rem 0 1rem;
 }
 
 .card__header h1,
@@ -29,6 +29,26 @@
 .card__actions button,
 .card__actions a {
   margin: 0 0.25rem;
+}
+
+.delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.delete-btn {
+  padding: 0.5rem;
+  border:1px solid #363333;
+  font-size: 1.1rem;
+}
+
+.delete-btn:hover,
+.delete-btn:focus,
+.delete-btn:active{
+  background: #363333;
+  color: white;
+  outline: none;
 }
 
 .btn {
@@ -50,18 +70,19 @@
 }
 
 .invoice-item {
-  width: 20rem;
+  width: 35rem;
   max-width: 95%;
   margin: 1rem;
 }
 
 .invoice__title {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   text-align: center;
 }
 
 .invoice__total {
   text-align: center;
+  font-size: 1.2rem;
   color: #4d4d4d;
   margin-bottom: 0.5rem;
 }

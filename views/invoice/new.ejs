@@ -10,8 +10,8 @@
 
     <% if (recipients.length > 0) { %>
     <p>Välj en tidigare mottagare för att fylla i mottagruppgifter</p>
-    <form action="/new-invoice/autofill" method="post">
-      <select name="recipient" id="recipient">
+    <form action="/invoice/new/autofill" method="post">
+      <select name="recipientAuthority" id="recipient">
         <% recipients.forEach(recipient => { %>
           <option value="<%= recipient.authority %>"> 
             <%= recipient.authority %>
@@ -22,7 +22,7 @@
     </form>
     <% } %>
 
-    <form action="/new-invoice" method="post" novalidate>
+    <form action="/invoice/new" method="post" novalidate>
       <fieldset>
         <legend>Mottagaruppgifter:</legend>
         <div>
@@ -31,8 +31,8 @@
             type="text" 
             name="authority" 
             id="authority"
-            <% if (input) { %>
-              value= "<%= input.authority %>"
+            <% if (oldInput) { %>
+              value= "<%= oldInput.authority %>"
             <% } else { %>
               value="<%= recipient ? recipient.authority : '' %>" />
             <% } %>
@@ -43,8 +43,8 @@
             type="text" 
             name="refPerson" 
             id="ref-person"
-            <% if (input) { %>
-              value= "<%= input.refPerson %>"
+            <% if (oldInput) { %>
+              value= "<%= oldInput.refPerson %>"
             <% } else { %>
               value="<%= recipient ? recipient.refPerson : '' %>" />
             <% } %>
@@ -55,8 +55,8 @@
             type="text" 
             name="street" 
             id="street"
-            <% if (input) { %>
-              value= "<%= input.street %>"
+            <% if (oldInput) { %>
+              value= "<%= oldInput.street %>"
             <% } else { %>
               value="<%= recipient ? recipient.street : '' %>" />
             <% } %>
@@ -67,8 +67,8 @@
             type="text" 
             name="zip" 
             id="zip" 
-            <% if (input) { %>
-              value= "<%= input.zip %>"
+            <% if (oldInput) { %>
+              value= "<%= oldInput.zip %>"
             <% } else { %>
               value="<%= recipient ? recipient.zip : '' %>" />
             <% } %>
@@ -79,8 +79,8 @@
             type="text" 
             name="city" 
             id="city"
-            <% if (input) { %>
-              value= "<%= input.city %>"
+            <% if (oldInput) { %>
+              value= "<%= oldInput.city %>"
             <% } else { %>
               value="<%= recipient ? recipient.city : '' %>" />
             <% } %>
@@ -94,7 +94,7 @@
             type="number" 
             name="invoiceNumber" 
             id="invoice-number"
-            value="<%= input ? input.invoiceNumber : '' %>" />
+            value="<%= oldInput ? oldInput.invoiceNumber : '' %>" />
         </div>
         <div>
           <label for="assignment-number">Uppdragsnummer</label>
@@ -102,20 +102,19 @@
             type="number" 
             name="assignmentNumber" 
             id="assignment-number" 
-            value="<%= input ? input.assignmentNumber : '' %>" />
+            value="<%= oldInput ? oldInput.assignmentNumber : '' %>" />
         </div>
-        <h5>Rad 1</h5>
-        
+        <br>
+        <div id="rows">
         <% if (numRows.length > 0) { %>
           <% for (let i = 0; i < numRows.length; i++) { %>
-          <div id="rows">
               <div>
                 <label for="description">Beskrivning</label>
                 <input 
                   type="text" 
                   name="description[]" 
                   id="description"
-                  value="<%= input ? input.description[i] : '' %>" />
+                  value="<%= oldInput ? oldInput.description[i] : '' %>" />
               </div>
               <div>
                 <label for="quantity">Antal: </label>
@@ -123,7 +122,7 @@
                   type="number" 
                   name="quantity[]" 
                   id="quantity"
-                  value="<%= input ? input.quantity[i] : '' %>" />
+                  value="<%= oldInput ? oldInput.quantity[i] : '' %>" />
               </div>
               <div>
                 <label for="unit">Enhet:</label>
@@ -131,7 +130,7 @@
                   type="text" 
                   name="unit[]" 
                   id="unit"
-                  value="<%= input ? input.unit[i] : '' %>" />
+                  value="<%= oldInput ? input.unit[i] : '' %>" />
               </div>
               <div>
                 <label for="price">Pris:</label>
@@ -139,46 +138,11 @@
                   type="number" 
                   name="price[]" 
                   id="price"
-                  value="<%= input ? input.quantity[i] : '' %>" />
+                  value="<%= oldInput ? oldInput.quantity[i] : '' %>" />
               </div>
-            </div>
           <% } %>
-        <% } else { %>
-          <div id="rows">
-            <div>
-              <label for="description">Beskrivning</label>
-              <input 
-                type="text" 
-                name="description[]" 
-                id="description"
-                value="<%= input ? input.description : '' %>" />
-            </div>
-            <div>
-              <label for="quantity">Antal: </label>
-              <input 
-                type="number" 
-                name="quantity[]" 
-                id="quantity"
-                value="<%= input ? input.quantity : '' %>" />
-            </div>
-            <div>
-              <label for="unit">Enhet:</label>
-              <input 
-                type="text" 
-                name="unit[]" 
-                id="unit"
-                value="<%= input ? input.unit : '' %>" />
-            </div>
-            <div>
-              <label for="price">Pris:</label>
-              <input 
-                type="number" 
-                name="price[]" 
-                id="price"
-                value="<%= input ? input.quantity : '' %>" />
-            </div>
-          </div>
         <% } %>
+        </div>
         <input type="button" id="add-row" value="Ny rad">
       </fieldset>
       <div>

@@ -1,3 +1,4 @@
+const path = require('path')
 const { promisify } = require('util')
 const { readFile, unlink } = require('fs')
 
@@ -6,7 +7,33 @@ const puppeteer = require('puppeteer')
 const sendMail = require('../emails/email')
 
 const _readFile = promisify(readFile)
-const FILE_PATH = __dirname + '/invoice.pdf'
+const FILE_PATH = path.resolve(__dirname, 'invoice.pdf')
+
+const viewPdf = response => {
+  response.sendFile(FILE_PATH, err => {
+    if (err) {
+      throw new Error(err)
+    } else {
+      unlink(FILE_PATH, err => {
+        if (err) throw new Error(err)
+      })
+    }
+  })
+}
+
+const downloadPdf = (invoice, response) => {
+  response.download(FILE_PATH, 
+    `faktura${invoice.invoiceNumber}-${invoice.recipient.authority.toLowerCase()}-${invoice.createdAt.toISOString().substring(0, 10)}`, 
+    (err) => {
+      if (err) {
+        throw new Error(err)
+      } else {
+        unlink(FILE_PATH, err => {
+          if (err) throw new Error(err)
+        })
+      }
+  })
+}
 
 const emailPdf = async (invoice, user) => {
   try {
@@ -15,13 +42,13 @@ const emailPdf = async (invoice, user) => {
       to: user.email,
       from: {
         email: user.email,
-        name:  user.firstName
+        name: user.firstName
       },
       subject: `Faktura nr ${invoice.invoiceNumber} från Fakturameistern!`,
       content: [
         {
           type: 'text/html',
-          value: `<p>Hej ${user.firstName}!. Bifogat finns fakturan du nyss skapade i Fakturameistern.</p>`
+          value: `<p>Hej ${user.firstName}!. Bifogad finns fakturan du nyss skapade i Fakturameistern.</p>`
         }
       ],
       attachments: [
@@ -43,7 +70,7 @@ const emailPdf = async (invoice, user) => {
 
 const convertInvoiceToPdf = async (invoice, user) => {
   try {
-    const template = await _readFile((__dirname + '/pdf.ejs'), 'utf-8')
+    const template = await _readFile(__dirname + '/pdf.ejs', 'utf-8')
     if (!template) {
       throw new Error('Could not find template')
     }
@@ -67,5 +94,7 @@ const convertInvoiceToPdf = async (invoice, user) => {
 
 module.exports = {
   convertInvoiceToPdf,
-  emailPdf
+  emailPdf,
+  viewPdf,
+  downloadPdf
 }

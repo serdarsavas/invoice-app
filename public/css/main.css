@@ -67,5 +67,5 @@ form {
 .main-header__item button:hover,
 .main-header__item button:active {
   color: #d3d8e2;
-  border-bottom: 0.2rem solid #c9ced9;
+  border-bottom: 0.1rem solid #c9ced9;
 }

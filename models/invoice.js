@@ -5,10 +5,10 @@ const Schema = mongoose.Schema
 const invoiceSchema = new Schema(
   {
     invoiceNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
-    assignmentNumber: Number,
+    assignmentNumber: String,
     recipient: {
       authority: {
         type: String,
