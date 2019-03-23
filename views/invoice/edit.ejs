@@ -4,7 +4,7 @@
   <body>
       <%- include('../includes/navigation.ejs') %>
         <main>
-          <form action="/invoice/edit">
+          <form action="/invoice/edit" method="POST">
             <fieldset>
                 <legend>Mottagaruppgifter:</legend>
                 <div>
@@ -120,12 +120,16 @@
                         type="number" 
                         name="price[]" 
                         id="price"
-                        value="<%= row.price %>" />
+                        value="<%= row.price %>"
+                        step=".01" />
                     </div>
                   </div>
                 <% }) %>
+                <input type="button" id="add-row" value="Ny rad">
               </fieldset>
+              <input type="hidden" name="invoiceId" value="<%= invoice._id%>">
+              <input type="submit" value="Spara ändringar">
           </form>
         </main>
-
+<script src="/js/invoice.js"></script>
 <%- include('../includes/end.ejs') %>

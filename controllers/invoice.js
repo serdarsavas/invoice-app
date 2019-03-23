@@ -1,13 +1,13 @@
 const { validationResult } = require('express-validator/check')
 
 const pdfHandler = require('../pdf/pdf')
-const User = require('../models/user')
 const Invoice = require('../models/invoice')
 
 //Helpers
 
 const getInvoiceRows = req => {
   const numRows = req.body.description.length
+  console.log('Req body:-------', req.body)
   let rows = []
   for (let i = 0; i < numRows; i++) {
     let quantity = Number(req.body.quantity[i])
@@ -102,15 +102,13 @@ exports.getNewInvoice = async (req, res) => {
     pageTitle: 'Ny faktura',
     recipients: await getUniqueRecipients(req),
     recipient: null,
-    oldInput: null,
-    numRows: []
+    oldInput: null
   })
 }
 
 exports.postNewInvoice = async (req, res) => {
   const errors = validationResult(req)
   const oldInput = { ...req.body }
-  const numRows = req.body.description.length
 
   if (!errors.isEmpty()) {
     return res.status(422).render('invoice/new', {
@@ -119,8 +117,7 @@ exports.postNewInvoice = async (req, res) => {
       errorMessage: errors.array()[0].msg,
       oldInput,
       recipients: await getUniqueRecipients(req),
-      recipient: null,
-      numRows
+      recipient: null
     })
   }
   try {
@@ -147,7 +144,6 @@ exports.postInvoiceRecipientData = async (req, res) => {
         recipients: await getUniqueRecipients(req),
         recipient: null,
         oldInput: null,
-        numRows: []
       })
     }
     const { recipient } = invoice
@@ -157,8 +153,7 @@ exports.postInvoiceRecipientData = async (req, res) => {
       pageTitle: 'Ny faktura',
       recipients: await getUniqueRecipients(req),
       recipient,
-      oldInput: null,
-      numRows: []
+      oldInput: null
     })
   } catch (e) {
     return console.log(e)
@@ -167,7 +162,9 @@ exports.postInvoiceRecipientData = async (req, res) => {
 
 exports.getInvoices = async (req, res) => {
   try {
-    const invoices = await Invoice.find({ owner: req.user })
+    const documents = await Invoice.find({ owner: req.user })
+    const invoices = [...documents].reverse()
+
     res.render('invoice/invoices', {
       path: '/invoices',
       pageTitle: 'Mina fakturor',
@@ -214,10 +211,37 @@ exports.getEditInvoice = async (req, res) => {
   }
 }
 
+exports.postEditInvoice = async (req, res) => {
+  try {
+    const invoiceId = req.body.invoiceId
+    const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user })
+    if (!invoice) {
+      return res.redirect('/start')
+    } 
+    const rows = getInvoiceRows(req)
+    const total = getTotal(rows)
+
+    invoice.invoiceNumber = req.body.invoiceNumber
+    invoice.assignmentNumber = req.body.assignmentNumber
+    invoice.recipient.authority = req.body.authority
+    invoice.recipient.refPerson = req.body.refPerson
+    invoice.recipient.street = req.body.street
+    invoice.recipient.zip = req.body.zip
+    invoice.recipient.city = req.body.city
+    invoice.rows = rows
+    invoice.totalBeforeVAT = total
+    invoice.totalAfterVAT = (total * 1.25).toFixed(2)
+    await invoice.save()
+    res.redirect('/invoice/invoices')
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 exports.postDeleteInvoice = async (req, res) => {
   try {
     await Invoice.findByIdAndDelete(req.body.invoiceId)
-    res.redirect('/invoices')
+    res.redirect('/invoice/invoices')
   } catch (e) {
     console.log(e)
     res.redirect('/start')

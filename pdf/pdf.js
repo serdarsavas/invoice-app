@@ -23,7 +23,7 @@ const viewPdf = response => {
 
 const downloadPdf = (invoice, response) => {
   response.download(FILE_PATH, 
-    `faktura${invoice.invoiceNumber}-${invoice.recipient.authority.toLowerCase()}-${invoice.createdAt.toISOString().substring(0, 10)}`, 
+    `faktura${invoice.invoiceNumber}-${invoice.recipient.authority.toLowerCase()}-${invoice.updatedAt.toISOString().substring(0, 10)}`, 
     (err) => {
       if (err) {
         throw new Error(err)
@@ -74,10 +74,10 @@ const convertInvoiceToPdf = async (invoice, user) => {
     if (!template) {
       throw new Error('Could not find template')
     }
-    const html = ejs.render(template, {
+    const html = await ejs.render(template, {
       invoice,
       user
-    })
+    }, true)
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
     await page.setContent(html)

@@ -15,7 +15,7 @@
                                         <%= invoice.recipient.authority %>
                                     </h1>
                                     <p class="invoice__date">
-                                        <%= invoice.createdAt.toISOString().substring(0, 10) %>
+                                        <%= invoice.updatedAt.toISOString().substring(0, 10) %>
                                     </p>
                                 </header>
                                 <div class="card__content">
@@ -31,7 +31,7 @@
                                         <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
                                         <button class="delete-btn" type="submit">X</button>
                                     </form>
-                                    <a href="/invoice/view/<%= invoice._id %>" class="btn" target="_blank">Se faktura</a>
+                                    <a href="/invoice/view/<%= invoice._id %>" class="btn" target="_blank">Visa faktura</a>
                                     <a href="/invoice/download/<%= invoice._id %>" class="btn">Ladda ner</a>
                                     <a href="/invoice/edit/<%= invoice._id %>" class="btn">Redigera</a>
                                 </div>

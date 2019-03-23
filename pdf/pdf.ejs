@@ -129,7 +129,7 @@
           <h1 class="large-header">Faktura</h1>
           <p class="italic">Fakturanummer: <%= invoice.invoiceNumber %></p>
           <div>
-            <h3 class="address-header">Fakturaddress:</h3>
+            <h3 class="address-header">Mottagare:</h3>
             <p>
               <%= invoice.recipient.authority %><br />
               <%= invoice.recipient.street %><br />
@@ -140,7 +140,7 @@
         <div class="header-col3">
           <p>
             <span class="bold">Fakturadatum:</span><br />
-            <%= invoice.createdAt.toISOString().substring(0, 10) %>
+            <%= invoice.updatedAt.toISOString().substring(0, 10) %>
           </p>
           <p>
             <span class="bold">Uppdragsnummer:</span><br />

@@ -10,7 +10,7 @@
                     <a class="<%= path === '/new' ? 'active' : '' %>" href="/invoice/new">Ny faktura</a>
                 </li>
                 <li class="main-header__item">
-                    <a class="<%= path === '/invoices' ? 'active' : '' %>" href="/invoices">Gamla fakturor</a>
+                    <a class="<%= path === '/invoices' ? 'active' : '' %>" href="/invoice/invoices">Gamla fakturor</a>
                 </li>
             </ul>
             <ul class="main-header__item-list">
@@ -32,8 +32,7 @@
                     <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Registrering</a>
                 </li>
             </ul>
-        <% } %>
-        
+        <% } %>    
     </nav>
 </header>
 
