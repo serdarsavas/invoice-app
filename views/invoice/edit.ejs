@@ -1,135 +1,121 @@
 <%- include('../includes/head.ejs') %>
-  <link rel="stylesheet" href="/css/invoices.css">
-  </head>
-  <body>
-      <%- include('../includes/navigation.ejs') %>
-        <main>
-          <form action="/invoice/edit" method="POST">
-            <fieldset>
-                <legend>Mottagaruppgifter:</legend>
-                <div>
-                  <label for="authority">Mottagare: </label>
-                  <input 
-                    type="text" 
-                    name="authority" 
-                    id="authority"
-                    <% if (oldInput) { %>
-                      value= "<%= oldInput.authority %>"
-                    <% } else { %>
-                      value="<%= invoice.recipient.authority %>" />
-                    <% } %>
-                </div>
-                <div>
-                  <label for="ref-person">Referensperson: </label>
-                  <input 
-                    type="text" 
-                    name="refPerson" 
-                    id="ref-person"
-                    <% if (oldInput) { %>
-                      value= "<%= oldInput.refPerson %>"
-                    <% } else { %>
-                      value="<%= invoice.recipient.refPerson%>" />
-                    <% } %>
-                </div>
-                <div>
-                  <label for="street">Gatuaddress:</label>
-                  <input 
-                    type="text" 
-                    name="street" 
-                    id="street"
-                    <% if (oldInput) { %>
-                      value= "<%= oldInput.street %>"
-                    <% } else { %>
-                      value="<%= invoice.recipient.street %>" />
-                    <% } %>
-                </div>
-                <div>
-                  <label for="zip">Postkod:</label>
-                  <input 
-                    type="text" 
-                    name="zip" 
-                    id="zip" 
-                    <% if (oldInput) { %>
-                      value= "<%= oldInput.zip %>"
-                    <% } else { %>
-                      value="<%= invoice.recipient.zip %>" />
-                    <% } %>
-                </div>
-                <div>
-                  <label for="city">Postort:</label>
-                  <input 
-                    type="text" 
-                    name="city" 
-                    id="city"
-                    <% if (oldInput) { %>
-                      value= "<%= oldInput.city %>"
-                    <% } else { %>
-                      value="<%= invoice.recipient.city %>" />
-                    <% } %>
-                </div>
-              </fieldset>
-              <fieldset>
-                <legend>Kostnadsuppgifter:</legend>
-                <div>
-                  <label for="invoice-number">Fakturanummer</label>
-                  <input 
-                    type="number" 
-                    name="invoiceNumber" 
-                    id="invoice-number"
-                    value="<%= oldInput ? oldInput.invoiceNumber : invoice.invoiceNumber %>" />
-                </div>
-                <div>
-                  <label for="assignment-number">Uppdragsnummer</label>
-                  <input 
-                    type="number" 
-                    name="assignmentNumber" 
-                    id="assignment-number" 
-                    value="<%= oldInput ? oldInput.assignmentNumber : invoice.assignmentNumber %>" />
-                </div>
-                <h5>Rad 1</h5>
-                
-              <% invoice.rows.forEach(row => { %>
-                <div id="rows">
-                    <div>
-                      <label for="description">Beskrivning</label>
-                      <input 
-                        type="text" 
-                        name="description[]" 
-                        id="description"
-                        value="<%= row.description %>" />
-                    </div>
-                    <div>
-                      <label for="quantity">Antal: </label>
-                      <input 
-                        type="number" 
-                        name="quantity[]" 
-                        id="quantity"
-                        value="<%= row.quantity %>" />
-                    </div>
-                    <div>
-                      <label for="unit">Enhet:</label>
-                      <input 
-                        type="text" 
-                        name="unit[]" 
-                        id="unit"
-                        value="<%= row.unit %>" />
-                    </div>
-                    <div>
-                      <label for="price">Pris:</label>
-                      <input 
-                        type="number" 
-                        name="price[]" 
-                        id="price"
-                        value="<%= row.price %>"
-                        step=".01" />
-                    </div>
-                  </div>
-                <% }) %>
-                <input type="button" id="add-row" value="Ny rad">
-              </fieldset>
-              <input type="hidden" name="invoiceId" value="<%= invoice._id%>">
-              <input type="submit" value="Spara ändringar">
-          </form>
-        </main>
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/invoice.css">
+</head>
+<body>
+<%- include('../includes/navigation.ejs') %>
+  <main class="form-wrapper">
+    <form action="/invoice/edit" method="POST">
+      <h2 class="form-header">Mottagaruppgifter</h2>
+      <div class="form-control">
+        <label for="authority">Mottagare</label>
+        <input 
+          type="text" 
+          name="authority" 
+          id="authority"
+          value="<%= invoice.recipient.authority %>" />
+      </div>
+      <div class="form-control">
+        <label for="ref-person">Referensperson</label>
+        <input 
+          type="text" 
+          name="refPerson" 
+          id="ref-person"
+          value="<%= invoice.refPerson %>" />
+      </div>
+      <div class="form-control">
+        <label for="street">Gatuaddress</label>
+        <input 
+          type="text" 
+          name="street" 
+          id="street"
+          value="<%= invoice.recipient.street %>" />
+      </div>
+      <div class="form-control">
+        <label for="zip">Postkod</label>
+        <input 
+          type="text" 
+          name="zip" 
+          id="zip" 
+          value="<%= invoice.recipient.zip %>" />
+      </div>
+      <div class="form-control">
+        <label for="city">Postort</label>
+        <input 
+          type="text" 
+          name="city" 
+          id="city"
+          value="<%= invoice.recipient.city %>" />
+      </div>
+      
+      <h2 class="invoice-header">Kostnadsuppgifter</h2>
+      <div class="form-control">
+        <label for="invoice-number">Fakturanummer</label>
+        <input 
+          type="number" 
+          name="invoiceNumber" 
+          id="invoice-number"
+          value="<%= invoice.invoiceNumber %>" />
+      </div>
+      <div class="form-control">
+        <label for="assignment-number">Uppdragsnummer</label>
+        <input 
+          type="number" 
+          name="assignmentNumber" 
+          id="assignment-number" 
+          value="<%= invoice.assignmentNumber %>" />
+      </div> 
+      
+      <section class="invoice-rows" id="rows">
+      <% invoice.rows.forEach(row => { %>
+        <div class="row">
+          <div class="form-control">
+            <label for="description">Beskrivning</label>
+            <input 
+              type="text" 
+              name="description[]" 
+              id="description"
+              value="<%= row.description %>" />
+          </div>
+          <div class="form-control">
+            <label for="quantity">Antal: </label>
+            <input 
+              type="number" 
+              name="quantity[]" 
+              id="quantity"
+              value="<%= row.quantity %>" />
+          </div>
+          <div class="form-control">
+            <label for="unit">Enhet:</label>
+            <input 
+              type="text" 
+              name="unit[]" 
+              id="unit"
+              value="<%= row.unit %>" />
+          </div>
+          <div class="form-control">
+            <label for="price">Pris:</label>
+            <input 
+              type="number" 
+              name="price[]" 
+              id="price"
+              value="<%= row.price %>"
+              step=".01" />
+          </div>
+        </div>  
+        <% }) %>
+      </section>
+      <div class="form-control">
+        <button class="btn" type="button" id="add-row">Ny rad</button>
+      </div>
+      <input type="hidden" name="invoiceId" value="<%= invoice._id%>">
+      <button class="btn" type="submit">Spara ändringar</button>
+    </form>
+    <form action="/invoice/edit-cancel" method="POST">
+      <div class="form-control">
+        <button class="btn" type="submit">Avbryt</button>
+      </div>
+    </form>
+  </main>
 <script src="/js/invoice.js"></script>
 <%- include('../includes/end.ejs') %>

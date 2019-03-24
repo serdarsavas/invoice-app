@@ -94,29 +94,26 @@ exports.getStartPage = (req, res) => {
   })
 }
 
-exports.getNewInvoice = async (req, res) => {
-  res.render('invoice/new', {
-    errorMessage: '',
-    path: '/new',
+exports.getAddInvoice = async (req, res) => {
+  res.render('invoice/add', {
+    path: '/add',
     pageTitle: 'Ny faktura',
     recipients: await getUniqueRecipients(req),
     recipient: null,
-    oldInput: null
+    errorMessage: null
   })
 }
 
-exports.postNewInvoice = async (req, res) => {
+exports.postAddInvoice = async (req, res) => {
   const errors = validationResult(req)
-  const oldInput = { ...req.body }
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('invoice/new', {
-      path: '/new',
+    return res.status(422).render('invoice/edit-invoice', {
+      path: '/edit-invoice',
       pageTitle: 'Ny faktura',
-      errorMessage: errors.array()[0].msg,
-      oldInput,
       recipients: await getUniqueRecipients(req),
-      recipient: null
+      recipient: null,
+      errorMessage: errors.array()[0].msg
     })
   }
   try {
@@ -129,30 +126,67 @@ exports.postNewInvoice = async (req, res) => {
   }
 }
 
+exports.getEditInvoice = async (req, res) => {
+  try {
+    const invoice = await Invoice.findById(req.params.invoiceId)
+    res.render('invoice/edit', {
+      pageTitle: 'Redigera',
+      path: '/invoices',
+      invoice
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+exports.postEditInvoice = async (req, res) => {
+  try {
+    const invoiceId = req.body.invoiceId
+    const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user })
+    if (!invoice) {
+      return res.redirect('/start')
+    } 
+    const rows = getInvoiceRows(req)
+    const total = getTotal(rows)
+
+    invoice.invoiceNumber = req.body.invoiceNumber
+    invoice.assignmentNumber = req.body.assignmentNumber
+    invoice.recipient.authority = req.body.authority
+    invoice.recipient.refPerson = req.body.refPerson
+    invoice.recipient.street = req.body.street
+    invoice.recipient.zip = req.body.zip
+    invoice.recipient.city = req.body.city
+    invoice.rows = rows
+    invoice.totalBeforeVAT = total
+    invoice.totalAfterVAT = (total * (invoice.VAT + 1)).toFixed(2)
+    await invoice.save()
+    res.redirect('/invoice/invoices')
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 exports.postInvoiceRecipientData = async (req, res) => {
-  const recipientAuthority = req.body.recipientAuthority
+  const authority = req.body.authority
   try {
     const invoice = await Invoice.findOne({
-      'recipient.authority': recipientAuthority
+      'recipient.authority': authority
     })
     if (!invoice) {
-      return res.status(422).render('invoice/new', {
-        errorMessage: '',
-        path: '/new',
+      return res.status(422).render('invoice/add', {
+        path: '/add',
         pageTitle: 'Ny faktura',
         recipients: await getUniqueRecipients(req),
-        recipient: null,
-        oldInput: null,
+        errorMessage: 'Mottagaren kunde inte hittas.',
       })
     }
-    const { recipient } = invoice
-    res.render('invoice/new', {
-      errorMessage: '',
-      path: '/new',
+    const {recipient} = invoice
+    res.render('invoice/add', {
+      path: '/add',
       pageTitle: 'Ny faktura',
       recipients: await getUniqueRecipients(req),
       recipient,
-      oldInput: null
+      errorMessage: null
     })
   } catch (e) {
     return console.log(e)
@@ -198,49 +232,6 @@ exports.getDownloadInvoice = async (req, res) => {
 exports.getRecipient = (req, res) => {
 
 }
-
-
-exports.getEditInvoice = async (req, res) => {
-  try {
-    const invoice = await Invoice.findById(req.params.invoiceId)
-    res.render('invoice/edit', {
-      pageTitle: 'Redigera',
-      path: '/invoices',
-      invoice,
-      oldInput: null
-    })
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-exports.postEditInvoice = async (req, res) => {
-  try {
-    const invoiceId = req.body.invoiceId
-    const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user })
-    if (!invoice) {
-      return res.redirect('/start')
-    } 
-    const rows = getInvoiceRows(req)
-    const total = getTotal(rows)
-
-    invoice.invoiceNumber = req.body.invoiceNumber
-    invoice.assignmentNumber = req.body.assignmentNumber
-    invoice.recipient.authority = req.body.authority
-    invoice.recipient.refPerson = req.body.refPerson
-    invoice.recipient.street = req.body.street
-    invoice.recipient.zip = req.body.zip
-    invoice.recipient.city = req.body.city
-    invoice.rows = rows
-    invoice.totalBeforeVAT = total
-    invoice.totalAfterVAT = (total * (invoice.VAT + 1)).toFixed(2)
-    await invoice.save()
-    res.redirect('/invoice/invoices')
-  } catch (e) {
-    console.log(e)
-  }
-}
-
 exports.postDeleteInvoice = async (req, res) => {
   try {
     await Invoice.findByIdAndDelete(req.body.invoiceId)
@@ -249,4 +240,8 @@ exports.postDeleteInvoice = async (req, res) => {
     console.log(e)
     res.redirect('/start')
   }
+}
+
+exports.postCancelEdit = (req, res) => {
+  res.redirect('/invoice/invoices')
 }

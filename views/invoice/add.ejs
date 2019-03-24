@@ -1,0 +1,125 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/invoice.css">
+
+</head>
+<%- include('../includes/navigation.ejs') %>
+<body>
+  
+  <% if (errorMessage) { %>
+    <div><%= errorMessage %></div>
+  <% } %>
+  
+  <main class="form-wrapper">
+    <h2 class="invoice-header">Mottagaruppgifter</h2>
+    <% if (recipients.length > 0) { %>
+    <form action="/invoice/add/autofill" method="post">
+      <div class="select form-control">
+        <select name="authority" id="recipient">
+          <% recipients.forEach(recipient => { %>
+            <option value="<%= recipient.authority %>"> 
+              <%= recipient.authority %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="form-control">
+        <button class="btn" type="submit">Hämta uppgifter</button>
+      </div>  
+    </form>
+    <% } %>
+    
+    
+    <form action="/invoice/add" method="post">
+      <div class="form-control">
+        <label for="authority">Mottagare: </label>
+        <input 
+          type="text" 
+          name="authority" 
+          id="authority"
+          value="<%= recipient ? recipient.authority : '' %>" />
+      </div>
+      <div class="form-control">
+        <label for="ref-person">Referensperson: </label>
+        <input 
+          type="text" 
+          name="refPerson" 
+          id="ref-person"
+          value="<%= recipient ? recipient.refPerson : '' %>" />
+      </div>
+      <div class="form-control">
+        <label for="street">Gatuaddress:</label>
+        <input 
+          type="text" 
+          name="street" 
+          id="street"
+          value="<%= recipient ? recipient.street : '' %>" />
+      </div>
+      <div class="form-control">
+        <label for="zip">Postkod:</label>
+        <input 
+          type="text" 
+          name="zip" 
+          id="zip" 
+          value="<%= recipient ? recipient.zip : '' %>" />
+      </div>
+      <div class="form-control">
+        <label for="city">Postort:</label>
+        <input 
+          type="text" 
+          name="city" 
+          id="city"
+          value="<%= recipient ? recipient.city : '' %>" />
+      </div>
+   
+      <h2 class="invoice-header">Kostnadsuppgifter</h2>
+      <div class="form-control">
+        <label for="invoice-number">Fakturanummer</label>
+        <input 
+          type="number" 
+          name="invoiceNumber" 
+          id="invoice-number"/>
+      </div>
+      <div class="form-control">
+        <label for="assignment-number">Uppdragsnummer</label>
+        <input 
+          type="number" 
+          name="assignmentNumber" 
+          id="assignment-number"/>
+      </div>
+
+      <section class="invoice-rows" id="rows">
+        <div class="row">
+          <div class="form-control">
+            <label for="description">Beskrivning</label>
+            <input type="text" name="description[]" id="description" />
+          </div>
+          <div class="form-control">
+            <label for="quantity">Antal: </label>
+            <input type="number" name="quantity[]" id="quantity" step=".01" />
+          </div>
+          <div class="form-control">
+            <label for="unit">Enhet:</label>
+            <input type="text" name="unit[]" id="unit"/>
+          </div>
+          <div class="form-control">
+            <label for="price">Pris:</label>
+            <input type="number" name="price[]" id="price" step=".01"/>
+          </div>
+        </div>
+      </section>
+      <button class="btn" type="button" id="add-row">Ny rad på fakturan</button>
+      <div class="form-control">
+        <button class="btn" type="submit">Skicka som pdf till min epost</button>
+      </div>
+    </form>
+
+    <form action="/invoice/edit-cancel" method="POST">
+      <div class="form-control">
+        <button class="btn" type="submit">Avbryt</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="/js/invoice.js"></script>
+<%- include('../includes/end.ejs') %>

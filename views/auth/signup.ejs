@@ -1,4 +1,5 @@
 <%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
 
   </head>
   <body>
@@ -7,59 +8,61 @@
     <% if (errorMessage) { %>
       <div><%= errorMessage %></div>
     <% } %>
+  <div class="form-wrapper">
     <form action="/signup" method="POST" novalidate>
-      <div>
+      <div class="form-control">
         <label for="first-name">Förnamn</label>
         <input type="text" name="firstName" id="first-name" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="last-name">Efternamn</label>
         <input type="text" name="lastName" id="last-name" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="email">Epost</label>
         <input type="email" name="email" id="email" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="telephone">Telefon</label>
         <input type="tel" name="telephone" id="telephone" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="position">Jobbtitel</label>
         <input type="text" name="position" id="position" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="street">Gatuaddress</label>
         <input type="text" name="street" id="street" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="street">Postkod</label>
         <input type="number" name="zip" id="zip" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="city">Postort</label>
         <input type="text" name="city" id="city" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="registration-number">Organisationsnummer</label>
         <input type="text" name="registrationNumber" id="registration-number" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="vat-number">Momsregnr</label>
         <input type="text" name="vatNumber" id="vat-number" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="bankgiro">Bankgiro</label>
         <input type="text" name="bankgiro" id="bankgiro" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="password">Lösenord</label>
         <input type="password" name="password" id="password" />
       </div>
-      <div>
+      <div class="form-control">
         <label for="confirm-password">Bekräfta lösenord</label>
         <input type="password" name="confirmPassword" id="confirm-password" />
       </div>
-      <button type="submit">Registrera dig</button>
+      <button class="btn" type="submit">Registrera dig</button>
     </form>
+  </div>
     <%- include('../includes/end.ejs') %>

@@ -19,6 +19,10 @@ main {
   text-align: center;
 }
 
+.inline {
+  display: inline;
+}
+
 .main-header {
   width: 100%;
   height: 4rem;
