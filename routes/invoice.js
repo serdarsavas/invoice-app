@@ -30,6 +30,8 @@ router.post(
   invoiceController.postNewInvoice
 )
 
+router.get('/invoice/recipient/:recipient', auth, invoiceController.getRecipient)
+
 router.post('/invoice/new/autofill',auth, [
   body('invoiceNumber')
       .isInt()

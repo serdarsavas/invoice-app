@@ -29,6 +29,7 @@
         width: 90%;
         display: flex;
         justify-content: space-around;
+        align-items: stretch;
       }
 
       .header {
@@ -44,7 +45,7 @@
         margin-top: 10px;
       }
       .header-col3 {
-        width: 20%;
+        width: 30%;
         margin-top: 20px;
       }
 
@@ -58,7 +59,7 @@
         width: 90%;
         margin: 0 auto;
         border-collapse: collapse;
-        padding-bottom: 200px;
+        padding-bottom: 100px;
       }
 
       thead {
@@ -67,9 +68,13 @@
 
       th,
       td {
-        padding: 10px;
+        padding: 15px;
         text-align: left;
         vertical-align: top;
+      }
+
+      th {
+        white-space: nowrap;
       }
 
       .invoice-footer {
@@ -83,14 +88,13 @@
 
       footer {
         border-top: 3px solid black;
-
+        flex-wrap: wrap;
+        justify-content: space-evenly;
       }
 
       .footer-col {
         padding: 0 15px;
-        width: 40%;
-        margin: auto;
-        flex-wrap: wrap;
+        width: 50%;
       }
 
       .bold {
@@ -111,9 +115,6 @@
         font-size: 43px;
       }
 
-      p {
-        line-height: 1.2;
-      }
     </style>
   </head>
   <body>
@@ -139,11 +140,11 @@
         </div>
         <div class="header-col3">
           <p>
-            <span class="bold">Fakturadatum:</span><br />
+            <span class="bold">Fakturadatum:</span>
             <%= invoice.updatedAt.toISOString().substring(0, 10) %>
           </p>
           <p>
-            <span class="bold">Uppdragsnummer:</span><br />
+            <span class="bold">Uppdragsnummer:</span>
             <%= invoice.assignmentNumber %>
           </p>
           <p>
@@ -187,12 +188,12 @@
         <div class="flex invoice-footer">
           <div class="left">
             <p>Belopp före moms</p>
-            <p>Total moms</p>
+            <p>Total moms (<%= invoice.VAT %>)</p>
             <p class="bold">Att betala</p>
           </div>
           <div class="right">
-            <p><%= invoice.totalBeforeVAT %> SEK</p>
-            <p><%= invoice.VAT %> %</p>
+            <p><%= invoice.totalBeforeVAT %> kr</p>
+            <p><%= invoice.totalAfterVAT - invoice.totalBeforeVAT %> kr</p>
             <p class="bold"><%= invoice.totalAfterVAT %> kr</p>
           </div>
         </div>
@@ -201,23 +202,22 @@
       <footer class="flex footer">
         <div class="footer-col">
           <p>
-            Adress:<br />
             <%= user.firstName %> <%= user.lastName %><br />
             <%= user.address.street %><br />
             <%= user.address.zip %> <%= user.address.city %>
           </p>
         </div>
         <div class="footer-col">
-          <p>Telefonnummer:<br /><%= user.telephone %></p>
-          <p>Epost:<br /><%= user.email %></p>
-        </div>
-        <div class="footer-col">
-          <p>Bankgiro:<br /><%= user.bankgiro %></p>
+          <p>Bankgiro: <%= user.bankgiro %></p>
           <p>Godkänd för F-skatt</p>
         </div>
         <div class="footer-col">
-          <p>Organisationsnr:<br /><%= user.registrationNumber %></p>
-          <p>Momsregnr:<br /><%= user.vatNumber %></p>
+            <p>Telefon: <%= user.telephone %></p>
+            <p>Epost: <%= user.email %></p>
+        </div>
+        <div class="footer-col">
+          <p>Organisationsnr: <%= user.registrationNumber %></p>
+          <p>Momsregnr: <%= user.vatNumber %></p>
         </div>
       </footer>
     </div>

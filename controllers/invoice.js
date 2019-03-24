@@ -7,7 +7,6 @@ const Invoice = require('../models/invoice')
 
 const getInvoiceRows = req => {
   const numRows = req.body.description.length
-  console.log('Req body:-------', req.body)
   let rows = []
   for (let i = 0; i < numRows; i++) {
     let quantity = Number(req.body.quantity[i])
@@ -47,7 +46,7 @@ const createInvoice = async req => {
     },
     rows: rows,
     totalBeforeVAT: total,
-    VAT: 25,
+    VAT: 0.25,
     totalAfterVAT: totalAfterVAT,
     owner: req.user._id
   })
@@ -196,6 +195,10 @@ exports.getDownloadInvoice = async (req, res) => {
   }
 }
 
+exports.getRecipient = (req, res) => {
+
+}
+
 
 exports.getEditInvoice = async (req, res) => {
   try {
@@ -230,7 +233,7 @@ exports.postEditInvoice = async (req, res) => {
     invoice.recipient.city = req.body.city
     invoice.rows = rows
     invoice.totalBeforeVAT = total
-    invoice.totalAfterVAT = (total * 1.25).toFixed(2)
+    invoice.totalAfterVAT = (total * (invoice.VAT + 1)).toFixed(2)
     await invoice.save()
     res.redirect('/invoice/invoices')
   } catch (e) {
