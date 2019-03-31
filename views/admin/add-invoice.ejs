@@ -6,16 +6,18 @@
 <%- include('../includes/navigation.ejs') %>
 <body>
   
-  <% if (errorMessage) { %>
-    <div><%= errorMessage %></div>
-  <% } %>
   
   <main class="form-wrapper">
+    <% if (validationErrors) { %>
+      <% validationErrors.forEach(e => { %>
+        <div class="error-message"><%= e.msg %></div>
+      <% }) %>
+    <% } %>
     <h2 class="invoice-header">Mottagaruppgifter</h2>
     <% if (recipients.length > 0) { %>
-    <form action="/invoice/add/autofill" method="post">
+    <form action="/admin/add-invoice/autofill" method="post" novalidate>
       <div class="select form-control">
-        <select name="authority" id="recipient">
+        <select name="authority" id="authority">
           <% recipients.forEach(recipient => { %>
             <option value="<%= recipient.authority %>"> 
               <%= recipient.authority %>
@@ -30,7 +32,7 @@
     <% } %>
     
     
-    <form action="/invoice/add" method="post">
+    <form action="/admin/add-invoice" method="post" novalidate>
       <div class="form-control">
         <label for="authority">Mottagare: </label>
         <input 
@@ -95,15 +97,15 @@
             <input type="text" name="description[]" id="description" />
           </div>
           <div class="form-control">
-            <label for="quantity">Antal: </label>
+            <label for="quantity">Antal </label>
             <input type="number" name="quantity[]" id="quantity" step=".01" />
           </div>
           <div class="form-control">
-            <label for="unit">Enhet:</label>
+            <label for="unit">Enhet</label>
             <input type="text" name="unit[]" id="unit"/>
           </div>
           <div class="form-control">
-            <label for="price">Pris:</label>
+            <label for="price">Pris</label>
             <input type="number" name="price[]" id="price" step=".01"/>
           </div>
         </div>
@@ -112,12 +114,7 @@
       <div class="form-control">
         <button class="btn" type="submit">Skicka som pdf till min epost</button>
       </div>
-    </form>
-
-    <form action="/invoice/edit-cancel" method="POST">
-      <div class="form-control">
-        <button class="btn" type="submit">Avbryt</button>
-      </div>
+      <a class="btn" href="/admin/invoices">Avbryt</button> 
     </form>
   </main>
 

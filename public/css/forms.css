@@ -30,13 +30,13 @@
   outline-color: #786f6f;
 }
 
-.form-control input.invalid,
-.form-control textarea.invalid {
+.form-control input.invalid { 
   border-color: red;
 }
 
 .btn {
   display: inline-block;
+  margin-top: 1rem;
   padding: 0.25rem 1rem;
   text-decoration: none;
   font: inherit;
@@ -47,10 +47,27 @@
   cursor: pointer;
 }
 
+a.btn {
+  margin-left: 0.5rem;
+}
+
 .btn:hover,
 .btn:active {
   background-color: #4c4c4c;
   color: white;
 }
 
+.error-message {
+  margin: auto;
+  text-align: center;
+  padding: 0.5rem;
+  color: red;
+}
+
+.success-message {
+  margin: auto;
+  text-align: center;
+  padding: 0.5rem;
+  color: green;
+}
 

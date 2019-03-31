@@ -121,9 +121,9 @@
     <div class="wrapper">
       <header class="flex header">
         <div class="header-col1">
-          <h2 class="author"><%= user.firstName %> <%= user.lastName %></h2>
+          <h2 class="author"><%= user.name %></h2>
           <div class="header-sub-col">
-            <h4><%= user.position %></h4>
+            <h4><%= user.position ? user.position : 'XXXXXXXX' %></h4>
           </div>
         </div>
         <div class="header-col2">
@@ -149,14 +149,15 @@
           </p>
           <p>
             <span class="italic">Vår referens:</span><br />
-            <%= user.firstName %> <%= user.lastName %>
+            <%= user.name %>
           </p>
           <p>
             <span class="italic">Er referens:</span><br />
             <%= invoice.recipient.refPerson %>
           </p>
           <p>
-            <span class="italic">Betalningsvillkor:</span><br />30 dagar netto
+            <span class="italic">Betalningsvillkor:</span><br />
+            30 dagar netto
           </p>
         </div>
       </header>
@@ -202,22 +203,22 @@
       <footer class="flex footer">
         <div class="footer-col">
           <p>
-            <%= user.firstName %> <%= user.lastName %><br />
-            <%= user.address.street %><br />
-            <%= user.address.zip %> <%= user.address.city %>
+            <%= user.name %><br />
+            <%= user.street %><br />
+            <%= user.zip %> <%= user.city %>
           </p>
         </div>
         <div class="footer-col">
-          <p>Bankgiro: <%= user.bankgiro %></p>
+          <p>Bankgiro: <%= user.bankgiro ? user.bankgiro : 'NNNN-NNNN' %></p>
           <p>Godkänd för F-skatt</p>
         </div>
         <div class="footer-col">
-            <p>Telefon: <%= user.telephone %></p>
+            <p>Telefon: <%= user.phone %></p>
             <p>Epost: <%= user.email %></p>
         </div>
         <div class="footer-col">
-          <p>Organisationsnr: <%= user.registrationNumber %></p>
-          <p>Momsregnr: <%= user.vatNumber %></p>
+          <p>Organisationsnr: <%= user.registrationNumber ? user.registrationNumber : 'NNNNNN-NNNN' %></p>
+          <p>Momsregnr: <%= user.vatNumber ? user.vatNumber : 'NNNNNNNNNNNNNN'%></p>
         </div>
       </footer>
     </div>

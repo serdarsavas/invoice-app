@@ -1,0 +1,187 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+
+  </head>
+  <body>
+    <%- include('../includes/navigation.ejs') %>
+
+    
+  <div class="form-wrapper">
+    <% if (validationErrors) { %>
+      <% validationErrors.forEach(e => { %>
+        <div class="error-message"><%= e.msg %></div>
+      <% }) %>
+    <% } %>
+    <% if (successMessage) { %>
+        <h2 class="success-message"><%= successMessage %></h2>
+    <% } %>
+    <form action="/admin/profile" method="POST" novalidate>
+      <div class="form-control">
+        <label for="name">Namn</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'name') ? 'invalid' : ''%>"
+          type="text" 
+          name="name" 
+          id="name"
+          <% if (inputData) { %> 
+            value="<%= inputData.name %>"
+          <% } else if(user.name) { %>
+            value="<%= user.name %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="email">Epost</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : ''%>"
+          type="email" 
+          name="email" 
+          id="email" 
+          <% if (inputData) { %> 
+            value="<%= inputData.email %>"
+          <% } else if(user.email) { %>
+            value="<%= user.email %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="phone">Telefon</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'phone') ? 'invalid' : ''%>"
+          type="tel" 
+          name="phone" 
+          id="phone" 
+          <% if (inputData) { %> 
+            value="<%= inputData.phone %>"
+          <% } else if(user.phone){ %>
+            value="<%= user.phone %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="street">Gatuaddress</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : ''%>"
+          type="text" 
+          name="street" 
+          id="street" 
+          <% if (inputData) { %> 
+            value="<%= inputData.street %>"
+          <% } else if(user.street) { %>
+            value="<%= user.street %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="zip">Postkod</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : ''%>"
+          type="text"
+          name="zip" 
+          id="zip" 
+          <% if (inputData) { %> 
+            value="<%= inputData.zip %>"
+          <% } else if(user.zip) { %>
+            value="<%= user.zip %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="city">Postort</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'city') ? 'invalid' : ''%>"
+          type="text" 
+          name="city" 
+          id="city" 
+          <% if (inputData) { %> 
+            value="<%= inputData.city %>"
+          <% } else if(user.city) { %>
+            value="<%= user.city %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+          <label for="position">Jobbtitel</label>
+          <input 
+            class="<%= validationErrors.find(e => e.param === 'position') ? 'invalid' : ''%>"
+            type="text"
+            name="position" 
+            id="position" 
+            <% if (inputData) { %> 
+              value="<%= inputData.position %>"
+            <% } else if(user.position) { %>
+              value="<%= user.position %>"
+            <% } %>
+            />
+      </div>
+      <div class="form-control">
+        <label for="registration-number">Organisationsnummer</label>
+        <input
+          class="<%= validationErrors.find(e => e.param === 'registrationNumber') ? 'invalid' : ''%>" 
+          type="text" 
+          name="registrationNumber" 
+          id="registration-number"
+          <% if (inputData) { %> 
+            value="<%= inputData.registrationNumber %>"
+          <% } else if(user.registrationNumber) { %>
+            value="<%= user.registrationNumber %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="vat-number">Momsregistreringsnummer</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'vatNumber') ? 'invalid' : ''%>"
+          type="text" 
+          name="vatNumber" 
+          id="vat-number" 
+          <% if (inputData) { %> 
+            value="<%= inputData.vatNumber %>"
+          <% } else if(user.vatNumber) { %>
+            value="<%= user.vatNumber %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="bankgiro">Bankgiro</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'bankgiro') ? 'invalid' : ''%>"
+          type="text" 
+          name="bankgiro" 
+          id="bankgiro" 
+          <% if (inputData) { %> 
+            value="<%= inputData.bankgiro %>"
+          <% } else if(user.bankgiro) { %>
+            value="<%= user.bankgiro %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="password">Lösenord</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : ''%>"
+          type="password" 
+          name="password" 
+          id="password" 
+          <% if (inputData) { %> 
+            value="<%= inputData.password %>"
+          <% } %>
+          />
+      </div>
+      <div class="form-control">
+        <label for="confirm-password">Bekräfta lösenord</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : ''%>"
+          type="password" 
+          name="confirmPassword" 
+          id="confirm-password"  
+          <% if (inputData) { %> 
+            value="<%= inputData.confirmPassword %>"
+          <% } %>
+          />
+      </div>
+      <button class="btn" type="submit">Spara ändringar</button>
+      <a class="btn" href="/admin/invoices">Avbryt</button>
+    </form>
+  </div>
+    <%- include('../includes/end.ejs') %>

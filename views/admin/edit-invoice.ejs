@@ -5,7 +5,7 @@
 <body>
 <%- include('../includes/navigation.ejs') %>
   <main class="form-wrapper">
-    <form action="/invoice/edit" method="POST">
+    <form action="/admin/edit-invoice" method="POST">
       <h2 class="form-header">Mottagaruppgifter</h2>
       <div class="form-control">
         <label for="authority">Mottagare</label>
@@ -21,7 +21,7 @@
           type="text" 
           name="refPerson" 
           id="ref-person"
-          value="<%= invoice.refPerson %>" />
+          value="<%= invoice.recipient.refPerson %>" />
       </div>
       <div class="form-control">
         <label for="street">Gatuaddress</label>
@@ -111,7 +111,7 @@
       <input type="hidden" name="invoiceId" value="<%= invoice._id%>">
       <button class="btn" type="submit">Spara ändringar</button>
     </form>
-    <form action="/invoice/edit-cancel" method="POST">
+    <form action="/admin/edit-cancel" method="POST">
       <div class="form-control">
         <button class="btn" type="submit">Avbryt</button>
       </div>

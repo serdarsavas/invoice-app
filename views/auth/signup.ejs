@@ -5,62 +5,90 @@
   <body>
     <%- include('../includes/navigation.ejs') %>
 
-    <% if (errorMessage) { %>
-      <div><%= errorMessage %></div>
-    <% } %>
+    
   <div class="form-wrapper">
+    <% if (validationErrors) { %>
+      <% validationErrors.forEach(e => { %>
+        <div class="error-message"><%= e.msg %></div>
+      <% }) %>
+    <% } %>
     <form action="/signup" method="POST" novalidate>
       <div class="form-control">
-        <label for="first-name">Förnamn</label>
-        <input type="text" name="firstName" id="first-name" />
-      </div>
-      <div class="form-control">
-        <label for="last-name">Efternamn</label>
-        <input type="text" name="lastName" id="last-name" />
+        <label for="name">Namn</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'name') ? 'invalid' : ''%>"
+          type="text" 
+          name="name" 
+          id="name" />
       </div>
       <div class="form-control">
         <label for="email">Epost</label>
-        <input type="email" name="email" id="email" />
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : ''%>"
+          type="email" 
+          name="email" 
+          id="email" />
       </div>
       <div class="form-control">
-        <label for="telephone">Telefon</label>
-        <input type="tel" name="telephone" id="telephone" />
+        <label for="phone">Telefon</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'phone') ? 'invalid' : ''%>"
+          type="tel" 
+          name="phone" 
+          id="phone" />
       </div>
+      
       <div class="form-control">
         <label for="position">Jobbtitel</label>
-        <input type="text" name="position" id="position" />
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'phone') ? 'invalid' : ''%>"
+          type="text"
+          name="position" 
+          id="position" />
       </div>
+
       <div class="form-control">
         <label for="street">Gatuaddress</label>
-        <input type="text" name="street" id="street" />
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : ''%>"
+          type="text" 
+          name="street" 
+          id="street" />
       </div>
+
       <div class="form-control">
-        <label for="street">Postkod</label>
-        <input type="number" name="zip" id="zip" />
+        <label for="zip">Postkod</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : ''%>"
+          type="text"
+          name="zip" 
+          id="zip" />
       </div>
+
       <div class="form-control">
         <label for="city">Postort</label>
-        <input type="text" name="city" id="city" />
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'city') ? 'invalid' : ''%>"
+          type="text" 
+          name="city" 
+          id="city" />
       </div>
-      <div class="form-control">
-        <label for="registration-number">Organisationsnummer</label>
-        <input type="text" name="registrationNumber" id="registration-number" />
-      </div>
-      <div class="form-control">
-        <label for="vat-number">Momsregnr</label>
-        <input type="text" name="vatNumber" id="vat-number" />
-      </div>
-      <div class="form-control">
-        <label for="bankgiro">Bankgiro</label>
-        <input type="text" name="bankgiro" id="bankgiro" />
-      </div>
+    
       <div class="form-control">
         <label for="password">Lösenord</label>
-        <input type="password" name="password" id="password" />
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : ''%>"
+          type="password" 
+          name="password" 
+          id="password" />
       </div>
       <div class="form-control">
         <label for="confirm-password">Bekräfta lösenord</label>
-        <input type="password" name="confirmPassword" id="confirm-password" />
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : ''%>"
+          type="password" 
+          name="confirmPassword" 
+          id="confirm-password" />
       </div>
       <button class="btn" type="submit">Registrera dig</button>
     </form>

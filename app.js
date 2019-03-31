@@ -6,9 +6,10 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 
+
 const User = require('./models/user')
 const authRoutes = require('./routes/auth')
-const invoiceRoutes = require('./routes/invoice')
+const adminRoutes = require('./routes/admin')
 
 const app = express()
 
@@ -23,7 +24,6 @@ app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 app.use(bodyParser.urlencoded({ extended: true }))
-
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(
@@ -57,7 +57,7 @@ app.use(async (req, res, next) => {
 })
 
 app.use(authRoutes)
-app.use(invoiceRoutes)
+app.use(adminRoutes)
 
 
 mongoose

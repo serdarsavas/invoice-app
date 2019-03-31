@@ -4,16 +4,16 @@
         <% if (isAuthenticated) { %>
             <ul class="main-header__item-list">
                 <li class="main-header__item">
-                    <a class="<%= path === '/start' ? 'active' : '' %>" href="/start">Hem</a>
+                    <a class="<%= path === '/add' ? 'active' : '' %>" href="/admin/add-invoice">Ny faktura</a>
                 </li>
                 <li class="main-header__item">
-                    <a class="<%= path === '/add' ? 'active' : '' %>" href="/invoice/add">Ny faktura</a>
+                    <a class="<%= path === '/invoices' ? 'active' : '' %>" href="/admin/invoices">Fakturor</a>
                 </li>
                 <li class="main-header__item">
-                    <a class="<%= path === '/invoices' ? 'active' : '' %>" href="/invoice/invoices">Gamla fakturor</a>
+                    <a class="<%= path === '/profile' ? 'active' : '' %>" href="/admin/profile">Mina uppgifter</a>
                 </li>
             </ul>
-            <ul class="main-header__item-list">
+            <ul class="main-header__item-list logout">
                 <li class="main-header__item">
                     <form action="/logout" method="post">
                         <button type="submit">Logga ut</button>
@@ -22,9 +22,6 @@
             </ul>
         <%  } else { %>
             <ul class="main-header__item-list">
-                <li class="main-header__item">
-                    <a class="<%= path === '/' ? 'active' : '' %>" href="/">Hem</a>
-                </li>
                 <li class="main-header__item">
                     <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Logga in</a>
                 </li>

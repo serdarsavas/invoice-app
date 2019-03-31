@@ -35,19 +35,23 @@ main {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .main-header__item-list {
   list-style: none;
   padding: 0;
-  display: flex;
-  justify-content: start;
+  
+}
+
+.main-header__item-list {
+  margin-left: 17rem;
 }
 
 .main-header__item {
   margin: 0 1rem;
   font-size: 1.2rem;
+  display: inline-block;
 }
 
 .main-header__item a,
@@ -56,7 +60,7 @@ main {
   background: transparent;
   border: none;
   text-decoration: none;
-  padding: 0.5rem;
+  padding: 0.65rem;
   color: white;
   cursor: pointer;
 }
@@ -66,8 +70,8 @@ main {
 .main-header__item a.active,
 .main-header__item button:hover,
 .main-header__item button:active {
-  color: #d3d8e2;
-  border-bottom: 0.1rem solid #c9ced9;
+  color: #e5e5e5;
+  border-bottom: 0.1rem solid #e5e5e5;
 }
 
 .btn {
@@ -91,3 +95,5 @@ main {
 .btn:focus {
   outline: none;
 }
+
+

@@ -26,7 +26,7 @@ exports.postLogin = async (req, res) => {
 
   const email = req.body.email
   const password = req.body.password
-  
+
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/login', {
       path: '/login',
@@ -35,7 +35,8 @@ exports.postLogin = async (req, res) => {
       inputData: {
         email,
         password
-      }
+      },
+      validationErrors: errors.array()
     })
   }
 
@@ -45,11 +46,12 @@ exports.postLogin = async (req, res) => {
       return res.status(422).render('auth/login', {
         path: '/login',
         pageTitle: 'Logga in',
-        errorMessage: 'Felaktig epost eller lösenord.',
+        errorMessage: 'Felaktig epostadress eller lösenord.',
         inputData: {
           email,
           password
-        }
+        },
+        validationErrors: []
       })
     }
     const isMatch = await bcrypt.compare(password, user.password)
@@ -61,31 +63,33 @@ exports.postLogin = async (req, res) => {
         inputData: {
           email,
           password
-        }
+        },
+        validationErrors: []
       })
     }
     req.session.isLoggedIn = true
     req.session.user = user
     await req.session.save()
-    res.redirect('/start')
-    
+    res.redirect('/admin/invoices')
   } catch (e) {
     console.log(e)
   }
 }
 
-exports.postLogout = (req, res) => {
-  req.session.destroy(err => {
-    res.redirect('/')
-    if (err) console.log(err)
-  })
+exports.postLogout = async (req, res) => {
+  try {
+    await req.session.destroy()
+    res.redirect()
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 exports.getSignup = (req, res) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Registrering',
-    errorMessage: null
+    validationErrors: [] 
   })
 }
 
@@ -95,27 +99,20 @@ exports.postSignup = async (req, res) => {
     return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Registrering',
-      errorMessage: errors.array()[0].msg
+      validationErrors: errors.array({ onlyFirstError: true })
     })
   }
   const password = req.body.password
   try {
     const hashedPassword = await bcrypt.hash(password, 8)
     const user = new User({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      name: req.body.name,
       email: req.body.email,
-      telephone: req.body.telephone,
-      position: req.body.position,
-      address: {
-        street: req.body.street,
-        zip: req.body.zip,
-        city: req.body.city
-      },
-      registrationNumber: req.body.registrationNumber,
-      vatNumber: req.body.vatNumber,
-      bankgiro: req.body.bankgiro,
-      password: hashedPassword
+      password: hashedPassword,
+      phone: req.body.phone,
+      street: req.body.street,
+      zip: req.body.zip,
+      city: req.body.city
     })
     await user.save()
   } catch (e) {

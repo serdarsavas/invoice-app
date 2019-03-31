@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator/check')
+const bcrypt = require('bcryptjs')
 
 const pdfHandler = require('../pdf/pdf')
 const Invoice = require('../models/invoice')
@@ -25,15 +26,14 @@ const getInvoiceRows = req => {
 const getTotal = rows => {
   let total = 0
   rows.forEach(row => {
-    total+= Number(row.amount)
+    total += Number(row.amount)
   })
-  return total
+  return total.toFixed(2)
 }
 
 const createInvoice = async req => {
   const rows = getInvoiceRows(req)
   const total = getTotal(rows)
-  const totalAfterVAT = (total * 1.25).toFixed(2)
   const invoice = new Invoice({
     invoiceNumber: req.body.invoiceNumber,
     assignmentNumber: req.body.assignmentNumber,
@@ -47,7 +47,7 @@ const createInvoice = async req => {
     rows: rows,
     totalBeforeVAT: total,
     VAT: 0.25,
-    totalAfterVAT: totalAfterVAT,
+    totalAfterVAT: (total * 1.25).toFixed(2),
     owner: req.user._id
   })
   try {
@@ -87,20 +87,13 @@ const getUniqueRecipients = async (req, res) => {
 
 //Exports
 
-exports.getStartPage = (req, res) => {
-  res.render('invoice/start', {
-    path: '/start',
-    pageTitle: 'Hem'
-  })
-}
-
 exports.getAddInvoice = async (req, res) => {
-  res.render('invoice/add', {
+  res.render('admin/add-invoice', {
     path: '/add',
     pageTitle: 'Ny faktura',
     recipients: await getUniqueRecipients(req),
     recipient: null,
-    errorMessage: null
+    validationErrors: null
   })
 }
 
@@ -108,19 +101,19 @@ exports.postAddInvoice = async (req, res) => {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('invoice/edit-invoice', {
-      path: '/edit-invoice',
+    return res.status(422).render('admin/add-invoice', {
+      path: '/add',
       pageTitle: 'Ny faktura',
       recipients: await getUniqueRecipients(req),
       recipient: null,
-      errorMessage: errors.array()[0].msg
+      validationErrors: errors.array({ onlyFirstError: true })
     })
   }
   try {
     const invoice = await createInvoice(req)
     await pdfHandler.convertInvoiceToPdf(invoice, req.user)
     await pdfHandler.emailPdf(invoice, req.user)
-    res.redirect('/invoice/invoices')
+    res.redirect('/admin/invoices')
   } catch (e) {
     res.send(e)
   }
@@ -129,8 +122,8 @@ exports.postAddInvoice = async (req, res) => {
 exports.getEditInvoice = async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.invoiceId)
-    res.render('invoice/edit', {
-      pageTitle: 'Redigera',
+    res.render('admin/edit-invoice', {
+      pageTitle: 'Redigera faktura',
       path: '/invoices',
       invoice
     })
@@ -143,9 +136,6 @@ exports.postEditInvoice = async (req, res) => {
   try {
     const invoiceId = req.body.invoiceId
     const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user })
-    if (!invoice) {
-      return res.redirect('/start')
-    } 
     const rows = getInvoiceRows(req)
     const total = getTotal(rows)
 
@@ -160,7 +150,7 @@ exports.postEditInvoice = async (req, res) => {
     invoice.totalBeforeVAT = total
     invoice.totalAfterVAT = (total * (invoice.VAT + 1)).toFixed(2)
     await invoice.save()
-    res.redirect('/invoice/invoices')
+    res.redirect('/admin/invoices')
   } catch (e) {
     console.log(e)
   }
@@ -173,20 +163,20 @@ exports.postInvoiceRecipientData = async (req, res) => {
       'recipient.authority': authority
     })
     if (!invoice) {
-      return res.status(422).render('invoice/add', {
+      return res.status(422).render('admin/add-invoice', {
         path: '/add',
         pageTitle: 'Ny faktura',
         recipients: await getUniqueRecipients(req),
-        errorMessage: 'Mottagaren kunde inte hittas.',
+        validationErrors: null
       })
     }
-    const {recipient} = invoice
-    res.render('invoice/add', {
+    const { recipient } = invoice
+    res.render('admin/add-invoice', {
       path: '/add',
       pageTitle: 'Ny faktura',
       recipients: await getUniqueRecipients(req),
       recipient,
-      errorMessage: null
+      validationErrors: null
     })
   } catch (e) {
     return console.log(e)
@@ -198,9 +188,9 @@ exports.getInvoices = async (req, res) => {
     const documents = await Invoice.find({ owner: req.user })
     const invoices = [...documents].reverse()
 
-    res.render('invoice/invoices', {
+    res.render('admin/invoices', {
       path: '/invoices',
-      pageTitle: 'Mina fakturor',
+      pageTitle: 'Fakturor',
       invoices
     })
   } catch (e) {
@@ -229,16 +219,68 @@ exports.getDownloadInvoice = async (req, res) => {
   }
 }
 
-exports.getRecipient = (req, res) => {
-
-}
 exports.postDeleteInvoice = async (req, res) => {
   try {
     await Invoice.findByIdAndDelete(req.body.invoiceId)
-    res.redirect('/invoice/invoices')
+    res.redirect('/admin/invoices')
   } catch (e) {
     console.log(e)
-    res.redirect('/start')
+    res.redirect('/admin/invoices')
+  }
+}
+
+exports.getEditProfile = (req, res) => {
+  res.render('admin/edit-profile', {
+    pageTitle: 'Mina uppgifter',
+    path: '/profile',
+    user: req.user,
+    validationErrors: [],
+    inputData: null,
+    successMessage: null
+  })
+}
+
+exports.postEditProfile = async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).render('admin/edit-profile', {
+      pageTitle: 'Mina uppgifter',
+      path: '/profile',
+      user: req.user,
+      validationErrors: errors.array({ onlyFirstError: true }),
+      inputData: req.body,
+      successMessage: null
+    })
+  }
+  try {
+    const user = req.user
+    const isNewPassword = await bcrypt.compare(req.body.password, user.password)
+    if(isNewPassword) {
+      user.password = await bcrypt.hash(req.body.password, 8)
+    }
+    user.name = req.body.name
+    user.email = req.body.email
+    user.phone = req.body.phone
+    user.street = req.body.street
+    user.zip = req.body.zip
+    user.city = req.body.city
+    user.position = req.body.position
+    user.registrationNumber = req.body.registrationNumber
+    user.vatNumber = req.body.vatNumber
+    user.bankgiro = req.body.bankgiro
+    await user.save()
+    req.user = user
+    res.render('admin/edit-profile', {
+      pageTitle: 'Mina uppgifter',
+      path: '/profile',
+      user: req.user,
+      validationErrors: [],
+      inputData: null,
+      successMessage: 'Dina uppgifter är nu sparade!'
+    })
+  } catch (e) {
+    console.log(e)
+    res.redirect('/admin/invoices')
   }
 }
 

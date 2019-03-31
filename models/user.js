@@ -4,67 +4,38 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
   
-  firstName: {
+  name: {
     type: String,
-    required: true,
-    trim: true
-  },
-  lastName: {
-    type: String,
-    required: true,
-    trim: true
+    required: true
   },
   email: {
     type: String,
-    required: true,
-    trim: true,
-    lowercase: true
+    required: true
   },
   password: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
-  telephone: {
+  phone: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
-  position: {
+  street: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
-  address: {
-    street: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    zip: {
-      type: Number,
-      reguired: true,
-    },
-    city: {
-      type: String,
-      required: true,
-      trim: true
-    }
-  },
-  registrationNumber: {
+  zip: {
     type: String,
-    trim: true
+    reguired: true
   },
-  vatNumber: {
+  city: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
-  bankgiro: {
-    type: String,
-    required: true,
-    trim: true
-  }
+  position: String,
+  registrationNumber: String,
+  vatNumber: String,
+  bankgiro: String
 })
 
 userSchema.virtual('invoices', {

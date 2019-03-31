@@ -5,32 +5,110 @@
   align-items: stretch;
 }
 
-.card {
-  box-shadow: 0 2px 8px #00000042;
+.invoice {
   position: relative;
+  box-shadow: 0 2px 8px #00000042;
+  width: 22rem;
+  max-width: 95%;
+  margin: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
 }
 
-.card__header {
+.invoice-data {
+  margin-top: 2rem;
+  padding: 1rem;
+  width: 65%;
+}
+
+.invoice-header {
+  margin: auto;
   padding: 1rem 1rem 0 1rem;
 }
 
-.card__header h1,
-.card__content h1,
-.card__content h2,
-.card__content p {
+.invoice-details {
+  margin: auto;
+}
+
+.invoice-header h1,
+.invoice-header h1,
+.invoice-header h2,
+.invoice-header p {
   margin: 0;
 }
 
-.card__actions {
-  padding: 1rem;
+.invoice-actions {
+  padding: 2rem 0;
   text-align: center;
-  margin: 0;
+  background: #f3f1f1;
+  width: 35%;
 }
 
-.card__actions button,
-.card__actions a {
-  margin: 0 0.25rem;
+.invoice-actions a {
+  margin: 2rem auto;
+  white-space: nowrap;
+  display: block;
+  text-decoration: none;
+  color: #494949;
+  padding: 0.5rem;
+  text-align: left;
 }
+
+.invoice-actions a:hover,
+.invoice-actions a:active {
+  text-decoration: underline;
+  color: #111010;
+  font-size: 1.01rem;
+}
+
+
+.invoice-header__title {
+  font-size: 1.4rem;
+  font-weight: 100;
+  text-align: center;
+  color: #4c4c4c;
+  padding: 0.5rem;
+}
+.invoice-header__date {
+  font-size: 1.15rem;
+  font-weight: 100;
+  text-align: center;
+  color: #4c4c4c;
+}
+
+.invoice-details {
+  margin-top: 2.5rem;
+}
+
+
+.invoice-details__total {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #4c4c4c;
+}
+
+.invoice-details__number, .invoice-details__date {
+  text-align: center;
+  color: #4c4c4c;
+}
+
+.invoice-filter {
+  font-size: 1rem;
+  height: 2rem;
+  padding: 1.2rem;
+  display: block;
+  width: 40%;
+  margin: 2rem auto;
+  border: 0.5px solid #b0abab;
+}
+
+.invoice-filter:focus {
+  outline: none;
+  background: #eeeff1;
+}
+
 
 .delete {
   position: absolute;
@@ -55,45 +133,8 @@
   font-size: 1.4rem;
 }
 
-.invoice-item {
-  width: 30rem;
-  max-width: 95%;
-  margin: 1rem;
-}
-
-.invoice__title {
-  font-size: 1.4rem;
-  text-align: center;
-  color: #4c4c4c;
-}
 
 
-.invoice__total {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #4c4c4c;
-  margin-bottom: 0.5rem;
-}
-
-.invoice__number, .invoice__date {
-  text-align: center;
-  color: #4c4c4c;
-}
-
-.invoice-filter {
-  font-size: 1rem;
-  height: 2rem;
-  padding: 1.2rem;
-  display: block;
-  width: 40%;
-  margin: 2rem auto;
-  border: 0.5px solid #b0abab;
-}
-
-.invoice-filter:focus {
-  outline: none;
-  background: #eeeff1;
-}
 
 
 

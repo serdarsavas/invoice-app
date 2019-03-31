@@ -4,22 +4,22 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
     
+  <div class="form-wrapper">
     <% if (errorMessage) { %>
-      <div><%= errorMessage %></div>
+      <div class="error-message"><%= errorMessage %></div>
     <% } %>
-<div class="form-wrapper">
-  <form action="/login" method="post" novalidate>
-    <div class="form-control">
-      <label for="email">Epost</label>
-      <input type="email" name="email" id="email" value="<%= inputData.email %>">
-    </div>
-    <div class="form-control">
-      <label for="password">Lösenord</label>
-      <input type="password" name="password" id="password" value="<%= inputData.password %>">
-    </div>
-    <div class="form-control">
-      <button class="btn" type="submit">Logga in</button>
-    </div>
-  </form>
-</div>
+    <form action="/login" method="post" novalidate>
+      <div class="form-control">
+        <label for="email">Epost</label>
+        <input type="email" name="email" id="email" value="<%= inputData.email %>">
+      </div>
+      <div class="form-control">
+        <label for="password">Lösenord</label>
+        <input type="password" name="password" id="password" value="<%= inputData.password %>">
+      </div>
+      <div class="form-control">
+        <button class="btn" type="submit">Logga in</button>
+      </div>
+    </form>
+  </div>
 <%- include('../includes/end.ejs') %>
