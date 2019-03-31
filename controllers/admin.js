@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
+const { groupBy } = require('lodash')
 
 const pdfHandler = require('../pdf/pdf')
 const Invoice = require('../models/invoice')
@@ -17,7 +18,7 @@ const getInvoiceRows = req => {
       quantity: quantity,
       unit: req.body.unit[i],
       price: price,
-      amount: (Math.ceil(quantity) * price).toFixed(2)
+      amount: (Math.ceil(quantity) * price)
     })
   }
   return rows
@@ -28,7 +29,7 @@ const getTotal = rows => {
   rows.forEach(row => {
     total += Number(row.amount)
   })
-  return total.toFixed(2)
+  return total
 }
 
 const createInvoice = async req => {
@@ -47,8 +48,8 @@ const createInvoice = async req => {
     rows: rows,
     totalBeforeVAT: total,
     VAT: 0.25,
-    totalAfterVAT: (total * 1.25).toFixed(2),
-    owner: req.user._id
+    totalAfterVAT: (total * 1.25),
+    owner: req.user
   })
   try {
     await invoice.save()
@@ -125,7 +126,8 @@ exports.getEditInvoice = async (req, res) => {
     res.render('admin/edit-invoice', {
       pageTitle: 'Redigera faktura',
       path: '/invoices',
-      invoice
+      invoice,
+      inputData: null
     })
   } catch (e) {
     console.log(e)
@@ -133,9 +135,21 @@ exports.getEditInvoice = async (req, res) => {
 }
 
 exports.postEditInvoice = async (req, res) => {
+
   try {
     const invoiceId = req.body.invoiceId
-    const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user })
+    const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user }) 
+    const errors = validationResult(req)
+    
+    if (!errors.isEmpty()) {
+      return res.render('admin/edit-invoice', {
+        pageTitle: 'Redigera faktura',
+        path: '/invoices',
+        invoice,
+        inputData: req.body,
+        validationErrors: errors.array({ onlyFirstError: true })
+      })
+    }
     const rows = getInvoiceRows(req)
     const total = getTotal(rows)
 
@@ -148,20 +162,21 @@ exports.postEditInvoice = async (req, res) => {
     invoice.recipient.city = req.body.city
     invoice.rows = rows
     invoice.totalBeforeVAT = total
-    invoice.totalAfterVAT = (total * (invoice.VAT + 1)).toFixed(2)
+    invoice.totalAfterVAT = (total * (invoice.VAT + 1))
+    
     await invoice.save()
     res.redirect('/admin/invoices')
+  
   } catch (e) {
     console.log(e)
   }
 }
 
 exports.postInvoiceRecipientData = async (req, res) => {
-  const authority = req.body.authority
+  
   try {
-    const invoice = await Invoice.findOne({
-      'recipient.authority': authority
-    })
+    const authority = req.body.authority
+    const invoice = await Invoice.findOne({ 'recipient.authority': authority })
     if (!invoice) {
       return res.status(422).render('admin/add-invoice', {
         path: '/add',
@@ -186,7 +201,8 @@ exports.postInvoiceRecipientData = async (req, res) => {
 exports.getInvoices = async (req, res) => {
   try {
     const documents = await Invoice.find({ owner: req.user })
-    const invoices = [...documents].reverse()
+    const documentsByLatestFirst = [...documents].reverse()
+    const invoices = groupBy(documentsByLatestFirst, "recipient.authority")
 
     res.render('admin/invoices', {
       path: '/invoices',
@@ -284,6 +300,3 @@ exports.postEditProfile = async (req, res) => {
   }
 }
 
-exports.postCancelEdit = (req, res) => {
-  res.redirect('/invoice/invoices')
-}

@@ -25,8 +25,6 @@ router.get('/admin/download-invoice/:invoiceId', auth, adminController.getDownlo
 
 router.post('/admin/delete-invoice', auth, adminController.postDeleteInvoice)
 
-router.post('/admin/edit-cancel', auth, adminController.postCancelEdit)
-
 router.get('/admin/profile', auth, adminController.getEditProfile)
 
 router.post('/admin/profile', auth, validate('postEditProfile'), adminController.postEditProfile)

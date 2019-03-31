@@ -1,6 +1,7 @@
 <%- include('../includes/head.ejs') %>
 <link rel="stylesheet" href="/css/forms.css">
 <link rel="stylesheet" href="/css/invoice.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
 </head>
 <%- include('../includes/navigation.ejs') %>
@@ -110,10 +111,10 @@
           </div>
         </div>
       </section>
-      <button class="btn" type="button" id="add-row">Ny rad på fakturan</button>
-      <div class="form-control">
-        <button class="btn" type="submit">Skicka som pdf till min epost</button>
+      <div class="add-row" id="add-row">
+        <i class="fas fa-plus"><span>Ny rad på fakturan</span></i>
       </div>
+      <button class="btn" type="submit">Skicka som pdf till min epost</button>
       <a class="btn" href="/admin/invoices">Avbryt</button> 
     </form>
   </main>

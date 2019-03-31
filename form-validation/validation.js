@@ -146,9 +146,9 @@ exports.validate = (method) => {
           .trim()
           .not()
           .isEmpty()
-          .withMessage(`* Fältet Antal är tomt`)
+          .withMessage(`* Antal saknas`)
           .isFloat()
-          .withMessage(`* Endast siffror tillåtna under 'Uppdragsnummer'`),
+          .withMessage(`* Endast siffror tillåtna under 'Antal'`),
         body('unit')
           .not()
           .isEmpty()

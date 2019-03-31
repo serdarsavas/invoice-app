@@ -189,13 +189,13 @@
         <div class="flex invoice-footer">
           <div class="left">
             <p>Belopp före moms</p>
-            <p>Total moms (<%= invoice.VAT %>)</p>
+            <p>Total moms (<%= invoice.VAT * 100 %>%)</p>
             <p class="bold">Att betala</p>
           </div>
           <div class="right">
-            <p><%= invoice.totalBeforeVAT %> kr</p>
-            <p><%= invoice.totalAfterVAT - invoice.totalBeforeVAT %> kr</p>
-            <p class="bold"><%= invoice.totalAfterVAT %> kr</p>
+            <p><%= invoice.totalBeforeVAT.toFixed(2) %> kr</p>
+            <p><%= (invoice.totalAfterVAT - invoice.totalBeforeVAT).toFixed(2) %> kr</p>
+            <p class="bold"><%= invoice.totalAfterVAT.toFixed(2) %> kr</p>
           </div>
         </div>
       </main>

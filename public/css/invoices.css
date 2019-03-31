@@ -55,11 +55,18 @@
   text-align: left;
 }
 
-.invoice-actions a:hover,
-.invoice-actions a:active {
-  text-decoration: underline;
+.invoice-actions__link:hover,
+.invoice-actions__link:active {
   color: #111010;
   font-size: 1.01rem;
+  border-bottom: 1px solid #111010;
+}
+
+.invoice-actions__symbol {
+  display: inline-block;
+  font-size: 0.9rem;
+  transform: scale(1, 1.9);
+  padding-left: 0.3rem;
 }
 
 
@@ -132,6 +139,7 @@
   cursor: pointer;
   font-size: 1.4rem;
 }
+
 
 
 

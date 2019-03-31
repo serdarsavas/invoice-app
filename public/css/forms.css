@@ -71,3 +71,24 @@ a.btn {
   color: green;
 }
 
+.add-row {
+  margin: 1rem 0 3rem 1rem;
+}
+
+.fas {
+  color: #696969;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+
+.fas:hover {
+  cursor: pointer;
+  border-bottom: 1px solid #4c4c4c;
+}
+
+.fas span {
+  font: 300 1.3rem 'Open Sans';
+  margin-left: 1rem;
+  color: #4c4c4c;
+}
+

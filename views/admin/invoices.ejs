@@ -16,9 +16,9 @@
                                         <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
                                         <button class="delete-btn" type="submit">X</button>
                                     </form> 
-                                    <a href="/admin/view-invoice/<%= invoice._id %>" target="_blank">Visa faktura ></a>
-                                    <a href="/admin/download-invoice/<%= invoice._id %>">Ladda ner ></a>
-                                    <a href="/admin/edit-invoice/<%= invoice._id %>">Redigera ></a> 
+                                    <a href="/admin/view-invoice/<%= invoice._id %>" target="_blank"><span class="invoice-actions__link">Visa faktura<span class="invoice-actions__symbol">></span></span></a>
+                                    <a href="/admin/download-invoice/<%= invoice._id %>"><span class="invoice-actions__link">Ladda ner<span class="invoice-actions__symbol">></span></span></a>
+                                    <a href="/admin/edit-invoice/<%= invoice._id %>"><span class="invoice-actions__link">Redigera<span class="invoice-actions__symbol">></span></span></a> 
                                 </div>
                                 <div class="invoice-data">
                                     <header class="invoice-header">
