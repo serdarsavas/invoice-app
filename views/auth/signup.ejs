@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/css/forms.css">
 
   </head>
-  <body>
+  <body class="preload">
     <%- include('../includes/navigation.ejs') %>
 
     
@@ -12,14 +12,15 @@
         <div class="error-message"><%= e.msg %></div>
       <% }) %>
     <% } %>
-    <form action="/signup" method="POST" novalidate>
+    <form action="/signup" method="POST">
       <div class="form-control">
         <label for="name">Namn</label>
         <input 
           class="<%= validationErrors.find(e => e.param === 'name') ? 'invalid' : ''%>"
           type="text" 
           name="name" 
-          id="name" />
+          id="name" 
+          value="<%= inputData ? inputData.name : '' %>"/>
       </div>
       <div class="form-control">
         <label for="email">Epost</label>
@@ -27,7 +28,8 @@
           class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : ''%>"
           type="email" 
           name="email" 
-          id="email" />
+          id="email" 
+          value="<%= inputData ? inputData.email : '' %>"/>
       </div>
       <div class="form-control">
         <label for="phone">Telefon</label>
@@ -35,16 +37,8 @@
           class="<%= validationErrors.find(e => e.param === 'phone') ? 'invalid' : ''%>"
           type="tel" 
           name="phone" 
-          id="phone" />
-      </div>
-      
-      <div class="form-control">
-        <label for="position">Jobbtitel</label>
-        <input 
-          class="<%= validationErrors.find(e => e.param === 'phone') ? 'invalid' : ''%>"
-          type="text"
-          name="position" 
-          id="position" />
+          id="phone" 
+          value="<%= inputData ? inputData.phone : '' %>"/>
       </div>
 
       <div class="form-control">
@@ -53,7 +47,8 @@
           class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : ''%>"
           type="text" 
           name="street" 
-          id="street" />
+          id="street" 
+          value="<%= inputData ? inputData.street : '' %>"/>
       </div>
 
       <div class="form-control">
@@ -62,7 +57,8 @@
           class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : ''%>"
           type="text"
           name="zip" 
-          id="zip" />
+          id="zip"
+          value="<%= inputData ? inputData.zip : '' %>"/>
       </div>
 
       <div class="form-control">
@@ -71,7 +67,8 @@
           class="<%= validationErrors.find(e => e.param === 'city') ? 'invalid' : ''%>"
           type="text" 
           name="city" 
-          id="city" />
+          id="city" 
+          value="<%= inputData ? inputData.city : '' %>"/>
       </div>
     
       <div class="form-control">
@@ -80,7 +77,8 @@
           class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : ''%>"
           type="password" 
           name="password" 
-          id="password" />
+          id="password" 
+          value="<%= inputData ? inputData.password : '' %>"/>
       </div>
       <div class="form-control">
         <label for="confirm-password">Bekräfta lösenord</label>
@@ -88,8 +86,10 @@
           class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : ''%>"
           type="password" 
           name="confirmPassword" 
-          id="confirm-password" />
+          id="confirm-password" 
+          value="<%= inputData ? inputData.confirmPassword : '' %>"/>
       </div>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button class="btn" type="submit">Registrera dig</button>
     </form>
   </div>

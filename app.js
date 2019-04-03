@@ -5,27 +5,25 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
-
+const csrf = require('csurf')
 
 const User = require('./models/user')
 const authRoutes = require('./routes/auth')
 const adminRoutes = require('./routes/admin')
 
 const app = express()
-
 const port = process.env.PORT
-
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URL,
   collection: 'sessions'
 })
+const csrfProtection = csrf()
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -34,9 +32,10 @@ app.use(
     store: store
   })
 )
-
+app.use(csrfProtection)
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken()
   next();
 });
 
@@ -54,6 +53,11 @@ app.use(async (req, res, next) => {
   } catch (e) {
     throw new Error(e)
   }
+})
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn
+  res.locals.csrfToken = req.csrfToken()
+  next()
 })
 
 app.use(authRoutes)

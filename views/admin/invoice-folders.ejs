@@ -1,0 +1,25 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/invoice-folders.css">
+</head>
+
+    <body class="preload">
+        <%- include('../includes/navigation.ejs') %>
+        <main>
+          <% if (recipients.length > 0) { %>
+            <div class="grid">
+            <% recipients.forEach(recipient => { %>
+            <a href="/admin/invoices/<%= recipient.authority %>">
+              <article class="folder">
+                  <i class="fas fa-folder">
+                    <span class="folder__name"><%= recipient.authority %></span>
+                  </i>
+              </article>
+            </a>
+              
+            <% }) %>
+          </div>
+          <% } else { %>
+              <h1>Inga gamla fakturor!</h1>
+          <% } %>
+      </main>
+  <%- include('../includes/end.ejs') %>

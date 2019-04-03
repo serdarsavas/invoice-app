@@ -1,6 +1,7 @@
 .form-wrapper {
   width: 40rem;
   max-width: 90%;
+  color: #4a4a4a;
   margin: 2rem auto;
   display: block;
   border: 1px solid #878686;
@@ -21,13 +22,9 @@
 }
 
 .form-control input {
-  border: 1px solid #a1a1a1;
+  border: 1px solid #4a4a4a;
   font: inherit;
-  border-radius: 2px;
-}
-
-.form-control input:focus {
-  outline-color: #786f6f;
+  border-radius: 3px;
 }
 
 .form-control input.invalid { 
@@ -40,9 +37,8 @@
   padding: 0.25rem 1rem;
   text-decoration: none;
   font: inherit;
-  border: 1px solid #4c4c4c;
-  color: #4c4c4c;
-  background: white;
+  border: 1px solid #4a4a4a;
+  background: #fdfdfd;
   border-radius: 3px;
   cursor: pointer;
 }
@@ -53,8 +49,12 @@ a.btn {
 
 .btn:hover,
 .btn:active {
-  background-color: #4c4c4c;
-  color: white;
+  background-color: #4a4a4a;
+  color: #fdfdfd;
+}
+
+.btn:focus {
+  outline: none;
 }
 
 .error-message {
@@ -71,24 +71,4 @@ a.btn {
   color: green;
 }
 
-.add-row {
-  margin: 1rem 0 3rem 1rem;
-}
-
-.fas {
-  color: #696969;
-  font-size: 1.5rem;
-  padding: 0.5rem;
-}
-
-.fas:hover {
-  cursor: pointer;
-  border-bottom: 1px solid #4c4c4c;
-}
-
-.fas span {
-  font: 300 1.3rem 'Open Sans';
-  margin-left: 1rem;
-  color: #4c4c4c;
-}
 

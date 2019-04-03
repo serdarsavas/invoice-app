@@ -3,50 +3,52 @@
     <link rel="stylesheet" href="/css/invoices.css">
 </head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
-            <main>
-                <% if (invoices.length > 0) { %>
-                    <input type="text" class="invoice-filter" id="filter" placeholder="Sök på titel eller datum (ÅÅ-MM-DD)" />
-                    <div class="grid">
-                        <% invoices.forEach(invoice => { %>
-                            <article class="invoice">
-                                <div class="invoice-actions">
-                                    <form action="/admin/delete-invoice" method="POST" class="delete">
-                                        <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
-                                        <button class="delete-btn" type="submit">X</button>
-                                    </form> 
-                                    <a href="/admin/view-invoice/<%= invoice._id %>" target="_blank"><span class="invoice-actions__link">Visa faktura<span class="invoice-actions__symbol">></span></span></a>
-                                    <a href="/admin/download-invoice/<%= invoice._id %>"><span class="invoice-actions__link">Ladda ner<span class="invoice-actions__symbol">></span></span></a>
-                                    <a href="/admin/edit-invoice/<%= invoice._id %>"><span class="invoice-actions__link">Redigera<span class="invoice-actions__symbol">></span></span></a> 
-                                </div>
-                                <div class="invoice-data">
-                                    <header class="invoice-header">
-                                        <h1 class="invoice-header__title">
-                                            <%= invoice.recipient.authority %>
-                                        </h1>
-                                        <p class="invoice-header__date">
-                                            <%= invoice.updatedAt.toISOString().substring(0, 10) %>
-                                        </p>
-                                    </header>
-                                    <div class="invoice-details">
-                                        <h2 class="invoice-details__total">
-                                            <%= invoice.totalAfterVAT %> kr
-                                        </h2>
-                                        <p class="invoice-details__number">
-                                            Fakturanr: <%= invoice.invoiceNumber %>
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                            </article>
-                        <% }) %>
+<body class="preload">
+    <%- include('../includes/navigation.ejs') %>
+    <main>
+    <% if (invoices.length > 0) { %>
+        <form class="search-form">
+            <input type="search" class="search-form__filter" id="filter" placeholder="Sök på datum (ÅÅMMDD)" />
+        </form>
+        <div class="grid">
+            <% invoices.forEach(invoice => { %>
+                <article class="invoice">
+                    <div class="invoice-data">
+                        <header class="invoice-header">
+                            <h1 class="invoice-header__title">
+                                <%= invoice.recipient.authority %>
+                            </h1>
+                            <p class="invoice-header__date">
+                                Datum: <%= invoice.updatedAt.toISOString().substring(0, 10).split('-').join('') %>
+                            </p>
+                        </header>
+                        <div class="invoice-details">
+                            <h2 class="invoice-details__total">
+                                <%= invoice.totalAfterVAT %> kr
+                            </h2>
+                            <p class="invoice-details__number">
+                                Fakturanr: <%= invoice.invoiceNumber %>
+                            </p>
+                        </div>
                     </div>
-                    <% } else { %>
-                        <h1>Inga gamla fakturor!</h1>
-                    <% } %>
-            </main>
-            <% if (invoices.length > 0) { %>
-                <script src="/js/invoices.js"></script>
-            <% } %>
-            <%- include('../includes/end.ejs') %>
+                    <div class="invoice-actions">
+                        <form action="/admin/delete-invoice" method="POST" class="delete">
+                            <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button class="delete-btn" type="submit">X</button>
+                        </form> 
+                        <a href="/admin/view-invoice/<%= invoice._id %>" target="_blank">Visa faktura</a>
+                        <a href="/admin/download-invoice/<%= invoice._id %>">Ladda ner</a>
+                        <a href="/admin/edit-invoice/<%= invoice._id %>">Redigera</a> 
+                    </div>                                
+                </article>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <h1>Inga gamla fakturor!</h1>
+    <% } %>
+</main>
+<% if (invoices.length > 0) { %>
+    <script src="/js/invoices.js"></script>
+<% } %>
+<%- include('../includes/end.ejs') %>

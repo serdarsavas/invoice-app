@@ -1,0 +1,41 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: stretch;
+}
+
+.folder {
+  margin: 1rem auto;
+  color: #dbdbdb;
+}
+
+.folder a {
+  text-decoration: none;
+  
+}
+
+.folder .fas {
+  font-size: 18rem;
+  position: relative;
+}
+
+.folder:hover {
+  cursor: pointer;
+  color: #cfcfcf;
+  transform: scale(1, 1.02)
+}
+
+.folder__name {
+  position: absolute;
+  top: 40%;
+  left: 10%;
+  font: 500 1.2rem 'Open Sans';
+  color: #2f2f2f;
+}
+/* .fas {
+  color: #696969;
+  padding: 0.5rem;
+} */
+
+

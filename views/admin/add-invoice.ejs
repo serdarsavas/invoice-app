@@ -1,13 +1,11 @@
 <%- include('../includes/head.ejs') %>
 <link rel="stylesheet" href="/css/forms.css">
-<link rel="stylesheet" href="/css/invoice.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/add-invoice.css">
 
 </head>
 <%- include('../includes/navigation.ejs') %>
-<body>
-  
-  
+<body class="preload">
+   
   <main class="form-wrapper">
     <% if (validationErrors) { %>
       <% validationErrors.forEach(e => { %>
@@ -27,6 +25,7 @@
         </select>
       </div>
       <div class="form-control">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <button class="btn" type="submit">Hämta uppgifter</button>
       </div>  
     </form>
@@ -93,6 +92,7 @@
 
       <section class="invoice-rows" id="rows">
         <div class="row">
+          <h3 class="row-header">(Rader på fakturan)</h2>
           <div class="form-control">
             <label for="description">Beskrivning</label>
             <input type="text" name="description[]" id="description" />
@@ -112,12 +112,13 @@
         </div>
       </section>
       <div class="add-row" id="add-row">
-        <i class="fas fa-plus"><span>Ny rad på fakturan</span></i>
+        <i class="fas fa-plus"><span>Ny rad</span></i>
       </div>
       <button class="btn" type="submit">Skicka som pdf till min epost</button>
-      <a class="btn" href="/admin/invoices">Avbryt</button> 
+      <a class="btn" href="/admin/invoices">Avbryt</a>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
     </form>
   </main>
 
-  <script src="/js/invoice.js"></script>
+  <script src="/js/add-invoice.js"></script>
 <%- include('../includes/end.ejs') %>

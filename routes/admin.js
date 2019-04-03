@@ -13,7 +13,9 @@ router.post('/admin/add-invoice', auth, validate('postAddInvoice'), adminControl
 
 router.post('/admin/add-invoice/autofill', auth, adminController.postInvoiceRecipientData)
 
-router.get('/admin/invoices', auth, adminController.getInvoices)
+router.get('/admin/invoices', auth, adminController.getInvoiceFolders)
+
+router.get('/admin/invoices/:folderName', auth, adminController.getInvoices)
 
 router.get('/admin/edit-invoice/:invoiceId', auth, adminController.getEditInvoice)
 

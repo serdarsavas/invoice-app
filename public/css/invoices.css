@@ -6,12 +6,14 @@
 }
 
 .invoice {
+  background: #f9f9f9;
   position: relative;
   box-shadow: 0 2px 8px #00000042;
   width: 22rem;
   max-width: 95%;
   margin: 1rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: stretch;
 }
@@ -19,7 +21,7 @@
 .invoice-data {
   margin-top: 2rem;
   padding: 1rem;
-  width: 65%;
+  width: 100%;
 }
 
 .invoice-header {
@@ -41,45 +43,38 @@
 .invoice-actions {
   padding: 2rem 0;
   text-align: center;
-  background: #f3f1f1;
-  width: 35%;
+  width: 100%;
 }
 
 .invoice-actions a {
-  margin: 2rem auto;
-  white-space: nowrap;
-  display: block;
+  margin: 0 0.2rem;
   text-decoration: none;
-  color: #494949;
-  padding: 0.5rem;
-  text-align: left;
+  font: 400 0.8rem;
+  color: #4c4c4c;
+  padding: 0.7rem 0.7rem;
+  text-align: center;
+  border: 1px solid #4c4c4c;
+  border-radius: 3px;
 }
 
-.invoice-actions__link:hover,
-.invoice-actions__link:active {
-  color: #111010;
-  font-size: 1.01rem;
-  border-bottom: 1px solid #111010;
-}
-
-.invoice-actions__symbol {
-  display: inline-block;
-  font-size: 0.9rem;
-  transform: scale(1, 1.9);
-  padding-left: 0.3rem;
+.invoice-actions a:hover,
+.invoice-actions a:active {
+  background: #4c4c4c;
+  color: #f3f1f1;
+  border: #f3f1f1;
 }
 
 
 .invoice-header__title {
   font-size: 1.4rem;
-  font-weight: 100;
+  font-weight: 200;
   text-align: center;
   color: #4c4c4c;
   padding: 0.5rem;
 }
 .invoice-header__date {
-  font-size: 1.15rem;
-  font-weight: 100;
+  font-size: 1.10rem;
+  font-weight: 200;
   text-align: center;
   color: #4c4c4c;
 }
@@ -101,21 +96,48 @@
   color: #4c4c4c;
 }
 
-.invoice-filter {
-  font-size: 1rem;
-  height: 2rem;
-  padding: 1.2rem;
+.search-form__filter {
   display: block;
-  width: 40%;
-  margin: 2rem auto;
-  border: 0.5px solid #b0abab;
-}
-
-.invoice-filter:focus {
+  -webkit-appearance: textfield;
+  margin: 1rem auto;
+	font-family: inherit;
+  font-size: 100%;
   outline: none;
-  background: #eeeff1;
+  background: #f1f1f1 url("../pics/search-icon.png") no-repeat 9px center;
+	border: solid 1px #cdcdcd;
+	padding: 0.8rem 3.2rem;
+	width: 8%;
+	
+	-webkit-border-radius: 10em;
+	-moz-border-radius: 10em;
+	border-radius: 10em;
+	
+	-webkit-transition: all .5s;
+	-moz-transition: all .5s;
+	transition: all .5s;
 }
 
+.search-form__filter::-webkit-search-decoration,
+.search-form__filter::-webkit-search-cancel-button {
+	display: none; 
+}
+
+.search-form__filter:focus {
+	width: 30%;
+	background-color: #fefefe;
+	
+	-webkit-box-shadow: 0 0 5px #afafaf80;
+	-moz-box-shadow: 0 0 5px #afafaf80;
+	box-shadow: 0 0 5px #afafaf80;
+}
+
+
+.search-form__filter:-moz-placeholder {
+	color: #737373;
+}
+.search-form__filter::-webkit-input-placeholder {
+	color: #737373;
+}
 
 .delete {
   position: absolute;
@@ -125,19 +147,21 @@
 
 .delete-btn {
   padding: 0.5rem;
-  font-size: 1.2rem;
-  color: #4c4c4c;
+  background: inherit;
+  font-size: 1.4rem;
+  color: #454545;
   width: 2.5rem;
   border: none;
+  transition: color 0.4s ease-out
 }
 
 .delete-btn:hover,
 .delete-btn:focus,
 .delete-btn:active{
-  color: #000000;
+  color: #c51313;
   outline: none;
   cursor: pointer;
-  font-size: 1.4rem;
+  font-size: 1.45rem;
 }
 
 

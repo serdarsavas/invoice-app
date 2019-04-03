@@ -1,7 +1,7 @@
 <%- include('../includes/head.ejs') %>
 <link rel="stylesheet" href="/css/forms.css">
 </head>
-<body>
+<body class="preload">
     <%- include('../includes/navigation.ejs') %>
     
   <div class="form-wrapper">
@@ -11,14 +11,25 @@
     <form action="/login" method="post" novalidate>
       <div class="form-control">
         <label for="email">Epost</label>
-        <input type="email" name="email" id="email" value="<%= inputData.email %>">
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'email' || e.param === 'password') ? 'invalid' : ''%>"
+          type="email" 
+          name="email" 
+          id="email" 
+          value="<%= inputData.email %>">
       </div>
       <div class="form-control">
         <label for="password">Lösenord</label>
-        <input type="password" name="password" id="password" value="<%= inputData.password %>">
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'password' || e.param === 'email') ? 'invalid' : ''%>"
+          type="password" 
+          name="password" 
+          id="password" 
+          value="<%= inputData.password %>">
       </div>
       <div class="form-control">
         <button class="btn" type="submit">Logga in</button>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       </div>
     </form>
   </div>
