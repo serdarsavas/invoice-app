@@ -4,7 +4,7 @@ const { readFile, unlink } = require('fs')
 
 const ejs = require('ejs')
 const puppeteer = require('puppeteer')
-const sendMail = require('../emails/email')
+const { sendPdfMail } = require('../emails/email')
 
 const _readFile = promisify(readFile)
 const FILE_PATH = path.resolve(__dirname, 'invoice.pdf')
@@ -38,7 +38,7 @@ const downloadPdf = (invoice, response) => {
 const emailPdf = async (invoice, user) => {
   try {
     const file = await _readFile(FILE_PATH)
-    sendMail({
+    sendPdfMail({
       to: user.email,
       from: {
         email: 'serdar.savas@botkyrka.se',

@@ -24,6 +24,7 @@ exports.validate = (method) => {
         body('email')
           .isEmail()
           .withMessage('* Ange en giltig epostadress')
+          .normalizeEmail()
           .custom(async email => {
           try {
             const user = await User.findOne({ email })
@@ -34,8 +35,7 @@ exports.validate = (method) => {
           } catch (e) {
             console.log(e)
             }
-          })
-          .normalizeEmail(),
+          }),
         body('phone')
           .trim()
           .not()
@@ -261,10 +261,39 @@ exports.validate = (method) => {
             .custom((value, { req }) => {
             if (value !== req.body.password) {
               return Promise.reject('Lösenorden matchar inte')
-              }
+            }
             return true
             })
         ]
+    }
+    case 'postReset': {
+      return [
+        body('email')
+          .normalizeEmail()
+      ]
+    }
+
+    case 'postNewPassword': {
+      return [
+        body('password')
+            .trim()
+            .not()
+            .isEmpty()
+            .withMessage('* Lösenord saknas')
+            .isLength({ min: 6 })
+            .withMessage('* Lösenordet måste vara minst 6 tecken'),
+          body('confirmPassword')
+            .not()
+            .isEmpty()
+            .withMessage('* Du måste bekräfta ditt lösenord')
+            .trim()
+            .custom((value, { req }) => {
+            if (value !== req.body.password) {
+              return Promise.reject('Lösenorden matchar inte')
+            }
+            return true
+            })
+      ]
     }
   }
 }

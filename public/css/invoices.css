@@ -6,7 +6,7 @@
 }
 
 .invoice {
-  background: #f9f9f9;
+  background: #fefefe;
   position: relative;
   box-shadow: 0 2px 8px #00000042;
   width: 22rem;
@@ -103,13 +103,10 @@
 	font-family: inherit;
   font-size: 100%;
   outline: none;
-  background: #f1f1f1 url("../pics/search-icon.png") no-repeat 9px center;
-	border: solid 1px #cdcdcd;
+  background: #ededed url("../pics/search-icon.png") no-repeat 9px center;
+	border: solid 1px #f1f1f1;
 	padding: 0.8rem 3.2rem;
 	width: 8%;
-	
-	-webkit-border-radius: 10em;
-	-moz-border-radius: 10em;
 	border-radius: 10em;
 	
 	-webkit-transition: all .5s;
@@ -122,21 +119,18 @@
 	display: none; 
 }
 
-.search-form__filter:focus {
+.search-form__filter:focus,
+.search-form__filter:hover {
 	width: 30%;
-	background-color: #fefefe;
-	
-	-webkit-box-shadow: 0 0 5px #afafaf80;
-	-moz-box-shadow: 0 0 5px #afafaf80;
-	box-shadow: 0 0 5px #afafaf80;
+	background-color: #e8e8e8;
 }
 
 
 .search-form__filter:-moz-placeholder {
-	color: #737373;
+	color: #4e4e4e;
 }
 .search-form__filter::-webkit-input-placeholder {
-	color: #737373;
+	color: #4e4e4e;
 }
 
 .delete {

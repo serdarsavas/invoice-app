@@ -35,7 +35,9 @@ const userSchema = new Schema({
   position: String,
   registrationNumber: String,
   vatNumber: String,
-  bankgiro: String
+  bankgiro: String,
+  resetToken: String,
+  resetTokenExpiration: Date
 })
 
 userSchema.virtual('invoices', {

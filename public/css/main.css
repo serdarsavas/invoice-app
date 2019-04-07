@@ -49,6 +49,7 @@ a, .btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 3%;
 }
 
 .main-header__item-list {
@@ -74,7 +75,7 @@ a, .btn {
   border: none;
   text-decoration: none;
   padding: 0.65rem;
-  color: #fdfdfd;
+  color: white;
   cursor: pointer;
   transition: color 0.5s ease-out;
 }
@@ -84,7 +85,7 @@ a, .btn {
 .main-header__item a.active,
 .main-header__item button:hover,
 .main-header__item button:active {
-  color: #cfcfcf;
+  color: #d6d6d6;
   border-bottom: 1px solid;
 }
 

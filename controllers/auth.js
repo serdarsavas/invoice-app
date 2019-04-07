@@ -1,5 +1,7 @@
+const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 
+const { sendResetMail } = require('../emails/email.js')
 const User = require('../models/user')
 const { validationResult } = require('express-validator/check')
 
@@ -76,21 +78,12 @@ exports.postLogin = async (req, res) => {
   }
 }
 
-exports.postLogout = async (req, res) => {
-  try {
-    await req.session.destroy()
-    res.redirect('/')
-  } catch (e) {
-    console.log(e)
-  }
-}
-
 exports.getSignup = (req, res) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Registrering',
     validationErrors: [],
-    inputData: null 
+    inputData: null
   })
 }
 
@@ -105,16 +98,16 @@ exports.postSignup = async (req, res) => {
       inputData: req.body
     })
   }
-  
+
   try {
-      const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: await bcrypt.hash(req.body.password, 8),
-        phone: req.body.phone,
-        street: req.body.street,
-        zip: req.body.zip,
-        city: req.body.city
+    const user = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: await bcrypt.hash(req.body.password, 8),
+      phone: req.body.phone,
+      street: req.body.street,
+      zip: req.body.zip,
+      city: req.body.city
     })
 
     await user.save()
@@ -122,4 +115,109 @@ exports.postSignup = async (req, res) => {
     console.log(e)
   }
   res.redirect('/')
+}
+
+exports.postLogout = async (req, res) => {
+  try {
+    await req.session.destroy()
+    res.redirect('/')
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+exports.getReset = (req, res) => {
+  res.render('auth/reset', {
+    pageTitle: 'Återställ lösenord',
+    path: '/reset',
+    errorMessage: null,
+    inputData: null
+  })
+}
+
+exports.postReset = (req, res) => {
+  crypto.randomBytes(32, async (err, buffer) => {
+    if (err) {
+      return res.redirect('/reset')
+    }
+
+    try {
+      const token = buffer.toString('hex')
+
+      const user = await User.findOne({ email: req.body.email })
+      if (!user) {
+        return res.render('auth/reset', {
+          pageTitle: 'Återställ lösenord',
+          path: '/reset',
+          errorMessage: 'Det finns inget konto kopplat till denna epostadress',
+          inputData: req.body.email
+        })
+      }
+      user.resetToken = token
+      user.resetTokenExpiration = Date.now() + 3600000
+      await user.save()
+      res.redirect('/')
+      sendResetMail(user)
+    } catch (e) {
+      console.log(e)
+    }
+  })
+}
+
+exports.getNewPassword = async (req, res) => {
+  try {
+    let errorMessage
+    const token = req.params.token
+    const user = await User.findOne({
+      resetToken : token,
+      resetTokenExpiration: { $gt: Date.now() }
+    })
+    user ? (errorMessage = null) : (errorMessage = 'Du har inget aktivt konto.')
+    res.render('auth/new-password', {
+      pageTitle: 'Nytt lösenord',
+      path: '/new-password',
+      errorMessage,
+      userId: user._id.toString(),
+      passwordToken: token,
+      inputData: null
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+exports.postNewPassword = async (req, res) => {
+  const { password, confirmPassword, userId, passwordToken } = req.body
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    return res.render('auth/new-password', {
+      pageTitle: 'Nytt lösenord',
+      path: '/new-password',
+      errorMessage: errors.array()[0].msg,
+      inputData: {
+        password,
+        confirmPassword
+      }
+    })
+  }
+  try {
+    const user = await User.findOne({
+      _id: userId,
+      resetToken: passwordToken,
+      resetTokenExpiration: { $gt: Date.now() }
+    })
+
+    const hashedPassword = await bcrypt.hash(password, 8)
+    
+    user.password = hashedPassword
+    user.resetToken = null
+    user.resetTokenExpiration = null
+    
+    await user.save()
+    res.redirect('/')
+
+  } catch (e) {
+    console.log(e)
+  }
 }
