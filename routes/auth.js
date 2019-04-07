@@ -1,26 +1,27 @@
 const express = require('express')
 
-const { validate } = require('../form-validation/validation')
 const authController = require('../controllers/auth')
+const validate = require('../middleware/validation')
+const handleException = require('../middleware/exception-handler')
 
 const router = new express.Router()
 
 router.get('/', authController.getLogin)
 
-router.post('/login', validate('postLogin'), authController.postLogin)
+router.post('/login', validate('postLogin'), handleException(authController.postLogin))
 
-router.post('/logout', authController.postLogout)
+router.post('/logout', handleException(authController.postLogout))
 
 router.get('/signup', authController.getSignup)
 
-router.post('/signup', validate('postSignup'), authController.postSignup)
+router.post('/signup', validate('postSignup'), handleException(authController.postSignup))
 
 router.get('/reset', authController.getReset)
 
 router.post('/reset', validate('postReset'), authController.postReset)
 
-router.get('/reset/:token', authController.getNewPassword)
+router.get('/reset/:token', handleException(authController.getNewPassword))
 
-router.post('/new-password', validate('postNewPassword'), authController.postNewPassword)
+router.post('/new-password', validate('postNewPassword'), handleException(authController.postNewPassword))
 
 module.exports = router

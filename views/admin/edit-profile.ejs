@@ -6,7 +6,7 @@
     <%- include('../includes/navigation.ejs') %>
 
     
-  <div class="form-wrapper">
+  <main class="form-wrapper">
     <% if (validationErrors) { %>
       <% validationErrors.forEach(e => { %>
         <div class="error-message"><%= e.msg %></div>
@@ -184,5 +184,5 @@
       <a class="btn" href="/admin/invoices">Avbryt</button>
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     </form>
-  </div>
-    <%- include('../includes/end.ejs') %>
+  </main>
+<%- include('../includes/end.ejs') %>

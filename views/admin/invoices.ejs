@@ -35,7 +35,7 @@
                         <form action="/admin/delete-invoice" method="POST" class="delete">
                             <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                            <button class="delete-btn" type="submit">X</button>
+                            <button class="delete-btn" type="submit" title="Ta bort faktura">X</button>
                         </form> 
                         <a href="/admin/view-invoice/<%= invoice._id %>" target="_blank">Visa faktura</a>
                         <a href="/admin/download-invoice/<%= invoice._id %>">Ladda ner</a>
@@ -47,7 +47,7 @@
     <% } else { %>
         <h1>Inga gamla fakturor!</h1>
     <% } %>
-</main>
+    </main>
 <% if (invoices.length > 0) { %>
     <script src="/js/invoices.js"></script>
 <% } %>

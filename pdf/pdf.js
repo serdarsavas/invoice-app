@@ -4,7 +4,7 @@ const { readFile, unlink } = require('fs')
 
 const ejs = require('ejs')
 const puppeteer = require('puppeteer')
-const { sendPdfMail } = require('../emails/email')
+const { sendPdfMail } = require('../email/email')
 
 const _readFile = promisify(readFile)
 const FILE_PATH = path.resolve(__dirname, 'invoice.pdf')

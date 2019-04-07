@@ -1,7 +1,7 @@
 const { body } = require('express-validator/check')
 const User = require('../models/user')
 
-exports.validate = (method) => {
+const validate = (method) => {
   switch(method) {
     case 'postLogin': {
       return [
@@ -26,15 +26,11 @@ exports.validate = (method) => {
           .withMessage('* Ange en giltig epostadress')
           .normalizeEmail()
           .custom(async email => {
-          try {
             const user = await User.findOne({ email })
-            if (user) {
-              return Promise.reject('* Epostadressen existerar redan')
+            if (!user) { 
+              return true
             }
-            return true
-          } catch (e) {
-            console.log(e)
-            }
+            throw new Error('* Epostadressen används redan')
           }),
         body('phone')
           .trim()
@@ -78,7 +74,7 @@ exports.validate = (method) => {
           .trim()
           .custom((value, { req }) => {
           if (value !== req.body.password) {
-            return Promise.reject('Lösenorden matchar inte')
+            throw new Error('* Lösenorden matchar inte')
           }
           return true
           })
@@ -135,31 +131,16 @@ exports.validate = (method) => {
           .withMessage(`* Uppdragsnummer saknas`)
           .isInt()
           .withMessage(`* Endast siffror tillåtna under 'Uppdragsnummer'`),
-        body('description')
-          .trim()
-          .not()
-          .isEmpty()
-          .withMessage(`* Beskrivning saknas`)
+        body('description[]')
           .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
           .withMessage(`* Endast bokstäver tillåtna under 'Beskrivning'`),
-        body('quantity')
-          .trim()
-          .not()
-          .isEmpty()
-          .withMessage(`* Antal saknas`)
+        body('quantity[]')
           .isFloat()
           .withMessage(`* Endast siffror tillåtna under 'Antal'`),
-        body('unit')
-          .not()
-          .isEmpty()
-          .withMessage(`* Enhet saknas`)
+        body('unit[]')
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
           .withMessage(`* Endast siffror och bokstäver tillåtna under 'Enhet'`),
-        body('price')
-          .trim()
-          .not()
-          .isEmpty()
-          .withMessage(`* Pris saknas`)
+        body('price[]')
           .isFloat()
           .withMessage(`* Endast siffror tillåtna under 'Pris'`)
       ]
@@ -297,3 +278,5 @@ exports.validate = (method) => {
     }
   }
 }
+
+module.exports = validate

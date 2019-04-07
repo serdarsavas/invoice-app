@@ -1,16 +1,25 @@
 <%- include('../includes/head.ejs') %>
   <link rel="stylesheet" href="/css/forms.css">
-  <link rel="stylesheet" href="/css/invoice.css">
+  <link rel="stylesheet" href="/css/add-invoice.css">
 
 </head>
 <body class="preload">
 <%- include('../includes/navigation.ejs') %>
   <main class="form-wrapper">
-    <form action="/admin/edit-invoice" method="POST">
-      <h2 class="form-header">Mottagaruppgifter</h2>
+    <% if (validationErrors) { %>
+      <% validationErrors.forEach(e => { %>
+        <div class="error-message"><%= e.msg %></div>
+      <% }) %>
+    <% } %>
+    <% if (successMessage) { %>
+        <h2 class="success-message"><%= successMessage %></h2>
+    <% } %>
+    <form action="/admin/edit-invoice" method="post">
+      <h2 class="invoice-header">Mottagaruppgifter</h2>
       <div class="form-control">
         <label for="authority">Mottagare</label>
-        <input 
+        <input
+          class="<%= validationErrors.find(e => e.param === 'authority') ? 'invalid' : ''%>" 
           type="text" 
           name="authority" 
           id="authority"
@@ -18,7 +27,8 @@
       </div>
       <div class="form-control">
         <label for="ref-person">Referensperson</label>
-        <input 
+        <input
+          class="<%= validationErrors.find(e => e.param === 'refPerson') ? 'invalid' : ''%>" 
           type="text" 
           name="refPerson" 
           id="ref-person"
@@ -26,7 +36,8 @@
       </div>
       <div class="form-control">
         <label for="street">Gatuaddress</label>
-        <input 
+        <input
+          class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : ''%>" 
           type="text" 
           name="street" 
           id="street"
@@ -35,6 +46,7 @@
       <div class="form-control">
         <label for="zip">Postkod</label>
         <input 
+          class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : ''%>"
           type="text" 
           name="zip" 
           id="zip" 
@@ -43,6 +55,7 @@
       <div class="form-control">
         <label for="city">Postort</label>
         <input 
+          class="<%= validationErrors.find(e => e.param === 'city') ? 'invalid' : ''%>"
           type="text" 
           name="city" 
           id="city"
@@ -52,7 +65,8 @@
       <h2 class="invoice-header">Kostnadsuppgifter</h2>
       <div class="form-control">
         <label for="invoice-number">Fakturanummer</label>
-        <input 
+        <input
+          class="<%= validationErrors.find(e => e.param === 'invoiceNumber') ? 'invalid' : ''%>" 
           type="number" 
           name="invoiceNumber" 
           id="invoice-number"
@@ -60,7 +74,8 @@
       </div>
       <div class="form-control">
         <label for="assignment-number">Uppdragsnummer</label>
-        <input 
+        <input
+          class="<%= validationErrors.find(e => e.param === 'assignmentNumber') ? 'invalid' : ''%>" 
           type="number" 
           name="assignmentNumber" 
           id="assignment-number" 
@@ -68,36 +83,41 @@
       </div> 
       
       <section class="invoice-rows" id="rows">
+        <h3 class="row-header">(Rader på fakturan)</h2>
       <% if (inputData) { %>
         <% for (let i = 0; i < inputData.description.length; i++) { %>
         <div class="row">
             <div class="form-control">
               <label for="description">Beskrivning</label>
-              <input 
+              <input
+                class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>" 
                 type="text" 
                 name="description[]" 
                 id="description"
                 value="<%= inputData.description[i] %>" />
             </div>
             <div class="form-control">
-              <label for="quantity">Antal: </label>
-              <input 
+              <label for="quantity">Antal</label>
+              <input
+                class="<%= validationErrors.find(e => e.param === 'quantity.') ? 'invalid' : ''%>" 
                 type="number" 
                 name="quantity[]" 
                 id="quantity"
                 value="<%= inputData.quantity[i] ? inputData.quantity[i] : '' %>" />
             </div>
             <div class="form-control">
-              <label for="unit">Enhet:</label>
-              <input 
+              <label for="unit">Enhet</label>
+              <input
+                class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                 type="text" 
                 name="unit[]" 
                 id="unit"
                 value="<%= inputData.unit[i] ? inputData.unit[i] : '' %>" />
             </div>
             <div class="form-control">
-              <label for="price">Pris:</label>
+              <label for="price">Pris</label>
               <input 
+                class="<%= validationErrors.find(e => e.param === 'price.') ? 'invalid' : ''%>"
                 type="number" 
                 name="price[]" 
                 id="price"
@@ -112,30 +132,34 @@
             <div class="form-control">
               <label for="description">Beskrivning</label>
               <input 
+                class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>"
                 type="text" 
                 name="description[]" 
                 id="description"
                 value="<%= row.description ? row.description : '' %>" />
             </div>
             <div class="form-control">
-              <label for="quantity">Antal: </label>
-              <input 
+              <label for="quantity">Antal</label>
+              <input
+                class="<%= validationErrors.find(e => e.param === 'quantity.') ? 'invalid' : ''%>" 
                 type="number" 
                 name="quantity[]" 
                 id="quantity"
                 value="<%= row.quantity ? row.quantity : '' %>" />
             </div>
             <div class="form-control">
-              <label for="unit">Enhet:</label>
-              <input 
+              <label for="unit">Enhet</label>
+              <input
+                class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                 type="text" 
                 name="unit[]" 
                 id="unit"
                 value="<%= row.unit ? row.unit : '' %>" />
             </div>
             <div class="form-control">
-              <label for="price">Pris:</label>
-              <input 
+              <label for="price">Pris</label>
+              <input
+                class="<%= validationErrors.find(e => e.param === 'price.') ? 'invalid' : ''%>"
                 type="number" 
                 name="price[]" 
                 id="price"
@@ -147,13 +171,14 @@
         <% } %>
       </section>
       <div class="add-row" id="add-row">
-        <i class="fas fa-plus"><span>Ny rad på fakturan</span></i>
+        <i class="fas fa-plus"><span>Ny rad</span></i>
       </div>
       <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
-      <button class="btn" type="submit">Spara ändringar och visa kopia</button>
-      <a href="/admin/invoices" class="btn">Avbryt</a>
+      <button class="btn" type="submit">Spara ändringar</button>
+      <a href="/admin/view-invoice/<%= invoice._id %>" class="btn" target="_blank">Visa Pdf</a>     
+      <a href="/admin/invoices/<%= invoice.recipient.authority %>" class="btn">Tillbaka</a>
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     </form>
   </main>
-<script src="/js/invoice.js"></script>
+<script src="/js/add-invoice.js"></script>
 <%- include('../includes/end.ejs') %>
