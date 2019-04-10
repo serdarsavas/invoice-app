@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "./src/app.js",
   "scripts": {
+    "start": "node src/app.js",
     "dev": "env-cmd ./config/dev.env nodemon app.js"
   },
   "author": "",
