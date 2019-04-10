@@ -23,7 +23,7 @@ const sendResetMail = async (user) => {
         {
           type: 'text/html',
           value: `<p>Hej ${user.name.split(' ')[0]}! Du begärde precis ett nytt lösenord.</p>
-                  <p><a href="http://localhost:3000/reset/${user.resetToken}">Klicka här för att återställa ditt lösenord</a></p>`
+                  <p><a href="/reset/${user.resetToken}">Klicka här för att återställa ditt lösenord</a></p>`
         }
       ]
     })
