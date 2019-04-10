@@ -5,9 +5,8 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const sendPdfMail = async msg => {
   try {
     await sgMail.send(msg)
-    console.log('Email sent successfully!')
   } catch (e) {
-    console.log(e)
+    throw new Error(e)
   }
 }
 
@@ -28,9 +27,8 @@ const sendResetMail = async (user) => {
         }
       ]
     })
-    console.log('Reset mail sent!')
   } catch (e) {
-    console.log(e)
+    throw new Error(e)
   }
 } 
 

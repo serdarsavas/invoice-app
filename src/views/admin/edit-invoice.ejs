@@ -23,7 +23,8 @@
           type="text" 
           name="authority" 
           id="authority"
-          value="<%= inputData ? inputData.authority : invoice.recipient.authority %>" />
+          value="<%= inputData ? inputData.authority : invoice.recipient.authority %>" 
+          required/>
       </div>
       <div class="form-control">
         <label for="ref-person">Referensperson</label>
@@ -32,7 +33,8 @@
           type="text" 
           name="refPerson" 
           id="ref-person"
-          value="<%= inputData ? inputData.refPerson : invoice.recipient.refPerson %>" />
+          value="<%= inputData ? inputData.refPerson : invoice.recipient.refPerson %>" 
+          required/>
       </div>
       <div class="form-control">
         <label for="street">Gatuaddress</label>
@@ -41,7 +43,8 @@
           type="text" 
           name="street" 
           id="street"
-          value="<%= inputData ? inputData.street : invoice.recipient.street %>" />
+          value="<%= inputData ? inputData.street : invoice.recipient.street %>" 
+          required/>
       </div>
       <div class="form-control">
         <label for="zip">Postkod</label>
@@ -50,7 +53,8 @@
           type="text" 
           name="zip" 
           id="zip" 
-          value="<%= inputData ? inputData.zip : invoice.recipient.zip %>" />
+          value="<%= inputData ? inputData.zip : invoice.recipient.zip %>" 
+          required/>
       </div>
       <div class="form-control">
         <label for="city">Postort</label>
@@ -59,7 +63,8 @@
           type="text" 
           name="city" 
           id="city"
-          value="<%= inputData ? inputData.city :invoice.recipient.city %>" />
+          value="<%= inputData ? inputData.city :invoice.recipient.city %>" 
+          required/>
       </div>
       
       <h2 class="invoice-header">Kostnadsuppgifter</h2>
@@ -70,7 +75,8 @@
           type="number" 
           name="invoiceNumber" 
           id="invoice-number"
-          value="<%= inputData ? inputData.invoiceNumber : invoice.invoiceNumber %>" />
+          value="<%= inputData ? inputData.invoiceNumber : invoice.invoiceNumber %>" 
+          required/>
       </div>
       <div class="form-control">
         <label for="assignment-number">Uppdragsnummer</label>
@@ -79,7 +85,8 @@
           type="number" 
           name="assignmentNumber" 
           id="assignment-number" 
-          value="<%= inputData ? inputData.assignmentNumber : invoice.assignmentNumber %>" />
+          value="<%= inputData ? inputData.assignmentNumber : invoice.assignmentNumber %>" 
+          required/>
       </div> 
       
       <section class="invoice-rows" id="rows">
@@ -88,22 +95,22 @@
         <% for (let i = 0; i < inputData.description.length; i++) { %>
         <div class="row">
             <div class="form-control">
-              <label for="description">Beskrivning</label>
+              <label>Beskrivning</label>
               <input
                 class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>" 
                 type="text" 
                 name="description[]" 
-                id="description"
-                value="<%= inputData.description[i] %>" />
+                value="<%= inputData.description[i] %>" 
+                required/>
             </div>
             <div class="form-control">
-              <label for="quantity">Antal</label>
+              <label">Antal</label>
               <input
                 class="<%= validationErrors.find(e => e.param === 'quantity.') ? 'invalid' : ''%>" 
                 type="number" 
                 name="quantity[]" 
-                id="quantity"
-                value="<%= inputData.quantity[i] ? inputData.quantity[i] : '' %>" />
+                value="<%= inputData.quantity[i] ? inputData.quantity[i] : '' %>" 
+                required/>
             </div>
             <div class="form-control">
               <label for="unit">Enhet</label>
@@ -112,7 +119,8 @@
                 type="text" 
                 name="unit[]" 
                 id="unit"
-                value="<%= inputData.unit[i] ? inputData.unit[i] : '' %>" />
+                value="<%= inputData.unit[i] ? inputData.unit[i] : '' %>" 
+                required/>
             </div>
             <div class="form-control">
               <label for="price">Pris</label>
@@ -122,7 +130,8 @@
                 name="price[]" 
                 id="price"
                 value="<%= inputData.price[i] ? inputData.price[i] : '' %>"
-                step=".01" />
+                step=".01" 
+                required/>
             </div>
           </div>
         <% } %>
@@ -136,7 +145,8 @@
                 type="text" 
                 name="description[]" 
                 id="description"
-                value="<%= row.description ? row.description : '' %>" />
+                value="<%= row.description ? row.description : '' %>" 
+                required/>
             </div>
             <div class="form-control">
               <label for="quantity">Antal</label>
@@ -145,7 +155,8 @@
                 type="number" 
                 name="quantity[]" 
                 id="quantity"
-                value="<%= row.quantity ? row.quantity : '' %>" />
+                value="<%= row.quantity ? row.quantity : '' %>" 
+                required/>
             </div>
             <div class="form-control">
               <label for="unit">Enhet</label>
@@ -154,7 +165,8 @@
                 type="text" 
                 name="unit[]" 
                 id="unit"
-                value="<%= row.unit ? row.unit : '' %>" />
+                value="<%= row.unit ? row.unit : '' %>" 
+                required/>
             </div>
             <div class="form-control">
               <label for="price">Pris</label>
@@ -164,7 +176,8 @@
                 name="price[]" 
                 id="price"
                 value="<%= row.price ? row.price : '' %>"
-                step=".01" />
+                step=".01" 
+                required/>
             </div>
           </div>  
           <% }) %>

@@ -1,0 +1,39 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+</head>
+<body class="preload">
+    <%- include('../includes/navigation.ejs') %>
+    
+  <div class="form-wrapper">
+    <% if (errorMessage) { %>
+      <div class="error-message"><%= errorMessage %></div>
+    <% } %>
+    <form action="/login" method="post">
+      <div class="form-control">
+        <label for="email">Epost</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'email' || e.param === 'password') ? 'invalid' : ''%>"
+          type="email" 
+          name="email" 
+          id="email" 
+          value="<%= inputData.email %>"
+          required >
+      </div>
+      <div class="form-control">
+        <label for="password">Lösenord</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'password' || e.param === 'email') ? 'invalid' : ''%>"
+          type="password" 
+          name="password" 
+          id="password" 
+          value="<%= inputData.password %>"
+          required>
+      </div>
+      <div class="form-control">
+        <button class="btn" type="submit">Logga in</button>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      </div>
+    </form>
+    <a href="/reset">Glömt lösenordet</a>
+  </div>
+<%- include('../includes/end.ejs') %>

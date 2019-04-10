@@ -131,16 +131,32 @@ const validate = (method) => {
           .withMessage(`* Uppdragsnummer saknas`)
           .isInt()
           .withMessage(`* Endast siffror tillåtna under 'Uppdragsnummer'`),
-        body('description[]')
-          .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-          .withMessage(`* Endast bokstäver tillåtna under 'Beskrivning'`),
-        body('quantity[]')
+        body('description')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Beskrivning saknas`)
+          .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
+          .withMessage(`* Endast bokstäver och siffror tillåtna under 'Beskrivning'`),
+        body('quantity')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Antal saknas`)
           .isFloat()
           .withMessage(`* Endast siffror tillåtna under 'Antal'`),
-        body('unit[]')
+        body('unit')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Enhet saknas`)
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
           .withMessage(`* Endast siffror och bokstäver tillåtna under 'Enhet'`),
-        body('price[]')
+        body('price')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Pris saknas`)
           .isFloat()
           .withMessage(`* Endast siffror tillåtna under 'Pris'`)
       ]

@@ -20,7 +20,8 @@
           type="text" 
           name="name" 
           id="name" 
-          value="<%= inputData ? inputData.name : '' %>"/>
+          value="<%= inputData ? inputData.name : '' %>"
+          required/>
       </div>
       <div class="form-control">
         <label for="email">Epost</label>
@@ -29,7 +30,8 @@
           type="email" 
           name="email" 
           id="email" 
-          value="<%= inputData ? inputData.email : '' %>"/>
+          value="<%= inputData ? inputData.email : '' %>"
+          required/>
       </div>
       <div class="form-control">
         <label for="phone">Telefon</label>
@@ -38,7 +40,8 @@
           type="tel" 
           name="phone" 
           id="phone" 
-          value="<%= inputData ? inputData.phone : '' %>"/>
+          value="<%= inputData ? inputData.phone : '' %>"
+          required/>
       </div>
 
       <div class="form-control">
@@ -48,7 +51,8 @@
           type="text" 
           name="street" 
           id="street" 
-          value="<%= inputData ? inputData.street : '' %>"/>
+          value="<%= inputData ? inputData.street : '' %>"
+          required/>
       </div>
 
       <div class="form-control">
@@ -58,7 +62,8 @@
           type="text"
           name="zip" 
           id="zip"
-          value="<%= inputData ? inputData.zip : '' %>"/>
+          value="<%= inputData ? inputData.zip : '' %>"
+          required/>
       </div>
 
       <div class="form-control">
@@ -68,7 +73,8 @@
           type="text" 
           name="city" 
           id="city" 
-          value="<%= inputData ? inputData.city : '' %>"/>
+          value="<%= inputData ? inputData.city : '' %>"
+          required/>
       </div>
     
       <div class="form-control">
@@ -78,7 +84,8 @@
           type="password" 
           name="password" 
           id="password" 
-          value="<%= inputData ? inputData.password : '' %>"/>
+          value="<%= inputData ? inputData.password : '' %>"
+          required/>
       </div>
       <div class="form-control">
         <label for="confirm-password">Bekräfta lösenord</label>
@@ -87,7 +94,8 @@
           type="password" 
           name="confirmPassword" 
           id="confirm-password" 
-          value="<%= inputData ? inputData.confirmPassword : '' %>"/>
+          value="<%= inputData ? inputData.confirmPassword : '' %>"
+          required/>
       </div>
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button class="btn" type="submit">Registrera dig</button>

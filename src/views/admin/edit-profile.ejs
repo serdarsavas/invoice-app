@@ -28,7 +28,7 @@
           <% } else if(user.name) { %>
             value="<%= user.name %>"
           <% } %>
-          />
+          required/>
       </div>
       <div class="form-control">
         <label for="email">Epost</label>
@@ -42,7 +42,7 @@
           <% } else if(user.email) { %>
             value="<%= user.email %>"
           <% } %>
-          />
+          required/>
       </div>
       <div class="form-control">
         <label for="phone">Telefon</label>
@@ -56,7 +56,7 @@
           <% } else if(user.phone){ %>
             value="<%= user.phone %>"
           <% } %>
-          />
+          required />
       </div>
       <div class="form-control">
         <label for="street">Gatuaddress</label>
@@ -70,7 +70,7 @@
           <% } else if(user.street) { %>
             value="<%= user.street %>"
           <% } %>
-          />
+          required />
       </div>
       <div class="form-control">
         <label for="zip">Postkod</label>
@@ -84,7 +84,7 @@
           <% } else if(user.zip) { %>
             value="<%= user.zip %>"
           <% } %>
-          />
+          required />
       </div>
       <div class="form-control">
         <label for="city">Postort</label>
@@ -98,7 +98,7 @@
           <% } else if(user.city) { %>
             value="<%= user.city %>"
           <% } %>
-          />
+          required />
       </div>
       <div class="form-control">
           <label for="position">Jobbtitel</label>
@@ -112,7 +112,7 @@
             <% } else if(user.position) { %>
               value="<%= user.position %>"
             <% } %>
-            />
+            required />
       </div>
       <div class="form-control">
         <label for="registration-number">Organisationsnummer</label>
@@ -126,7 +126,7 @@
           <% } else if(user.registrationNumber) { %>
             value="<%= user.registrationNumber %>"
           <% } %>
-          />
+          required />
       </div>
       <div class="form-control">
         <label for="vat-number">Momsregistreringsnummer</label>
@@ -140,7 +140,7 @@
           <% } else if(user.vatNumber) { %>
             value="<%= user.vatNumber %>"
           <% } %>
-          />
+          required />
       </div>
       <div class="form-control">
         <label for="bankgiro">Bankgiro</label>
@@ -154,7 +154,7 @@
           <% } else if(user.bankgiro) { %>
             value="<%= user.bankgiro %>"
           <% } %>
-          />
+          required />
       </div>
       <div class="form-control">
         <label for="password">Lösenord</label>
@@ -164,9 +164,11 @@
           name="password" 
           id="password" 
           <% if (inputData) { %> 
-            value="<%= inputData.password %>"
-          <% } %>
-          />
+            value="<%= inputData.vatNumber %>"
+          <% } else if(user.password) { %>
+            value="<%= user.password %>"
+          <% } %>
+          required />
       </div>
       <div class="form-control">
         <label for="confirm-password">Bekräfta lösenord</label>
@@ -176,9 +178,11 @@
           name="confirmPassword" 
           id="confirm-password"  
           <% if (inputData) { %> 
-            value="<%= inputData.confirmPassword %>"
-          <% } %>
-          />
+            value="<%= inputData.vatNumber %>"
+          <% } else if(user.password) { %>
+            value="<%= user.password %>"
+          <% } %>
+          required />
       </div>
       <button class="btn" type="submit">Spara ändringar</button>
       <a class="btn" href="/admin/invoices">Avbryt</button>

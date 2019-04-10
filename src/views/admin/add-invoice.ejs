@@ -32,7 +32,7 @@
     <% } %>
     
     
-    <form action="/admin/add-invoice" method="post">
+    <form action="/admin/add-invoice" method="post" id="invoiceForm">
       <div class="form-control">
         <label for="authority">Mottagare</label>
         <input
@@ -45,7 +45,7 @@
           <% } else if (inputData) { %>
             value="<%= inputData.authority %>"
           <% } %>
-          />
+          required/>
       </div>
       <div class="form-control">
         <label for="ref-person">Referensperson</label>
@@ -59,7 +59,7 @@
           <% } else if (inputData) { %>
             value="<%= inputData.refPerson %>"
           <% } %>
-          />
+          required/>
       </div>
       <div class="form-control">
         <label for="street">Gatuaddress</label>
@@ -73,7 +73,7 @@
           <% } else if (inputData) { %>
             value="<%= inputData.street %>"
           <% } %>
-          />
+          required/>
       </div>
       <div class="form-control">
         <label for="zip">Postkod</label>
@@ -87,7 +87,7 @@
           <% } else if (inputData) { %>
             value="<%= inputData.zip %>"
           <% } %>
-          />
+          required/>
       </div>
       <div class="form-control">
         <label for="city">Postort</label>
@@ -101,7 +101,7 @@
           <% } else if (inputData) { %>
             value="<%= inputData.city %>"
           <% } %>
-          />
+          required/>
       </div>
    
       <h2 class="invoice-header">Kostnadsuppgifter</h2>
@@ -115,7 +115,7 @@
           <% if (inputData) { %>
             value="<%= inputData.invoiceNumber %>"
           <% } %>
-          />
+          required/>
       </div>
       <div class="form-control">
         <label for="assignment-number">Uppdragsnummer</label>
@@ -127,7 +127,7 @@
           <% if (inputData) { %>
             value="<%= inputData.assignmentNumber %>"
           <% } %>
-          />
+          required/>
       </div>
 
       <section class="invoice-rows" id="rows">
@@ -142,7 +142,8 @@
                     type="text" 
                     name="description[]" 
                     id="description"
-                    value="<%= inputData.description[i] %>" />
+                    value="<%= inputData.description[i] %>" 
+                    required/>
                 </div>
                 <div class="form-control">
                   <label for="quantity">Antal</label>
@@ -151,7 +152,8 @@
                     type="number" 
                     name="quantity[]" 
                     id="quantity"
-                    value="<%= inputData.quantity[i] ? inputData.quantity[i] : '' %>" />
+                    value="<%= inputData.quantity[i] ? inputData.quantity[i] : '' %>" 
+                    required/>
                 </div>
                 <div class="form-control">
                   <label for="unit">Enhet</label>
@@ -160,7 +162,8 @@
                     type="text" 
                     name="unit[]" 
                     id="unit"
-                    value="<%= inputData.unit[i] ? inputData.unit[i] : '' %>" />
+                    value="<%= inputData.unit[i] ? inputData.unit[i] : '' %>" 
+                    required/>
                 </div>
                 <div class="form-control">
                   <label for="price">Pris</label>
@@ -170,7 +173,8 @@
                     name="price[]" 
                     id="price"
                     value="<%= inputData.price[i] ? inputData.price[i] : '' %>"
-                    step=".01" />
+                    step=".01" 
+                    required/>
                 </div>
               </div>
             <% } %>
@@ -182,7 +186,8 @@
                   class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>" 
                   type="text" 
                   name="description[]" 
-                  id="description" />
+                  id="description" 
+                  required/>
               </div>
               <div class="form-control">
                 <label for="quantity">Antal </label>
@@ -191,7 +196,8 @@
                   type="number" 
                   name="quantity[]" 
                   id="quantity" 
-                  step=".01" />
+                  step=".01" 
+                  required/>
               </div>
               <div class="form-control">
                 <label for="unit">Enhet</label>
@@ -199,7 +205,8 @@
                   class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                   type="text" 
                   name="unit[]" 
-                  id="unit"/>
+                  id="unit"
+                  required/>
               </div>
               <div class="form-control">
                 <label for="price">Pris</label>
@@ -208,7 +215,8 @@
                   type="number" 
                   name="price[]" 
                   id="price" 
-                  step=".01"/>
+                  step=".01"
+                  required/>
               </div>
             </div>
           <% } %>
@@ -216,7 +224,7 @@
         <div class="add-row" id="add-row">
           <i class="fas fa-plus"><span>Ny rad</span></i>
         </div>
-        <button class="btn" type="submit">Skicka som pdf till min epost</button>
+        <button class="btn" type="submit" id="submitBtn">Skicka som pdf till min epost</button>
         <a class="btn" href="/admin/invoices">Avbryt</a>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
       </form>

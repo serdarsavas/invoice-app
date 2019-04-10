@@ -169,7 +169,7 @@ exports.getEditInvoice = async (req, res, next) => {
 exports.postEditInvoice = async (req, res, next) => {
   const invoiceId = req.body.invoiceId
   const errors = validationResult(req)
-
+  
   try {
     const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user })
     if (!errors.isEmpty()) {
@@ -249,7 +249,7 @@ exports.getInvoices = async (req, res, next) => {
       invoices
     })
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
 }
 

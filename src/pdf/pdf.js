@@ -64,7 +64,7 @@ const emailPdf = async (invoice, user) => {
       if (err) throw new Error(err)
     })
   } catch (e) {
-    console.log(e)
+    throw new Error(e)
   }
 }
 
@@ -72,7 +72,7 @@ const convertInvoiceToPdf = async (invoice, user) => {
   try {
     const template = await _readFile(__dirname + '/pdf.ejs', 'utf-8')
     if (!template) {
-      throw new Error('Could not find template')
+      throw new Error()
     }
     const html = await ejs.render(template, {
       invoice,
@@ -88,7 +88,7 @@ const convertInvoiceToPdf = async (invoice, user) => {
     })
     await browser.close()
   } catch (e) {
-    console.log(e)
+    throw new Error(e)
   }
 }
 

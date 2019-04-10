@@ -15,7 +15,8 @@
           class="<%= inputData ? 'invalid' : ''%>"
           type="email" 
           name="email"
-          value="<%= inputData ? inputData : ''%>">
+          value="<%= inputData ? inputData : ''%>"
+          required>
       </div>
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button class="btn" type="submit">Återställ lösenord</button>

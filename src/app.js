@@ -21,7 +21,7 @@ const store = new MongoDBStore({
 const csrfProtection = csrf()
 
 app.set('view engine', 'ejs')
-app.set('views', 'views')
+app.set('views', path.join(__dirname, 'views'))
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -68,7 +68,7 @@ app.use(errorController.get404)
 
 app.use((error, req, res, next) => {
   console.log(error)
-  res.status(500).render('error/500', {
+  res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',
     isAuthenticated: req.session.isLoggedIn

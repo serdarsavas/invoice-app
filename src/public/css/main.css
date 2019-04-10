@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden; 
+}
+
 .preload * {
   -webkit-transition: none !important;
   -moz-transition: none !important;
@@ -87,6 +91,12 @@ a, .btn {
 .main-header__item button:active {
   color: #d6d6d6;
   border-bottom: 1px solid;
+}
+
+.error-page > * {
+  width: 50%;
+  margin: 3rem auto 0;
+  text-align: center;
 }
 
 
