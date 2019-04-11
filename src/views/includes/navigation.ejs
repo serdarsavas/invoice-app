@@ -1,6 +1,7 @@
+<div class="backdrop"></div>
 <header class="main-header">
-    <nav class="main-header__nav">
-       
+    <button id="side-menu-toggle">Menu</button>
+    <nav class="main-header__nav">    
         <% if (isAuthenticated) { %>
             <ul class="main-header__item-list">
                 <li class="main-header__item">
@@ -33,4 +34,33 @@
         <% } %>    
     </nav>
 </header>
+
+<nav class="mobile-nav">
+    <ul class="mobile-nav__item-list">
+        <% if (isAuthenticated) { %>
+            <li class="mobile-nav__item">
+                <a class="<%= path === '/add' ? 'active' : '' %>" href="/admin/add-invoice">Ny faktura</a>
+            </li>
+            <li class="mobile-nav__item">
+                <a class="<%= path === '/invoices' ? 'active' : '' %>" href="/admin/invoices">Fakturor</a>
+            </li>
+            <li class="mobile-nav__item">
+                <a class="<%= path === '/profile' ? 'active' : '' %>" href="/admin/profile">Mina uppgifter</a>
+            </li>
+            <li class="mobile-nav__item">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit">Logga ut</button>
+                </form>
+            </li>
+        <% } else { %>
+            <li class="mobile-nav__item">
+                <a class="<%= path === '/login' ? 'active' : '' %>" href="/">Logga in</a>
+            </li>
+            <li class="mobile-nav__item">
+                <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Registrering</a>
+            </li>     
+        <% } %>
+    </ul>
+</nav>
 

@@ -1,8 +1,8 @@
 const html = `
-<div class="form-control"><label>Beskrivning</label><input type="text" name="description[]" /></div>
-<div class="form-control"><label>Antal: </label><input type="number" name="quantity[]" step=".01" /></div>
-<div class="form-control"><label>Enhet:</label><input type="text" name="unit[]"/></div>
-<div class="form-control"><label>Pris:</label><input type="number" name="price[]" step=".01"/>
+<div class="form-control"><label>Beskrivning</label><input type="text" name="description[]" required/></div>
+<div class="form-control"><label>Antal: </label><input type="number" name="quantity[]" step=".01" required/></div>
+<div class="form-control"><label>Enhet:</label><input type="text" name="unit[]" required/></div>
+<div class="form-control"><label>Pris:</label><input type="number" name="price[]" step=".01" required/>
 </div>`
 
 document.querySelector('#add-row').addEventListener('click', () => {
