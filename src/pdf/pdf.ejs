@@ -35,6 +35,7 @@
       .header {
         border-bottom: 1.5px solid black;
         padding-bottom: 20px;
+        justify-content: stretch;
       }
 
       .header-col1 {
@@ -45,7 +46,7 @@
         margin-top: 10px;
       }
       .header-col3 {
-        width: 30%;
+        width: 35%;
         margin-top: 20px;
       }
 
@@ -87,10 +88,10 @@
         padding: 0 20px;
       }
 
-      footer {
+      .footer {
         border-top: 3px solid black;
         flex-wrap: wrap;
-        justify-content: space-evenly;
+        justify-content: flex-end;
       }
 
       .footer-col {
@@ -104,6 +105,10 @@
 
       .italic {
         font-style: italic;
+      }
+
+      .date {
+        white-space: nowrap;
       }
 
       .address-header {
@@ -129,7 +134,7 @@
         </div>
         <div class="header-col2">
           <h1 class="large-header">Faktura</h1>
-          <p class="italic">Fakturanummer: <%= invoice.invoiceNumber %></p>
+          <p><span class="bold">Fakturanummer: </span><%= invoice.invoiceNumber %></p>
           <div>
             <h3 class="address-header">Mottagare:</h3>
             <p>
@@ -140,7 +145,7 @@
           </div>
         </div>
         <div class="header-col3">
-          <p>
+          <p class="date">
             <span class="bold">Fakturadatum:</span>
             <%= invoice.updatedAt.toISOString().substring(0, 10) %>
           </p>

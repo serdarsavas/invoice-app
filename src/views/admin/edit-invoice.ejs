@@ -82,7 +82,7 @@
         <label for="assignment-number">Uppdragsnummer</label>
         <input
           class="<%= validationErrors.find(e => e.param === 'assignmentNumber') ? 'invalid' : ''%>" 
-          type="number" 
+          type="text" 
           name="assignmentNumber" 
           id="assignment-number" 
           value="<%= inputData ? inputData.assignmentNumber : invoice.assignmentNumber %>" 

@@ -20,7 +20,7 @@
   position: relative;
 }
 
-.folder:hover {
+.fa-folder:hover {
   cursor: pointer;
   color: #cfcfcf;
   transform: scale(1, 1.02)

@@ -137,7 +137,7 @@ a,
 .mobile-nav__item a.active,
 .mobile-nav__item button:hover,
 .mobile-nav__item button:active {
-  background: #363636;
+  background: #494949;
   color: white;
   border-radius: 3px;
 }

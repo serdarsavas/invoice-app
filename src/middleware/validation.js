@@ -129,8 +129,8 @@ const validate = (method) => {
           .not()
           .isEmpty()
           .withMessage(`* Uppdragsnummer saknas`)
-          .isInt()
-          .withMessage(`* Endast siffror tillåtna under 'Uppdragsnummer'`),
+          .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
+          .withMessage(`* Endast siffror och bokstäver tillåtna under 'Uppdragsnummer'`),
         body('description')
           .trim()
           .not()

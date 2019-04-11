@@ -113,13 +113,13 @@ exports.postSignup = async (req, res, next) => {
   }
 }
 
-exports.postLogout = async (req, res, next) => {
-  try {
-    await req.session.destroy()
-    res.redirect('/')
-  } catch(e) {
-    next(new Error(e))
-  }
+exports.postLogout = (req, res, next) => {
+   req.session.destroy(e => {
+      if(e) {
+        return next(new Error(e))
+      }
+      res.redirect('/')
+    })
 }
 
 exports.getReset = (req, res) => {
