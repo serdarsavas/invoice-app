@@ -105,7 +105,7 @@
   background: #ededed url('../pics/search-icon.png') no-repeat 9px center;
   border: solid 1px #efefef;
   padding: 0.8rem 3.2rem;
-  width: 8%;
+  width: 9%;
   border-radius: 10em;
 
   -webkit-transition: all 0.5s;
@@ -153,12 +153,13 @@
 @media (max-width: 768px) {
 
   .search-form__filter {
-    width: 70%;
+    width: 80%;
+    background: #ededed;
   }
   
   .search-form__filter:focus,
   .search-form__filter:hover {
-    width: 70%;
+    width: 80%;
     background-color: #f4f4f4;
   }
 }
