@@ -15,7 +15,7 @@ const sendResetMail = async (user) => {
     await sgMail.send({
       to: user.email,
       from: {
-        email: 'serdar.savas@botkyrka.se',
+        email: 'ssavas@kth.se',
         name: 'Fakturameistern'
       },
       subject: 'Återställning av ditt lösenord',

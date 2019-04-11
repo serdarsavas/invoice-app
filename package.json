@@ -1,9 +1,12 @@
 {
-  "name": "invoice-project",
+  "name": "invoice-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
+  "engines": {
+    "node": "10.9.0"
+  },
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/app.js",
     "dev": "env-cmd ./config/dev.env nodemon app.js"
   },
   "author": "",
@@ -12,6 +15,7 @@
     "@sendgrid/mail": "^6.3.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "compression": "^1.7.4",
     "connect-mongodb-session": "^2.1.1",
     "csurf": "^1.9.0",
     "ejs": "^2.6.1",

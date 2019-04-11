@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const csrf = require('csurf')
+const compression = require('compression');
 
 const User = require('./models/user')
 const authRoutes = require('./routes/auth')
@@ -23,6 +24,7 @@ const csrfProtection = csrf()
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(compression())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(
@@ -67,7 +69,6 @@ app.get('/500', errorController.get500)
 app.use(errorController.get404)
 
 app.use((error, req, res, next) => {
-  console.log(error)
   res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',
