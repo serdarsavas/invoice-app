@@ -1,7 +1,7 @@
 {
   "name": "invoice-app",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "app.js",
   "engines": {
     "node": "10.9.0"
   },
