@@ -6,7 +6,7 @@
     "node": "10.9.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node src/app.js",
     "dev": "env-cmd ./config/dev.env nodemon app.js"
   },
   "author": "",
