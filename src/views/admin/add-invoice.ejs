@@ -12,6 +12,9 @@
         <div class="error-message"><%= e.msg %></div>
       <% }) %>
     <% } %>
+    <% if (successMessage) { %>
+      <h2 class="success-message"><%= successMessage %></h2>
+  <% } %>
     <h2 class="invoice-header">Mottagaruppgifter</h2>
     <% if (recipients.length > 0) { %>
     <form action="/admin/add-invoice/autofill" method="post" novalidate>
@@ -32,7 +35,7 @@
     <% } %>
     
     
-    <form action="/admin/add-invoice" method="post" id="invoiceForm">
+    <form method="post" id="invoiceForm">
       <div class="form-control">
         <label for="authority">Mottagare</label>
         <input
@@ -224,9 +227,11 @@
         <div class="add-row" id="add-row">
           <i class="fas fa-plus"><span>Ny rad</span></i>
         </div>
-        <button class="btn" type="submit" id="submitBtn">Skicka som pdf till min epost</button>
+        <button formaction="/admin/save-invoice" class="btn" type="submit" id="submitBtn">Spara faktura</button>
+        <button formaction="/admin/add-invoice" class="btn" type="submit" id="submitBtn">Spara och skicka pdf till min epost</button>
         <a class="btn" href="/admin/invoices">Avbryt</a>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
+        <input type="hidden" name="invoiceId" value="<%= invoiceId %>"> 
       </form>
   </main>
 

@@ -1,6 +1,7 @@
 const containers = document.querySelectorAll('.invoice')
+const searchField = document.querySelector('#filter')
 
-document.querySelector('#filter').addEventListener('input', e => {
+searchField.addEventListener('input', e => {
   containers.forEach((container, index) => {
     if (
       container
@@ -13,6 +14,19 @@ document.querySelector('#filter').addEventListener('input', e => {
       containers[index].style.display = 'none'
     }
   })
+})
+
+searchField.addEventListener('focus', e => {
+  e.target.setAttribute('placeholder', 'Sök på datum (ÅÅMMDD)')
+})
+searchField.addEventListener('mouseenter', e => {
+  e.target.setAttribute('placeholder', 'Sök på datum (ÅÅMMDD)')
+})
+searchField.addEventListener('blur', e => {
+  e.target.setAttribute('placeholder', 'Sök')
+})
+searchField.addEventListener('mouseleave', e => {
+  e.target.setAttribute('placeholder', 'Sök')
 })
 
 const deleteElems = document.querySelectorAll('.delete')

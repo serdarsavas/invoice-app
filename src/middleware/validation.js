@@ -80,8 +80,9 @@ const validate = (method) => {
           })
       ]
     }
-    case 'postAddInvoice':
-    case 'postEditInvoice': {
+    case 'postEmailInvoice':
+    case 'postEditInvoice':
+    case 'postSaveInvoice': {
       return [
         body('authority')
           .trim()

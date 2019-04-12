@@ -69,6 +69,9 @@ app.get('/500', errorController.get500)
 app.use(errorController.get404)
 
 app.use((error, req, res, next) => {
+  if (process.env.PORT === 3000) {
+    console.log(error)
+  }
   res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',
@@ -77,6 +80,7 @@ app.use((error, req, res, next) => {
 })
 
 mongoose
+  .set('useFindAndModify', false)
   .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true
   })

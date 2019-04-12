@@ -85,25 +85,69 @@ const getUniqueRecipients = async user => {
   }
 }
 
+// const updateInvoice = async (invoice, req) => {
+  
+//   } catch (e) {
+//     throw new Error(e)
+//   }
+// }
+
 //Exports
 
 exports.getAddInvoice = async (req, res, next) => {
   try {
     const recipients = await getUniqueRecipients(req.user)
     res.render('admin/add-invoice', {
-      path: '/add',
       pageTitle: 'Ny faktura',
+      path: '/add',
       recipients,
       recipient: null,
+      invoiceId: null,
+      inputData: null,
       validationErrors: [],
-      inputData: null
+      successMessage: null
     })
   } catch (e) {
     next(new Error(e))
   }
 }
 
-exports.postAddInvoice = async (req, res, next) => {
+exports.postSaveInvoice = async (req, res, next) => {
+  const errors = validationResult(req)
+
+  try {
+    const recipients = await getUniqueRecipients(req.user)
+    if (!errors.isEmpty()) {
+      return res.render('admin/add-invoice', {
+        pageTitle: 'Ny faktura',
+        path: '/add',
+        recipients,
+        recipient: null,
+        invoiceId: null,
+        inputData: req.body,
+        validationErrors: errors.array({ onlyFirstError: true }),
+        successMessage: null
+      })
+    }
+
+    const invoice = await createInvoice(req)
+
+    res.render('admin/add-invoice', {
+      pageTitle: 'Ny faktura',
+      path: '/add',
+      recipients,
+      recipient: null,
+      invoiceId: invoice._id.toString(),
+      inputData: req.body,
+      validationErrors: [],
+      successMessage: 'Fakturan är sparad!'
+    })
+  } catch (e) {
+    next(new Error(e))
+  }
+}
+
+exports.postEmailInvoice = async (req, res, next) => {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
@@ -112,12 +156,49 @@ exports.postAddInvoice = async (req, res, next) => {
       pageTitle: 'Ny faktura',
       recipients: [],
       recipient: null,
+      invoiceId: req.body.invoiceId,
+      inputData: req.body,
       validationErrors: errors.array({ onlyFirstError: true }),
-      inputData: req.body
+      successMessage: null
     })
   }
   try {
-    const invoice = await createInvoice(req)
+    const invoiceId = req.body.invoiceId
+    let invoice
+    if (!invoiceId) {
+      invoice = await createInvoice(req)
+    } else {
+      const rows = getInvoiceRows(req)
+      const total = getTotal(rows)
+      invoice = await Invoice.findByIdAndUpdate(invoiceId, {
+        invoiceNumber: req.body.invoiceNumber,
+        assignmentNumber: req.body.assignmentNumber,
+        recipient: {
+          authority: req.body.authority,
+          refPerson: req.body.refPerson,
+          street: req.body.street,
+          zip: req.body.zip,
+          city: req.body.city,
+        },
+        rows: rows,
+        totalBeforeVAT: total,
+        totalAfterVAT: total * 1.25
+      })
+      await invoice.save()
+      // const rows = getInvoiceRows(req)
+      // const total = getTotal(rows)
+      // invoice = await Invoice.findById(invoiceId)
+      // invoice.invoiceNumber = req.body.invoiceNumber
+      // invoice.assignmentNumber = req.body.assignmentNumber
+      // invoice.recipient.authority = req.body.authority
+      // invoice.recipient.refPerson = req.body.refPerson
+      // invoice.recipient.street = req.body.street
+      // invoice.recipient.zip = req.body.zip
+      // invoice.recipient.city = req.body.city
+      // invoice.rows = rows
+      // invoice.totalBeforeVAT = total
+      // invoice.totalAfterVAT =  total * (invoice.VAT + 1)
+    }
     await pdfHandler.convertInvoiceToPdf(invoice, req.user)
     await pdfHandler.emailPdf(invoice, req.user)
     return res.redirect('/admin/invoices')
@@ -139,8 +220,10 @@ exports.postAddInvoiceRecipient = async (req, res, next) => {
       pageTitle: 'Ny faktura',
       recipient,
       recipients,
+      invoiceId: null,
       validationErrors: [],
-      inputData: null
+      inputData: null,
+      successMessage: null
     })
   } catch (e) {
     next(new Error(e))
@@ -167,21 +250,20 @@ exports.getEditInvoice = async (req, res, next) => {
 }
 
 exports.postEditInvoice = async (req, res, next) => {
-  const invoiceId = req.body.invoiceId
   const errors = validationResult(req)
   
+  if (!errors.isEmpty()) {
+    return res.render('admin/edit-invoice', {
+      pageTitle: 'Redigera faktura',
+      path: '/invoices',
+      invoice: null,
+      inputData: req.body,
+      validationErrors: errors.array({ onlyFirstError: true }),
+      successMessage: null
+    })
+  }
   try {
-    const invoice = await Invoice.findOne({ _id: invoiceId, owner: req.user })
-    if (!errors.isEmpty()) {
-      return res.render('admin/edit-invoice', {
-        pageTitle: 'Redigera faktura',
-        path: '/invoices',
-        invoice,
-        inputData: req.body,
-        validationErrors: errors.array({ onlyFirstError: true }),
-        successMessage: null
-      })
-    }
+    const invoice = await Invoice.findOne({ _id: req.body.invoiceId, owner: req.user })
     const rows = getInvoiceRows(req)
     const total = getTotal(rows)
 
@@ -195,7 +277,6 @@ exports.postEditInvoice = async (req, res, next) => {
     invoice.rows = rows
     invoice.totalBeforeVAT = total
     invoice.totalAfterVAT = total * (invoice.VAT + 1)
-
     await invoice.save()
 
     res.render('admin/edit-invoice', {
@@ -249,7 +330,7 @@ exports.getInvoices = async (req, res, next) => {
       invoices
     })
   } catch (e) {
-    next(new Error(e));
+    next(new Error(e))
   }
 }
 
@@ -270,7 +351,6 @@ exports.getDownloadInvoice = async (req, res, next) => {
     const invoice = await Invoice.findById(req.params.invoiceId)
     await pdfHandler.convertInvoiceToPdf(invoice, req.user)
     pdfHandler.downloadPdf(invoice, res)
-  
   } catch (e) {
     next(new Error(e))
   }
@@ -278,9 +358,8 @@ exports.getDownloadInvoice = async (req, res, next) => {
 
 exports.postDeleteInvoice = async (req, res, next) => {
   try {
-    await Invoice.findByIdAndDelete(req.body.invoiceId)
-    res.redirect('/admin/invoices')
-  
+    const invoice = await Invoice.findByIdAndDelete(req.body.invoiceId)
+    res.redirect(`/admin/invoices/${invoice.recipient.authority}`)
   } catch (e) {
     next(new Error(e))
   }
@@ -315,7 +394,7 @@ exports.postEditProfile = async (req, res, next) => {
 
   try {
     const isNewPassword = await bcrypt.compare(req.body.password, user.password)
-  
+
     if (isNewPassword) {
       user.password = await bcrypt.hash(req.body.password, 8)
     }
@@ -340,7 +419,7 @@ exports.postEditProfile = async (req, res, next) => {
       inputData: null,
       successMessage: 'Dina uppgifter är nu sparade!'
     })
-  } catch(e) {
+  } catch (e) {
     next(new Error(e))
   }
 }

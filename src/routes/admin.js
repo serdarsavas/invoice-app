@@ -8,7 +8,7 @@ const router = new express.Router()
 
 router.get('/admin/add-invoice', auth, adminController.getAddInvoice)
 
-router.post('/admin/add-invoice', auth, validate('postAddInvoice'), adminController.postAddInvoice)
+router.post('/admin/add-invoice', auth, validate('postEmailInvoice'), adminController.postEmailInvoice)
 
 router.post('/admin/add-invoice/autofill', auth, adminController.postAddInvoiceRecipient)
 
@@ -19,6 +19,8 @@ router.get('/admin/invoices/:folderName', auth, adminController.getInvoices)
 router.get('/admin/edit-invoice/:invoiceId', auth, adminController.getEditInvoice)
 
 router.post('/admin/edit-invoice', auth, validate('postEditInvoice'), adminController.postEditInvoice)
+
+router.post('/admin/save-invoice', auth, validate('postSaveInvoice'), adminController.postSaveInvoice)
 
 router.get('/admin/view-invoice/:invoiceId', auth, adminController.getViewInvoice)
 

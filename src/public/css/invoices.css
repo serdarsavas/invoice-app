@@ -102,8 +102,8 @@
   font-family: inherit;
   font-size: 100%;
   outline: none;
-  background: #ededed url('../pics/search-icon.png') no-repeat 9px center;
-  border: solid 1px #efefef;
+  background: #e2e2e2 url('../pics/search-icon.png') no-repeat 9px center;
+  border: solid 1px #e2e2e2;
   padding: 0.8rem 3.2rem;
   width: 9%;
   border-radius: 10em;
@@ -121,9 +121,8 @@
 .search-form__filter:focus,
 .search-form__filter:hover {
   width: 30%;
-  background-color: #f4f4f4;
+  background-color: #f8f8f8;
 }
-
 
 .delete {
   position: absolute;
@@ -151,12 +150,11 @@
 }
 
 @media (max-width: 768px) {
-
   .search-form__filter {
     width: 80%;
     background: #ededed;
   }
-  
+
   .search-form__filter:focus,
   .search-form__filter:hover {
     width: 80%;
