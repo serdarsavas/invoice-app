@@ -15,7 +15,9 @@ const viewPdf = response => {
       throw new Error(err)
     } else {
       unlink(FILE_PATH, err => {
-        if (err) throw new Error(err)
+        if (err) {
+          throw new Error(err)
+        } 
       })
     }
   })
