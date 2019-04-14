@@ -14,11 +14,12 @@
   margin-top: 3rem;
 }
 
-.add-row {
-  margin: 0.2rem 0 4rem;
+.row-handler {
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  display: inline-block;
   border: 1px solid #4a4a4a;
   border-radius: 3px;
-  width: 8rem;
+  width: 9rem;
   cursor: pointer;
 }
 
@@ -26,24 +27,27 @@
   margin-bottom: 3rem;
 }
 
-
-.fa-plus {
-  color: #4a4a4a;
-  font-size: 1.4rem;
-  width: 100%;
-  height:100%;
-  padding: 0.25rem 1rem;
+.form-actions {
+  margin-top: 4rem;
 }
 
-.fa-plus:hover,
-.fa-plus:active {
+.fas {
+  color: #4a4a4a;
+  font-size: 1.2rem;
+  width: 100%;
+  height:100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.fas:hover,
+.fas:active {
   color: #fbfbfb;
   background: #4a4a4a;
 }
 
-.fa-plus span {
+.fas span {
   font: 300 1rem 'Open Sans';
-  padding-left: 0.7rem;
+  padding-left: 0.4rem;
   vertical-align: top;
 }
 

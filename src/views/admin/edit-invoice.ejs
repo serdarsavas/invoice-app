@@ -183,14 +183,22 @@
           <% }) %>
         <% } %>
       </section>
-      <div class="add-row" id="add-row">
-        <i class="fas fa-plus"><span>Ny rad</span></i>
+      <div class="row-handler" id="add-row">
+          <i class="fas fa-plus"><span>Ny rad</span></i>
       </div>
-      <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
-      <button class="btn" type="submit">Spara ändringar</button>
-      <a href="/admin/view-invoice/<%= invoice._id %>" class="btn" target="_blank">Visa Pdf</a>     
-      <a href="/admin/invoices/<%= invoice.recipient.authority %>" class="btn">Tillbaka</a>
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="row-handler" id="delete-row">
+        <i class="fas fa-minus"><span>Ta bort rad</span></i>
+      </div>
+      <div class="row-handler" id="copy-row">
+        <i class="fas fa-object-ungroup"><span>Kopiera rad</span></i>
+      </div>
+      <div class="form-actions">
+        <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
+        <button class="btn" type="submit">Spara ändringar</button>
+        <a href="/admin/view-invoice/<%= invoice._id %>" class="btn" target="_blank">Visa Pdf</a>     
+        <a href="/admin/invoices/<%= invoice.recipient.authority %>" class="btn">Tillbaka</a>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      </div>
     </form>
   </main>
 <script src="/js/add-invoice.js"></script>

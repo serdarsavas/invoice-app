@@ -139,42 +139,38 @@
           <% for (let i = 0; i < inputData.description.length; i++) { %>
             <div class="row">
                 <div class="form-control">
-                  <label for="description">Beskrivning</label>
+                  <label>Beskrivning</label>
                   <input
                     class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>" 
                     type="text" 
                     name="description[]" 
-                    id="description"
                     value="<%= inputData.description[i] %>" 
                     required/>
                 </div>
                 <div class="form-control">
-                  <label for="quantity">Antal</label>
+                  <label>Antal</label>
                   <input
                     class="<%= validationErrors.find(e => e.param === 'quantity.') ? 'invalid' : ''%>"  
                     type="number" 
                     name="quantity[]" 
-                    id="quantity"
                     value="<%= inputData.quantity[i] ? inputData.quantity[i] : '' %>" 
                     required/>
                 </div>
                 <div class="form-control">
-                  <label for="unit">Enhet</label>
+                  <label>Enhet</label>
                   <input
                     class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                     type="text" 
                     name="unit[]" 
-                    id="unit"
                     value="<%= inputData.unit[i] ? inputData.unit[i] : '' %>" 
                     required/>
                 </div>
                 <div class="form-control">
-                  <label for="price">Pris</label>
+                  <label>Pris</label>
                   <input
                     class="<%= validationErrors.find(e => e.param === 'price.') ? 'invalid' : ''%>" 
                     type="number" 
                     name="price[]" 
-                    id="price"
                     value="<%= inputData.price[i] ? inputData.price[i] : '' %>"
                     step=".01" 
                     required/>
@@ -184,54 +180,58 @@
           <% } else { %>
             <div class="row">
               <div class="form-control">
-                <label for="description">Beskrivning</label>
+                <label>Beskrivning</label>
                 <input
                   class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>" 
                   type="text" 
                   name="description[]" 
-                  id="description" 
                   required/>
               </div>
               <div class="form-control">
-                <label for="quantity">Antal </label>
+                <label>Antal </label>
                 <input
                   class="<%= validationErrors.find(e => e.param === 'quantity.') ? 'invalid' : ''%>" 
                   type="number" 
                   name="quantity[]" 
-                  id="quantity" 
                   step=".01" 
                   required/>
               </div>
               <div class="form-control">
-                <label for="unit">Enhet</label>
+                <label>Enhet</label>
                 <input
                   class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                   type="text" 
                   name="unit[]" 
-                  id="unit"
                   required/>
               </div>
               <div class="form-control">
-                <label for="price">Pris</label>
+                <label>Pris</label>
                 <input 
                   class="<%= validationErrors.find(e => e.param === 'price.') ? 'invalid' : ''%>"
                   type="number" 
                   name="price[]" 
-                  id="price" 
                   step=".01"
                   required/>
               </div>
             </div>
           <% } %>
         </section>
-        <div class="add-row" id="add-row">
+        <div class="row-handler" id="add-row">
           <i class="fas fa-plus"><span>Ny rad</span></i>
         </div>
-        <button formaction="/admin/save-invoice" class="btn" type="submit" id="submitBtn">Spara faktura</button>
-        <button formaction="/admin/add-invoice" class="btn" type="submit" id="submitBtn">Spara och skicka pdf till min epost</button>
-        <a class="btn" href="/admin/invoices">Avbryt</a>
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
-        <input type="hidden" name="invoiceId" value="<%= invoiceId %>"> 
+        <div class="row-handler" id="delete-row">
+          <i class="fas fa-minus"><span>Ta bort rad</span></i>
+        </div>
+        <div class="row-handler" id="copy-row">
+          <i class="fas fa-object-ungroup"><span>Kopiera rad</span></i>
+        </div>
+        <div class="form-actions">
+          <button formaction="/admin/save-invoice" class="btn" type="submit" id="submitBtn">Spara faktura</button>
+          <button formaction="/admin/add-invoice" class="btn" type="submit" id="submitBtn">Spara och skicka pdf till min epost</button>
+          <a class="btn" href="/admin/invoices">Avbryt</a>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
+          <input type="hidden" name="invoiceId" value="<%= invoiceId %>"> 
+        </div>
       </form>
   </main>
 

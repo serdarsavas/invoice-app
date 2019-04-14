@@ -86,7 +86,7 @@ const convertInvoiceToPdf = async (invoice, user) => {
       'args' : [
       '--no-sandbox',
       '--disable-setuid-sandbox'
-    ]
+      ]
     })
     const page = await browser.newPage()
     await page.setContent(html)
