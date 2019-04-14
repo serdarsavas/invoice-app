@@ -85,12 +85,6 @@ const getUniqueRecipients = async user => {
   }
 }
 
-// const updateInvoice = async (invoice, req) => {
-  
-//   } catch (e) {
-//     throw new Error(e)
-//   }
-// }
 
 //Exports
 
@@ -101,12 +95,21 @@ exports.getAddInvoice = async (req, res, next) => {
       pageTitle: 'Ny faktura',
       path: '/add',
       recipients,
-      recipient: null,
       invoiceId: null,
       inputData: null,
       validationErrors: [],
       successMessage: null
     })
+  } catch (e) {
+    next(new Error(e))
+  }
+}
+
+exports.getRecipientData = async (req, res, next) => {
+  try {
+    const recipients = await getUniqueRecipients(req.user)
+    const data = JSON.stringify(recipients)
+    res.send(data)
   } catch (e) {
     next(new Error(e))
   }
@@ -122,7 +125,6 @@ exports.postSaveInvoice = async (req, res, next) => {
         pageTitle: 'Ny faktura',
         path: '/add',
         recipients,
-        recipient: null,
         invoiceId: null,
         inputData: req.body,
         validationErrors: errors.array({ onlyFirstError: true }),
@@ -136,7 +138,6 @@ exports.postSaveInvoice = async (req, res, next) => {
       pageTitle: 'Ny faktura',
       path: '/add',
       recipients,
-      recipient: null,
       invoiceId: invoice._id.toString(),
       inputData: req.body,
       validationErrors: [],
@@ -155,7 +156,6 @@ exports.postEmailInvoice = async (req, res, next) => {
       path: '/add',
       pageTitle: 'Ny faktura',
       recipients: [],
-      recipient: null,
       invoiceId: req.body.invoiceId,
       inputData: req.body,
       validationErrors: errors.array({ onlyFirstError: true }),
@@ -185,19 +185,6 @@ exports.postEmailInvoice = async (req, res, next) => {
         totalAfterVAT: total * 1.25
       })
       await invoice.save()
-      // const rows = getInvoiceRows(req)
-      // const total = getTotal(rows)
-      // invoice = await Invoice.findById(invoiceId)
-      // invoice.invoiceNumber = req.body.invoiceNumber
-      // invoice.assignmentNumber = req.body.assignmentNumber
-      // invoice.recipient.authority = req.body.authority
-      // invoice.recipient.refPerson = req.body.refPerson
-      // invoice.recipient.street = req.body.street
-      // invoice.recipient.zip = req.body.zip
-      // invoice.recipient.city = req.body.city
-      // invoice.rows = rows
-      // invoice.totalBeforeVAT = total
-      // invoice.totalAfterVAT =  total * (invoice.VAT + 1)
     }
     await pdfHandler.convertInvoiceToPdf(invoice, req.user)
     await pdfHandler.emailPdf(invoice, req.user)
@@ -207,32 +194,10 @@ exports.postEmailInvoice = async (req, res, next) => {
   }
 }
 
-exports.postAddInvoiceRecipient = async (req, res, next) => {
-  const authority = req.body.authority
-
-  try {
-    const invoice = await Invoice.findOne({ 'recipient.authority': authority })
-    const { recipient } = invoice
-    const recipients = await getUniqueRecipients(req.user)
-
-    res.render('admin/add-invoice', {
-      path: '/add',
-      pageTitle: 'Ny faktura',
-      recipient,
-      recipients,
-      invoiceId: null,
-      validationErrors: [],
-      inputData: null,
-      successMessage: null
-    })
-  } catch (e) {
-    next(new Error(e))
-  }
-}
-
 exports.getEditInvoice = async (req, res, next) => {
+  const invoiceId = req.params.invoiceId
   try {
-    const invoice = await Invoice.findById(req.params.invoiceId)
+    const invoice = await Invoice.findById(invoiceId)
     if (!invoice) {
       throw new Error()
     }
@@ -240,6 +205,7 @@ exports.getEditInvoice = async (req, res, next) => {
       pageTitle: 'Redigera faktura',
       path: '/invoices',
       invoice,
+      invoiceId,
       inputData: null,
       validationErrors: [],
       successMessage: null
@@ -257,13 +223,14 @@ exports.postEditInvoice = async (req, res, next) => {
       pageTitle: 'Redigera faktura',
       path: '/invoices',
       invoice: null,
+      invoiceId: req.body.invoiceId,
       inputData: req.body,
       validationErrors: errors.array({ onlyFirstError: true }),
       successMessage: null
     })
   }
   try {
-    const invoice = await Invoice.findOne({ _id: req.body.invoiceId, owner: req.user })
+    const invoice = await Invoice.findById(req.body.invoiceId)
     const rows = getInvoiceRows(req)
     const total = getTotal(rows)
 
@@ -283,7 +250,8 @@ exports.postEditInvoice = async (req, res, next) => {
       pageTitle: 'Redigera faktura',
       path: '/invoices',
       invoice,
-      inputData: req.body,
+      invoiceId: req.body.invoiceId,
+      inputData: null,
       validationErrors: [],
       successMessage: 'Ändringarna är sparade!'
     })

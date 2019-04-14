@@ -8,9 +8,9 @@ const router = new express.Router()
 
 router.get('/admin/add-invoice', auth, adminController.getAddInvoice)
 
-router.post('/admin/add-invoice', auth, validate('postEmailInvoice'), adminController.postEmailInvoice)
+router.get('/admin/get-recipient', auth, adminController.getRecipientData)
 
-router.post('/admin/add-invoice/autofill', auth, adminController.postAddInvoiceRecipient)
+router.post('/admin/add-invoice', auth, validate('postEmailInvoice'), adminController.postEmailInvoice)
 
 router.get('/admin/invoices', auth, adminController.getInvoiceFolders)
 

@@ -17,9 +17,9 @@
   <% } %>
     <h2 class="invoice-header">Mottagaruppgifter</h2>
     <% if (recipients.length > 0) { %>
-    <form action="/admin/add-invoice/autofill" method="post" novalidate>
+    <form>
       <div class="select form-control">
-        <select name="authority" id="authority">
+        <select id="target-authority">
           <% recipients.forEach(recipient => { %>
             <option value="<%= recipient.authority %>"> 
               <%= recipient.authority %>
@@ -29,7 +29,7 @@
       </div>
       <div class="form-control">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <button class="btn" type="submit">Hämta uppgifter</button>
+        <button class="btn" id="get-recipients">Hämta uppgifter</button>
       </div>  
     </form>
     <% } %>
@@ -43,11 +43,7 @@
           type= "text" 
           name="authority" 
           id="authority"
-          <% if (recipient) { %>
-            value="<%= recipient.authority %>"
-          <% } else if (inputData) { %>
-            value="<%= inputData.authority %>"
-          <% } %>
+          value="<%= inputData ? inputData.authority : ''%>" 
           required/>
       </div>
       <div class="form-control">
@@ -57,39 +53,27 @@
           type="text" 
           name="refPerson" 
           id="ref-person"
-          <% if (recipient) { %>
-            value="<%= recipient.refPerson %>"
-          <% } else if (inputData) { %>
-            value="<%= inputData.refPerson %>"
-          <% } %>
+          value="<%= inputData ? inputData.refPerson : ''%>" 
           required/>
       </div>
       <div class="form-control">
         <label for="street">Gatuaddress</label>
         <input 
-          class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : ''%>"
+          class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : '' %>"
           type="text" 
           name="street" 
           id="street"
-          <% if (recipient) { %>
-            value="<%= recipient.street %>"
-          <% } else if (inputData) { %>
-            value="<%= inputData.street %>"
-          <% } %>
+          value="<%= inputData ? inputData.street : ''%>" 
           required/>
       </div>
       <div class="form-control">
         <label for="zip">Postkod</label>
         <input 
-          class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : ''%>"
+          class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : '' %>"
           type="text" 
           name="zip" 
           id="zip" 
-          <% if (recipient) { %>
-            value="<%= recipient.zip %>"
-          <% } else if (inputData) { %>
-            value="<%= inputData.zip %>"
-          <% } %>
+          value="<%= inputData ? inputData.zip : '' %>" 
           required/>
       </div>
       <div class="form-control">
@@ -99,11 +83,7 @@
           type="text" 
           name="city" 
           id="city"
-          <% if (recipient) { %>
-            value="<%= recipient.city %>"
-          <% } else if (inputData) { %>
-            value="<%= inputData.city %>"
-          <% } %>
+          value="<%= inputData ? inputData.city : '' %>" 
           required/>
       </div>
    
@@ -115,9 +95,7 @@
           type="number" 
           name="invoiceNumber" 
           id="invoice-number"
-          <% if (inputData) { %>
-            value="<%= inputData.invoiceNumber %>"
-          <% } %>
+          value="<%= inputData ? inputData.invoiceNumber : '' %>" 
           required/>
       </div>
       <div class="form-control">
@@ -127,9 +105,7 @@
           type="text" 
           name="assignmentNumber" 
           id="assignment-number"
-          <% if (inputData) { %>
-            value="<%= inputData.assignmentNumber %>"
-          <% } %>
+          value="<%= inputData ? inputData.assignmentNumber : '' %>" 
           required/>
       </div>
 

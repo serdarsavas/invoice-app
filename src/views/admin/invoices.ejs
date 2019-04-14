@@ -37,8 +37,8 @@
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button class="delete-btn" type="submit" title="Ta bort faktura">X</button>
                         </form> 
-                        <a href="/admin/view-invoice/<%= invoice._id %>" target="_blank">Visa faktura</a>
-                        <a href="/admin/download-invoice/<%= invoice._id %>">Ladda ner</a>
+                        <a href="/admin/view-invoice/<%= invoice._id %>" target="_blank">Visa pdf</a>
+                        <a href="/admin/download-invoice/<%= invoice._id %>">Ladda ner pdf</a>
                         <a href="/admin/edit-invoice/<%= invoice._id %>">Redigera</a> 
                     </div>                                
                 </article>

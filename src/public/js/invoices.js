@@ -16,17 +16,20 @@ searchField.addEventListener('input', e => {
   })
 })
 
-searchField.addEventListener('focus', e => {
-  e.target.setAttribute('placeholder', 'Sök på datum (ÅÅMMDD)')
+searchField.addEventListener('mouseleave', e => {
+  e.target.setAttribute('placeholder', 'Sök')
 })
-searchField.addEventListener('mouseenter', e => {
-  e.target.setAttribute('placeholder', 'Sök på datum (ÅÅMMDD)')
-})
+
 searchField.addEventListener('blur', e => {
   e.target.setAttribute('placeholder', 'Sök')
 })
-searchField.addEventListener('mouseleave', e => {
-  e.target.setAttribute('placeholder', 'Sök')
+
+searchField.addEventListener('focus', e => {
+  e.target.setAttribute('placeholder', 'Sök på datum (ÅÅMMDD)')
+})
+
+searchField.addEventListener('mouseenter', e => {
+  e.target.setAttribute('placeholder', 'Sök på datum (ÅÅMMDD)')
 })
 
 const deleteElems = document.querySelectorAll('.delete')

@@ -9,8 +9,8 @@ document.querySelector('#add-row').addEventListener('click', () => {
   const rows = document.querySelector('#rows')
   const row = document.createElement('div')
   row.classList.add('row')
-  row.innerHTML = html  
-  rows.appendChild(newRow)
+  row.innerHTML = html
+  rows.appendChild(row)
 })
 
 document.querySelector('#delete-row').addEventListener('click', () => {
@@ -27,3 +27,28 @@ document.querySelector('#copy-row').addEventListener('click', () => {
   const newRow = rows.lastElementChild.cloneNode(true)
   rows.appendChild(newRow)
 })
+
+//Fetch recipients
+
+const button = document.querySelector('#get-recipients')
+
+if (button) {
+  button.addEventListener('click', async e => {
+    e.preventDefault()
+  
+    try {
+      const data = await fetch('/admin/get-recipient')
+      const jsonData = await data.json()
+      const targetRecipient = document.querySelector('#target-authority').value
+      const recipient = jsonData.find(item => item.authority === targetRecipient)
+      document.querySelector('#authority').value = recipient.authority
+      document.querySelector('#ref-person').value = recipient.refPerson
+      document.querySelector('#street').value = recipient.street
+      document.querySelector('#zip').value = recipient.zip
+      document.querySelector('#city').value = recipient.city
+    
+    } catch (e) {
+      console.log(e)
+    }
+  })
+}
