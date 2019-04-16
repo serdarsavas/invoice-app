@@ -193,7 +193,7 @@
         <i class="fas fa-object-ungroup"><span>Kopiera rad</span></i>
       </div>
       <div class="form-actions">
-        <input type="hidden" name="invoiceId" value="<%= invoiceId %>">
+        <input type="hidden" name="invoiceId" value="<%= invoice._id %>">
         <button class="btn" type="submit">Spara ändringar</button>
         <a href="/admin/view-invoice/<%= invoice._id %>" class="btn" target="_blank">Visa Pdf</a>     
         <a href="/admin/invoices/<%= invoice.recipient.authority %>" class="btn">Tillbaka</a>

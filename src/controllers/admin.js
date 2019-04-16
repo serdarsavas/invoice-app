@@ -45,9 +45,9 @@ const createInvoice = async req => {
       city: req.body.city
     },
     rows: rows,
-    totalBeforeVAT: total,
+    totalBeforeVAT: total.toFixed(2),
     VAT: 0.25,
-    totalAfterVAT: total * 1.25,
+    totalAfterVAT: (total * 1.25).toFixed(2),
     owner: req.user
   })
   try {
@@ -205,7 +205,6 @@ exports.getEditInvoice = async (req, res, next) => {
       pageTitle: 'Redigera faktura',
       path: '/invoices',
       invoice,
-      invoiceId,
       inputData: null,
       validationErrors: [],
       successMessage: null
@@ -218,19 +217,18 @@ exports.getEditInvoice = async (req, res, next) => {
 exports.postEditInvoice = async (req, res, next) => {
   const errors = validationResult(req)
   
-  if (!errors.isEmpty()) {
-    return res.render('admin/edit-invoice', {
-      pageTitle: 'Redigera faktura',
-      path: '/invoices',
-      invoice: null,
-      invoiceId: req.body.invoiceId,
-      inputData: req.body,
-      validationErrors: errors.array({ onlyFirstError: true }),
-      successMessage: null
-    })
-  }
   try {
     const invoice = await Invoice.findById(req.body.invoiceId)
+    if (!errors.isEmpty()) {
+      return res.render('admin/edit-invoice', {
+        pageTitle: 'Redigera faktura',
+        path: '/invoices',
+        invoice: invoice,
+        inputData: req.body,
+        validationErrors: errors.array({ onlyFirstError: true }),
+        successMessage: null
+      })
+    }
     const rows = getInvoiceRows(req)
     const total = getTotal(rows)
 
@@ -250,7 +248,6 @@ exports.postEditInvoice = async (req, res, next) => {
       pageTitle: 'Redigera faktura',
       path: '/invoices',
       invoice,
-      invoiceId: req.body.invoiceId,
       inputData: null,
       validationErrors: [],
       successMessage: 'Ändringarna är sparade!'
@@ -303,10 +300,12 @@ exports.getInvoices = async (req, res, next) => {
 }
 
 exports.getViewInvoice = async (req, res, next) => {
-  const invoiceId = req.params.invoiceId
 
   try {
-    const invoice = await Invoice.findById(invoiceId)
+    const invoice = await Invoice.findById(req.params.invoiceId)
+    if (!invoice) {
+      throw new Error()
+    }
     await pdfHandler.convertInvoiceToPdf(invoice, req.user)
     await pdfHandler.viewPdf(res)
   } catch (e) {
@@ -317,6 +316,9 @@ exports.getViewInvoice = async (req, res, next) => {
 exports.getDownloadInvoice = async (req, res, next) => {
   try {
     const invoice = await Invoice.findById(req.params.invoiceId)
+    if (!invoice) {
+      throw new Error()
+    }
     await pdfHandler.convertInvoiceToPdf(invoice, req.user)
     pdfHandler.downloadPdf(invoice, res)
   } catch (e) {

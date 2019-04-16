@@ -27,14 +27,14 @@
   border-radius: 3px;
 }
 
-.form-control input.invalid {
-  border-color: red;
-}
 
 .form-control input:valid {
   border-color: green;
 }
 
+.form-control input.invalid {
+  border-color: red;
+}
 .btn {
   display: inline-block;
   margin: 1rem 0.5rem 0 0;
