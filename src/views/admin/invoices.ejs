@@ -6,7 +6,6 @@
 <body class="preload">
     <%- include('../includes/navigation.ejs') %>
     <main>
-    <% if (invoices.length > 0) { %>
         <form class="search-form">
             <input type="search" class="search-form__filter" id="filter" placeholder="Sök"/>
         </form>
@@ -42,13 +41,8 @@
                         <a href="/admin/edit-invoice/<%= invoice._id %>">Redigera</a> 
                     </div>                                
                 </article>
-            <% }) %>
+            <% }) %> 
         </div>
-    <% } else { %>
-        <h1>Inga gamla fakturor!</h1>
-    <% } %>
     </main>
-<% if (invoices.length > 0) { %>
     <script src="/js/invoices.js"></script>
-<% } %>
 <%- include('../includes/end.ejs') %>

@@ -4,9 +4,9 @@ const html = `
     <div class="form-control"><label>Enhet:</label><input type="text" name="unit[]" required/></div>
     <div class="form-control"><label>Pris:</label><input type="number" name="price[]" step=".01" required/></div>
   `
+const rows = document.querySelector('#rows')
 
 document.querySelector('#add-row').addEventListener('click', () => {
-  const rows = document.querySelector('#rows')
   const row = document.createElement('div')
   row.classList.add('row')
   row.innerHTML = html
@@ -14,16 +14,13 @@ document.querySelector('#add-row').addEventListener('click', () => {
 })
 
 document.querySelector('#delete-row').addEventListener('click', () => {
-  const rows = document.querySelector('#rows')
-  const lastRow = rows.lastElementChild
-
-  if (lastRow && !lastRow.classList.contains('row-header')) {
-    rows.removeChild(lastRow)
+  const rowElems = rows.querySelectorAll('.row')
+  if (rowElems.length > 1) {
+    rows.removeChild(rowElems[rowElems.length - 1])
   }
 })
 
 document.querySelector('#copy-row').addEventListener('click', () => {
-  const rows = document.querySelector('#rows')
   const newRow = rows.lastElementChild.cloneNode(true)
   rows.appendChild(newRow)
 })
