@@ -1,45 +1,51 @@
-const path = require('path')
-const { promisify } = require('util')
-const { readFile, unlink } = require('fs')
+const path = require('path');
+const { promisify } = require('util');
+const { readFile, unlink } = require('fs');
 
-const ejs = require('ejs')
-const puppeteer = require('puppeteer')
-const { sendPdfMail } = require('../email/email')
+const ejs = require('ejs');
+const puppeteer = require('puppeteer');
+const { sendPdfMail } = require('../email/email');
 
-const _readFile = promisify(readFile)
-const FILE_PATH = path.resolve(__dirname, 'invoice.pdf')
+const _readFile = promisify(readFile);
+const FILE_PATH = path.resolve(__dirname, 'invoice.pdf');
 
 const viewPdf = response => {
   response.sendFile(FILE_PATH, err => {
     if (err) {
-      throw new Error(err)
+      throw new Error(err);
     } else {
       unlink(FILE_PATH, err => {
         if (err) {
-          throw new Error(err)
-        } 
-      })
+          throw new Error(err);
+        }
+      });
     }
-  })
-}
+  });
+};
 
 const downloadPdf = (invoice, response) => {
-  response.download(FILE_PATH, 
-    `faktura${invoice.invoiceNumber}-${invoice.recipient.authority.toLowerCase()}-${invoice.updatedAt.toISOString().substring(0, 10)}`, 
-    (err) => {
+  response.download(
+    FILE_PATH,
+    `faktura${
+      invoice.invoiceNumber
+    }-${invoice.recipient.authority.toLowerCase()}-${invoice.updatedAt
+      .toISOString()
+      .substring(0, 10)}`,
+    err => {
       if (err) {
-        throw new Error(err)
+        throw new Error(err);
       } else {
         unlink(FILE_PATH, err => {
-          if (err) throw new Error(err)
-        })
+          if (err) throw new Error(err);
+        });
       }
-  })
-}
+    }
+  );
+};
 
 const emailPdf = async (invoice, user) => {
   try {
-    const file = await _readFile(FILE_PATH)
+    const file = await _readFile(FILE_PATH);
     sendPdfMail({
       to: user.email,
       from: {
@@ -50,7 +56,9 @@ const emailPdf = async (invoice, user) => {
       content: [
         {
           type: 'text/html',
-          value: `<p>Hej ${user.name.split(' ')[0]}! Bifogad finns fakturan du nyss skapade i Fakturameistern.</p>`
+          value: `<p>Hej ${
+            user.name.split(' ')[0]
+          }! Bifogad finns fakturan du nyss skapade i Fakturameistern.</p>`
         }
       ],
       attachments: [
@@ -61,49 +69,49 @@ const emailPdf = async (invoice, user) => {
           disposition: 'attachment'
         }
       ]
-    })
+    });
     unlink(FILE_PATH, err => {
-      if (err) throw new Error(err)
-    })
+      if (err) throw new Error(err);
+    });
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e);
   }
-}
+};
 
 const convertInvoiceToPdf = async (invoice, user) => {
- 
   try {
-    const template = await _readFile(__dirname + '/pdf.ejs', 'utf-8')
+    const template = await _readFile(__dirname + '/pdf.ejs', 'utf-8');
     if (!template) {
-      throw new Error()
+      throw new Error();
     }
-    const html = await ejs.render(template, {
-      invoice,
-      user
-    }, true)
+    const html = await ejs.render(
+      template,
+      {
+        invoice,
+        user
+      },
+      true
+    );
 
     const browser = await puppeteer.launch({
-      'args' : [
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
-      ]
-    })
-    const page = await browser.newPage()
-    await page.setContent(html)
-    await page.emulateMedia('screen')
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    await page.setContent(html);
+    await page.emulateMedia('screen');
     await page.pdf({
       path: FILE_PATH,
       format: 'A4'
-    })
-    await browser.close()
+    });
+    await browser.close();
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e);
   }
-}
+};
 
 module.exports = {
   convertInvoiceToPdf,
   emailPdf,
   viewPdf,
   downloadPdf
-}
+};

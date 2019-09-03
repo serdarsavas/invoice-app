@@ -1,39 +1,39 @@
-const bcrypt = require('bcryptjs')
-const { validationResult } = require('express-validator/check')
+const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator/check');
 
-const pdfHandler = require('../pdf/pdf')
-const Invoice = require('../models/invoice')
+const pdfHandler = require('../pdf/pdf');
+const Invoice = require('../models/invoice');
 
 //Helpers
 
 const getInvoiceRows = req => {
-  const numRows = req.body.description.length
-  let rows = []
+  const numRows = req.body.description.length;
+  let rows = [];
   for (let i = 0; i < numRows; i++) {
-    let quantity = Number(req.body.quantity[i])
-    let price = Number(req.body.price[i])
+    let quantity = Number(req.body.quantity[i]);
+    let price = Number(req.body.price[i]);
     rows.push({
       description: req.body.description[i],
       quantity: quantity,
       unit: req.body.unit[i],
       price: price,
       amount: Math.ceil(quantity) * price
-    })
+    });
   }
-  return rows
-}
+  return rows;
+};
 
 const getTotal = rows => {
-  let total = 0
+  let total = 0;
   rows.forEach(row => {
-    total += Number(row.amount)
-  })
-  return total
-}
+    total += Number(row.amount);
+  });
+  return total;
+};
 
 const createInvoice = async req => {
-  const rows = getInvoiceRows(req)
-  const total = getTotal(rows)
+  const rows = getInvoiceRows(req);
+  const total = getTotal(rows);
   const invoice = new Invoice({
     invoiceNumber: req.body.invoiceNumber,
     assignmentNumber: req.body.assignmentNumber,
@@ -49,48 +49,47 @@ const createInvoice = async req => {
     VAT: 0.25,
     totalAfterVAT: (total * 1.25).toFixed(2),
     owner: req.user
-  })
+  });
   try {
-    await invoice.save()
-    return invoice
+    await invoice.save();
+    return invoice;
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e);
   }
-}
+};
 
 const getUniqueRecipients = async user => {
   try {
-    const invoices = await Invoice.find({ owner: user })
+    const invoices = await Invoice.find({ owner: user });
     if (!invoices) {
-      return []
+      return [];
     }
-    const allRecipients = invoices.map(invoice => invoice.recipient)
-    const uniqueRecipients = []
-    const map = new Map()
+    const allRecipients = invoices.map(invoice => invoice.recipient);
+    const uniqueRecipients = [];
+    const map = new Map();
     for (const recipient of allRecipients) {
       if (!map.has(recipient.authority)) {
-        map.set(recipient.authority, true)
+        map.set(recipient.authority, true);
         uniqueRecipients.push({
           authority: recipient.authority,
           refPerson: recipient.refPerson,
           street: recipient.street,
           zip: recipient.zip,
           city: recipient.city
-        })
+        });
       }
     }
-    return uniqueRecipients
+    return uniqueRecipients;
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e);
   }
-}
-
+};
 
 //Exports
 
 exports.getAddInvoice = async (req, res, next) => {
   try {
-    const recipients = await getUniqueRecipients(req.user)
+    const recipients = await getUniqueRecipients(req.user);
     res.render('admin/add-invoice', {
       pageTitle: 'Ny faktura',
       path: '/add',
@@ -99,27 +98,27 @@ exports.getAddInvoice = async (req, res, next) => {
       inputData: null,
       validationErrors: [],
       successMessage: null
-    })
+    });
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.getRecipientData = async (req, res, next) => {
   try {
-    const recipients = await getUniqueRecipients(req.user)
-    const data = JSON.stringify(recipients)
-    res.send(data)
+    const recipients = await getUniqueRecipients(req.user);
+    const data = JSON.stringify(recipients);
+    res.send(data);
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.postSaveInvoice = async (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
 
   try {
-    const recipients = await getUniqueRecipients(req.user)
+    const recipients = await getUniqueRecipients(req.user);
     if (!errors.isEmpty()) {
       return res.render('admin/add-invoice', {
         pageTitle: 'Ny faktura',
@@ -129,10 +128,10 @@ exports.postSaveInvoice = async (req, res, next) => {
         inputData: req.body,
         validationErrors: errors.array({ onlyFirstError: true }),
         successMessage: null
-      })
+      });
     }
 
-    const invoice = await createInvoice(req)
+    const invoice = await createInvoice(req);
 
     res.render('admin/add-invoice', {
       pageTitle: 'Ny faktura',
@@ -142,14 +141,14 @@ exports.postSaveInvoice = async (req, res, next) => {
       inputData: req.body,
       validationErrors: [],
       successMessage: 'Fakturan är sparad!'
-    })
+    });
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.postEmailInvoice = async (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/add-invoice', {
@@ -160,16 +159,16 @@ exports.postEmailInvoice = async (req, res, next) => {
       inputData: req.body,
       validationErrors: errors.array({ onlyFirstError: true }),
       successMessage: null
-    })
+    });
   }
   try {
-    const invoiceId = req.body.invoiceId
-    let invoice
+    const invoiceId = req.body.invoiceId;
+    let invoice;
     if (!invoiceId) {
-      invoice = await createInvoice(req)
+      invoice = await createInvoice(req);
     } else {
-      const rows = getInvoiceRows(req)
-      const total = getTotal(rows)
+      const rows = getInvoiceRows(req);
+      const total = getTotal(rows);
       invoice = await Invoice.findByIdAndUpdate(invoiceId, {
         invoiceNumber: req.body.invoiceNumber,
         assignmentNumber: req.body.assignmentNumber,
@@ -178,28 +177,28 @@ exports.postEmailInvoice = async (req, res, next) => {
           refPerson: req.body.refPerson,
           street: req.body.street,
           zip: req.body.zip,
-          city: req.body.city,
+          city: req.body.city
         },
         rows: rows,
         totalBeforeVAT: total,
         totalAfterVAT: total * 1.25
-      })
-      await invoice.save()
+      });
+      await invoice.save();
     }
-    await pdfHandler.convertInvoiceToPdf(invoice, req.user)
-    await pdfHandler.emailPdf(invoice, req.user)
-    return res.redirect('/admin/invoices')
+    await pdfHandler.convertInvoiceToPdf(invoice, req.user);
+    await pdfHandler.emailPdf(invoice, req.user);
+    return res.redirect('/admin/invoices');
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.getEditInvoice = async (req, res, next) => {
-  const invoiceId = req.params.invoiceId
+  const invoiceId = req.params.invoiceId;
   try {
-    const invoice = await Invoice.findById(invoiceId)
+    const invoice = await Invoice.findById(invoiceId);
     if (!invoice) {
-      throw new Error()
+      throw new Error();
     }
     res.render('admin/edit-invoice', {
       pageTitle: 'Redigera faktura',
@@ -208,17 +207,17 @@ exports.getEditInvoice = async (req, res, next) => {
       inputData: null,
       validationErrors: [],
       successMessage: null
-    })
+    });
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.postEditInvoice = async (req, res, next) => {
-  const errors = validationResult(req)
-  
+  const errors = validationResult(req);
+
   try {
-    const invoice = await Invoice.findById(req.body.invoiceId)
+    const invoice = await Invoice.findById(req.body.invoiceId);
     if (!errors.isEmpty()) {
       return res.render('admin/edit-invoice', {
         pageTitle: 'Redigera faktura',
@@ -227,22 +226,22 @@ exports.postEditInvoice = async (req, res, next) => {
         inputData: req.body,
         validationErrors: errors.array({ onlyFirstError: true }),
         successMessage: null
-      })
+      });
     }
-    const rows = getInvoiceRows(req)
-    const total = getTotal(rows)
+    const rows = getInvoiceRows(req);
+    const total = getTotal(rows);
 
-    invoice.invoiceNumber = req.body.invoiceNumber
-    invoice.assignmentNumber = req.body.assignmentNumber
-    invoice.recipient.authority = req.body.authority
-    invoice.recipient.refPerson = req.body.refPerson
-    invoice.recipient.street = req.body.street
-    invoice.recipient.zip = req.body.zip
-    invoice.recipient.city = req.body.city
-    invoice.rows = rows
-    invoice.totalBeforeVAT = total
-    invoice.totalAfterVAT = total * (invoice.VAT + 1)
-    await invoice.save()
+    invoice.invoiceNumber = req.body.invoiceNumber;
+    invoice.assignmentNumber = req.body.assignmentNumber;
+    invoice.recipient.authority = req.body.authority;
+    invoice.recipient.refPerson = req.body.refPerson;
+    invoice.recipient.street = req.body.street;
+    invoice.recipient.zip = req.body.zip;
+    invoice.recipient.city = req.body.city;
+    invoice.rows = rows;
+    invoice.totalBeforeVAT = total;
+    invoice.totalAfterVAT = total * (invoice.VAT + 1);
+    await invoice.save();
 
     res.render('admin/edit-invoice', {
       pageTitle: 'Redigera faktura',
@@ -251,89 +250,88 @@ exports.postEditInvoice = async (req, res, next) => {
       inputData: null,
       validationErrors: [],
       successMessage: 'Ändringarna är sparade!'
-    })
+    });
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.getInvoiceFolders = async (req, res, next) => {
   try {
-    const recipients = await getUniqueRecipients(req.user)
+    const recipients = await getUniqueRecipients(req.user);
     if (!recipients.length > 0) {
       return res.render('admin/invoice-folders', {
         path: '/invoices',
         pageTitle: 'Fakturor',
         recipients: recipients
-      })
+      });
     }
     recipients.sort((a, b) =>
       a.authority.toLowerCase() > b.authority.toLowerCase() ? 1 : -1
-    )
+    );
     res.render('admin/invoice-folders', {
       path: '/invoices',
       pageTitle: 'Fakturor',
       recipients: recipients
-    })
+    });
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.getInvoices = async (req, res, next) => {
-  const folderName = req.params.folderName
+  const folderName = req.params.folderName;
 
   try {
     const documents = await Invoice.find({
       owner: req.user,
       'recipient.authority': folderName
-    })
-    const invoices = [...documents].reverse()
+    });
+    const invoices = [...documents].reverse();
     res.render('admin/invoices', {
       path: '',
       pageTitle: 'Fakturor',
       invoices
-    })
+    });
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.getViewInvoice = async (req, res, next) => {
-
   try {
-    const invoice = await Invoice.findById(req.params.invoiceId)
+    const invoice = await Invoice.findById(req.params.invoiceId);
     if (!invoice) {
-      throw new Error()
+      throw new Error();
     }
-    await pdfHandler.convertInvoiceToPdf(invoice, req.user)
-    await pdfHandler.viewPdf(res)
+    await pdfHandler.convertInvoiceToPdf(invoice, req.user);
+    await pdfHandler.viewPdf(res);
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.getDownloadInvoice = async (req, res, next) => {
   try {
-    const invoice = await Invoice.findById(req.params.invoiceId)
+    const invoice = await Invoice.findById(req.params.invoiceId);
     if (!invoice) {
-      throw new Error()
+      throw new Error();
     }
-    await pdfHandler.convertInvoiceToPdf(invoice, req.user)
-    pdfHandler.downloadPdf(invoice, res)
+    await pdfHandler.convertInvoiceToPdf(invoice, req.user);
+    pdfHandler.downloadPdf(invoice, res);
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.postDeleteInvoice = async (req, res, next) => {
   try {
-    const invoice = await Invoice.findByIdAndDelete(req.body.invoiceId)
-    res.redirect(`/admin/invoices/${invoice.recipient.authority}`)
+    const invoice = await Invoice.findByIdAndDelete(req.body.invoiceId);
+    res.redirect(`/admin/invoices/${invoice.recipient.authority}`);
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};
 
 exports.getEditProfile = (req, res) => {
   res.render('admin/edit-profile', {
@@ -343,11 +341,11 @@ exports.getEditProfile = (req, res) => {
     validationErrors: [],
     inputData: null,
     successMessage: null
-  })
-}
+  });
+};
 
 exports.postEditProfile = async (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-profile', {
@@ -357,30 +355,33 @@ exports.postEditProfile = async (req, res, next) => {
       validationErrors: errors.array({ onlyFirstError: true }),
       inputData: req.body,
       successMessage: null
-    })
+    });
   }
 
-  const user = req.user
+  const user = req.user;
 
   try {
-    const isNewPassword = await bcrypt.compare(req.body.password, user.password)
+    const isNewPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
 
     if (isNewPassword) {
-      user.password = await bcrypt.hash(req.body.password, 8)
+      user.password = await bcrypt.hash(req.body.password, 8);
     }
-    user.name = req.body.name
-    user.email = req.body.email
-    user.phone = req.body.phone
-    user.street = req.body.street
-    user.zip = req.body.zip
-    user.city = req.body.city
-    user.position = req.body.position
-    user.registrationNumber = req.body.registrationNumber
-    user.vatNumber = req.body.vatNumber
-    user.bankgiro = req.body.bankgiro
-    await user.save()
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.phone = req.body.phone;
+    user.street = req.body.street;
+    user.zip = req.body.zip;
+    user.city = req.body.city;
+    user.position = req.body.position;
+    user.registrationNumber = req.body.registrationNumber;
+    user.vatNumber = req.body.vatNumber;
+    user.bankgiro = req.body.bankgiro;
+    await user.save();
 
-    req.user = user
+    req.user = user;
     res.render('admin/edit-profile', {
       pageTitle: 'Mina uppgifter',
       path: '/profile',
@@ -388,8 +389,8 @@ exports.postEditProfile = async (req, res, next) => {
       validationErrors: [],
       inputData: null,
       successMessage: 'Dina uppgifter är nu sparade!'
-    })
+    });
   } catch (e) {
-    next(new Error(e))
+    next(new Error(e));
   }
-}
+};

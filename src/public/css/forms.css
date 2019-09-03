@@ -27,7 +27,6 @@
   border-radius: 3px;
 }
 
-
 .form-control input:valid {
   border-color: green;
 }

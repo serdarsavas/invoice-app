@@ -1,6 +1,6 @@
 window.addEventListener('load', () => {
-  document.querySelector('.preload').classList.remove('preload')
-})
+  document.querySelector('.preload').classList.remove('preload');
+});
 
 const backdrop = document.querySelector('.backdrop');
 const sideDrawer = document.querySelector('.mobile-nav');

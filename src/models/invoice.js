@@ -1,12 +1,12 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
 const invoiceSchema = new Schema(
   {
     invoiceNumber: {
       type: String,
-      required: true,
+      required: true
     },
     assignmentNumber: String,
     recipient: {
@@ -77,6 +77,6 @@ const invoiceSchema = new Schema(
   {
     timestamps: true
   }
-)
+);
 
-module.exports = mongoose.model('Invoice', invoiceSchema)
+module.exports = mongoose.model('Invoice', invoiceSchema);

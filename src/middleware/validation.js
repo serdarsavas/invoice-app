@@ -1,17 +1,17 @@
-const { body } = require('express-validator/check')
-const User = require('../models/user')
+const { body } = require('express-validator/check');
+const User = require('../models/user');
 
-const validate = (method) => {
-  switch(method) {
+const validate = method => {
+  switch (method) {
     case 'postLogin': {
       return [
-      body('email', '* Felaktig epostadress eller lösenord')
-        .isEmail()
-        .normalizeEmail(),
-      body('password', '* Felaktig epostadress eller lösenord')  
-        .trim()
-        .isLength({ min: 6 })
-      ]
+        body('email', '* Felaktig epostadress eller lösenord')
+          .isEmail()
+          .normalizeEmail(),
+        body('password', '* Felaktig epostadress eller lösenord')
+          .trim()
+          .isLength({ min: 6 })
+      ];
     }
     case 'postSignup': {
       return [
@@ -26,11 +26,11 @@ const validate = (method) => {
           .withMessage('* Ange en giltig epostadress')
           .normalizeEmail()
           .custom(async email => {
-            const user = await User.findOne({ email })
-            if (!user) { 
-              return true
+            const user = await User.findOne({ email });
+            if (!user) {
+              return true;
             }
-            throw new Error('* Epostadressen används redan')
+            throw new Error('* Epostadressen används redan');
           }),
         body('phone')
           .trim()
@@ -52,14 +52,18 @@ const validate = (method) => {
           .withMessage(`* Postnummer saknas`)
           .trim()
           .matches(/^(?=.*\d)[\d ]+$/)
-          .withMessage(`* Endast heltal och mellanslag tillåtna under 'Postkod'`),
+          .withMessage(
+            `* Endast heltal och mellanslag tillåtna under 'Postkod'`
+          ),
         body('city')
           .trim()
           .not()
           .isEmpty()
           .withMessage(`* Postort saknas`)
           .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ]+$/u)
-          .withMessage(`* Endast bokstäver och mellanslag tillåtna under 'Postort'`),
+          .withMessage(
+            `* Endast bokstäver och mellanslag tillåtna under 'Postort'`
+          ),
         body('password')
           .trim()
           .not()
@@ -73,12 +77,12 @@ const validate = (method) => {
           .withMessage('* Du måste bekräfta ditt lösenord')
           .trim()
           .custom((value, { req }) => {
-          if (value !== req.body.password) {
-            throw new Error('* Lösenorden matchar inte')
-          }
-          return true
+            if (value !== req.body.password) {
+              throw new Error('* Lösenorden matchar inte');
+            }
+            return true;
           })
-      ]
+      ];
     }
     case 'postEmailInvoice':
     case 'postEditInvoice':
@@ -110,7 +114,9 @@ const validate = (method) => {
           .isEmpty()
           .withMessage(`* Postkod saknas`)
           .matches(/[0-9 ]+$/u)
-          .withMessage(`* Endast siffror och mellanslag tillåtna för 'Postkod'`),
+          .withMessage(
+            `* Endast siffror och mellanslag tillåtna för 'Postkod'`
+          ),
         body('city')
           .trim()
           .not()
@@ -131,14 +137,18 @@ const validate = (method) => {
           .isEmpty()
           .withMessage(`* Uppdragsnummer saknas`)
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-          .withMessage(`* Endast siffror och bokstäver tillåtna under 'Uppdragsnummer'`),
+          .withMessage(
+            `* Endast siffror och bokstäver tillåtna under 'Uppdragsnummer'`
+          ),
         body('description')
           .trim()
           .not()
           .isEmpty()
           .withMessage(`* Beskrivning saknas`)
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-          .withMessage(`* Endast bokstäver och siffror tillåtna under 'Beskrivning'`),
+          .withMessage(
+            `* Endast bokstäver och siffror tillåtna under 'Beskrivning'`
+          ),
         body('quantity')
           .trim()
           .not()
@@ -160,140 +170,145 @@ const validate = (method) => {
           .withMessage(`* Pris saknas`)
           .isFloat()
           .withMessage(`* Endast siffror tillåtna under 'Pris'`)
-      ]
+      ];
     }
     case 'postEditProfile': {
-        return [
-          body('name')
-            .not()
-            .isEmpty()
-            .withMessage(`* Namn saknas`)
-            .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-            .withMessage(`* Otillåtna tecken i fältet 'Namn'`),
-          body('email')
-            .isEmail()
-            .withMessage('* Ange en giltig epostadress')
-            .custom(async (email, { req }) => {
+      return [
+        body('name')
+          .not()
+          .isEmpty()
+          .withMessage(`* Namn saknas`)
+          .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
+          .withMessage(`* Otillåtna tecken i fältet 'Namn'`),
+        body('email')
+          .isEmail()
+          .withMessage('* Ange en giltig epostadress')
+          .custom(async (email, { req }) => {
             try {
-              const user = await User.findOne({ email })
+              const user = await User.findOne({ email });
               if (user.id !== req.user.id) {
-                return Promise.reject('* Epostadressen existerar redan')
+                return Promise.reject('* Epostadressen existerar redan');
               }
-              return true
+              return true;
             } catch (e) {
-              console.log(e)
-              }
-            })
-            .normalizeEmail(),
-          body('phone')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage(`* Telefonnummer saknas`)
-            .matches(/^[0-9 .,+-]+$/i)
-            .withMessage('* Ange ett giltigt telefonnummer'),
-          body('street')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage(`* Gatuadress saknas`)
-            .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-            .withMessage(`* Otillåtna tecken under 'Gatuadress'`),
-          body('zip')
-            .not()
-            .isEmpty()
-            .withMessage(`* Postnummer saknas`)
-            .trim()
-            .matches(/^(?=.*\d)[\d ]+$/)
-            .withMessage(`* Endast heltal och mellanslag tillåtna under 'Postkod'`),
-          body('city')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage(`* Postort saknas`)
-            .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ]+$/u)
-            .withMessage(`* Endast bokstäver och mellanslag tillåtna under 'Postort'`),
-          body('position')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage(`* Jobbtitel saknas`)
-            .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-            .withMessage(`* Otillåtna tecken under 'Jobbtitel'`),
-          body('registrationNumber')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage(`* Organisationsnummer saknas`)
-            .matches(/^([0-9]+-)*[0-9]+$/)
-            .withMessage(`* Organisationsnumret skrivs i formatet 'NNNNNN-NNNN'`)
-            .isLength({min : 11, max : 11})
-            .withMessage(`* Organisationsnummer skrivs med 10 tecken separerat av ett bindestreck ('NNNNNN-NNNN')`),
-          body('vatNumber')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage(`* Momsregistreringsnummer saknas`)
-            .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-            .withMessage(`* Endast bokstäver och siffror tillåtna för 'Momsregistreringsnummer'`)
-            .isLength({min : 14, max : 14})
-            .withMessage(`* Momsregistreringsnummer ska vara 14 tecken`),
-          body('bankgiro')
-            .trim()
-            .matches(/^([0-9]+-)*[0-9]+$/)
-            .withMessage(`* Bankgiro skrivs i formatet 'NNNN-NNNN'`)
-            .isLength({min : 7, max : 9})
-            .withMessage(`* Bankgiro ska  vara 7-8 siffror ('NNNN-NNNN')`),
-          body('password')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage('* Lösenord saknas')
-            .isLength({ min: 6 })
-            .withMessage('* Lösenordet måste vara minst 6 tecken'),
-          body('confirmPassword')
-            .not()
-            .isEmpty()
-            .withMessage('* Du måste bekräfta ditt lösenord')
-            .trim()
-            .custom((value, { req }) => {
-            if (value !== req.body.password) {
-              return Promise.reject('Lösenorden matchar inte')
+              console.log(e);
             }
-            return true
-            })
-        ]
+          })
+          .normalizeEmail(),
+        body('phone')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Telefonnummer saknas`)
+          .matches(/^[0-9 .,+-]+$/i)
+          .withMessage('* Ange ett giltigt telefonnummer'),
+        body('street')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Gatuadress saknas`)
+          .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
+          .withMessage(`* Otillåtna tecken under 'Gatuadress'`),
+        body('zip')
+          .not()
+          .isEmpty()
+          .withMessage(`* Postnummer saknas`)
+          .trim()
+          .matches(/^(?=.*\d)[\d ]+$/)
+          .withMessage(
+            `* Endast heltal och mellanslag tillåtna under 'Postkod'`
+          ),
+        body('city')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Postort saknas`)
+          .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ]+$/u)
+          .withMessage(
+            `* Endast bokstäver och mellanslag tillåtna under 'Postort'`
+          ),
+        body('position')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Jobbtitel saknas`)
+          .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
+          .withMessage(`* Otillåtna tecken under 'Jobbtitel'`),
+        body('registrationNumber')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Organisationsnummer saknas`)
+          .matches(/^([0-9]+-)*[0-9]+$/)
+          .withMessage(`* Organisationsnumret skrivs i formatet 'NNNNNN-NNNN'`)
+          .isLength({ min: 11, max: 11 })
+          .withMessage(
+            `* Organisationsnummer skrivs med 10 tecken separerat av ett bindestreck ('NNNNNN-NNNN')`
+          ),
+        body('vatNumber')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage(`* Momsregistreringsnummer saknas`)
+          .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
+          .withMessage(
+            `* Endast bokstäver och siffror tillåtna för 'Momsregistreringsnummer'`
+          )
+          .isLength({ min: 14, max: 14 })
+          .withMessage(`* Momsregistreringsnummer ska vara 14 tecken`),
+        body('bankgiro')
+          .trim()
+          .matches(/^([0-9]+-)*[0-9]+$/)
+          .withMessage(`* Bankgiro skrivs i formatet 'NNNN-NNNN'`)
+          .isLength({ min: 7, max: 9 })
+          .withMessage(`* Bankgiro ska  vara 7-8 siffror ('NNNN-NNNN')`),
+        body('password')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage('* Lösenord saknas')
+          .isLength({ min: 6 })
+          .withMessage('* Lösenordet måste vara minst 6 tecken'),
+        body('confirmPassword')
+          .not()
+          .isEmpty()
+          .withMessage('* Du måste bekräfta ditt lösenord')
+          .trim()
+          .custom((value, { req }) => {
+            if (value !== req.body.password) {
+              return Promise.reject('Lösenorden matchar inte');
+            }
+            return true;
+          })
+      ];
     }
     case 'postReset': {
-      return [
-        body('email')
-          .normalizeEmail()
-      ]
+      return [body('email').normalizeEmail()];
     }
 
     case 'postNewPassword': {
       return [
         body('password')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage('* Lösenord saknas')
-            .isLength({ min: 6 })
-            .withMessage('* Lösenordet måste vara minst 6 tecken'),
-          body('confirmPassword')
-            .not()
-            .isEmpty()
-            .withMessage('* Du måste bekräfta ditt lösenord')
-            .trim()
-            .custom((value, { req }) => {
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage('* Lösenord saknas')
+          .isLength({ min: 6 })
+          .withMessage('* Lösenordet måste vara minst 6 tecken'),
+        body('confirmPassword')
+          .not()
+          .isEmpty()
+          .withMessage('* Du måste bekräfta ditt lösenord')
+          .trim()
+          .custom((value, { req }) => {
             if (value !== req.body.password) {
-              return Promise.reject('Lösenorden matchar inte')
+              return Promise.reject('Lösenorden matchar inte');
             }
-            return true
-            })
-      ]
+            return true;
+          })
+      ];
     }
   }
-}
+};
 
-module.exports = validate
+module.exports = validate;

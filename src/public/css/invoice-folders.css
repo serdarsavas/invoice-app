@@ -12,7 +12,6 @@
 
 .folder a {
   text-decoration: none;
-  
 }
 
 .folder .fas {
@@ -23,7 +22,7 @@
 .fa-folder:hover {
   cursor: pointer;
   color: #cfcfcf;
-  transform: scale(1, 1.02)
+  transform: scale(1, 1.02);
 }
 
 .folder__name {
@@ -49,4 +48,3 @@
   font-size: 1.3rem;
   line-height: 1.5;
 }
-

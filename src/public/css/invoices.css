@@ -47,7 +47,7 @@
 }
 
 .invoice-actions a {
-  margin: 0 0.2rem;
+  margin: 0 0.1rem;
   text-decoration: none;
   font: 400 0.8rem;
   color: #4c4c4c;
@@ -102,7 +102,7 @@
   font-family: inherit;
   font-size: 100%;
   outline: none;
-  background: #e2e2e2 url('../pics/search-icon.png') no-repeat 9px center;
+  background: #e2e2e2 no-repeat 9px center;
   border: solid 1px #e2e2e2;
   padding: 0.8rem 3.2rem;
   width: 9%;
@@ -159,5 +159,12 @@
   .search-form__filter:hover {
     width: 80%;
     background-color: #f4f4f4;
+  }
+}
+@media (max-width: 390px) {
+  .invoice-actions a {
+    display: block;
+    width: 70%;
+    margin: 0.5rem auto;
   }
 }
