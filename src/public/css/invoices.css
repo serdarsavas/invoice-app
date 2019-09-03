@@ -149,9 +149,23 @@
   font-size: 1.45rem;
 }
 
+
+
+@media (max-width: 1500px) {
+  .search-form__filter {
+    width: 20%;
+    background: #ededed;
+  }
+
+  .search-form__filter:focus,
+  .search-form__filter:hover {
+    width: 50%;
+  }
+
+
 @media (max-width: 768px) {
   .search-form__filter {
-    width: 80%;
+    width: 40%;
     background: #ededed;
   }
 
