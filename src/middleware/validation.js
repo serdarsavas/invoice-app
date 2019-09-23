@@ -52,18 +52,14 @@ const validate = method => {
           .withMessage(`* Postnummer saknas`)
           .trim()
           .matches(/^(?=.*\d)[\d ]+$/)
-          .withMessage(
-            `* Endast heltal och mellanslag tillåtna under 'Postkod'`
-          ),
+          .withMessage(`* Endast heltal och mellanslag tillåtna under 'Postkod'`),
         body('city')
           .trim()
           .not()
           .isEmpty()
           .withMessage(`* Postort saknas`)
           .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ]+$/u)
-          .withMessage(
-            `* Endast bokstäver och mellanslag tillåtna under 'Postort'`
-          ),
+          .withMessage(`* Endast bokstäver och mellanslag tillåtna under 'Postort'`),
         body('password')
           .trim()
           .not()
@@ -95,13 +91,6 @@ const validate = method => {
           .withMessage(`* Mottagare saknas`)
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
           .withMessage(`* Otillåtna tecken under 'Mottagare'`),
-        body('refPerson')
-          .trim()
-          .not()
-          .isEmpty()
-          .withMessage(`* Referensperson saknas`)
-          .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-          .withMessage(`* Otillåtna tecken under 'Referensperson'`),
         body('street')
           .not()
           .isEmpty()
@@ -114,9 +103,7 @@ const validate = method => {
           .isEmpty()
           .withMessage(`* Postkod saknas`)
           .matches(/[0-9 ]+$/u)
-          .withMessage(
-            `* Endast siffror och mellanslag tillåtna för 'Postkod'`
-          ),
+          .withMessage(`* Endast siffror och mellanslag tillåtna för 'Postkod'`),
         body('city')
           .trim()
           .not()
@@ -137,18 +124,14 @@ const validate = method => {
           .isEmpty()
           .withMessage(`* Uppdragsnummer saknas`)
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-          .withMessage(
-            `* Endast siffror och bokstäver tillåtna under 'Uppdragsnummer'`
-          ),
+          .withMessage(`* Endast siffror och bokstäver tillåtna under 'Uppdragsnummer'`),
         body('description')
           .trim()
           .not()
           .isEmpty()
           .withMessage(`* Beskrivning saknas`)
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-          .withMessage(
-            `* Endast bokstäver och siffror tillåtna under 'Beskrivning'`
-          ),
+          .withMessage(`* Endast bokstäver och siffror tillåtna under 'Beskrivning'`),
         body('quantity')
           .trim()
           .not()
@@ -215,18 +198,14 @@ const validate = method => {
           .withMessage(`* Postnummer saknas`)
           .trim()
           .matches(/^(?=.*\d)[\d ]+$/)
-          .withMessage(
-            `* Endast heltal och mellanslag tillåtna under 'Postkod'`
-          ),
+          .withMessage(`* Endast heltal och mellanslag tillåtna under 'Postkod'`),
         body('city')
           .trim()
           .not()
           .isEmpty()
           .withMessage(`* Postort saknas`)
           .matches(/[a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ]+$/u)
-          .withMessage(
-            `* Endast bokstäver och mellanslag tillåtna under 'Postort'`
-          ),
+          .withMessage(`* Endast bokstäver och mellanslag tillåtna under 'Postort'`),
         body('position')
           .trim()
           .not()
@@ -251,9 +230,7 @@ const validate = method => {
           .isEmpty()
           .withMessage(`* Momsregistreringsnummer saknas`)
           .matches(/[0-9a-zA-ZàáäåèéüÀÁÄÅÒÓÖØÜ ,.'-]+$/u)
-          .withMessage(
-            `* Endast bokstäver och siffror tillåtna för 'Momsregistreringsnummer'`
-          )
+          .withMessage(`* Endast bokstäver och siffror tillåtna för 'Momsregistreringsnummer'`)
           .isLength({ min: 14, max: 14 })
           .withMessage(`* Momsregistreringsnummer ska vara 14 tecken`),
         body('bankgiro')
