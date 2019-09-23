@@ -133,10 +133,7 @@
         </div>
         <div class="header-col2">
           <h1 class="large-header">Faktura</h1>
-          <p>
-            <span class="bold">Fakturanummer: </span><%= invoice.invoiceNumber
-            %>
-          </p>
+          <p><span class="bold">Fakturanummer: </span><%= invoice.invoiceNumber %></p>
           <div>
             <h3 class="address-header">Mottagare:</h3>
             <p>
@@ -159,10 +156,12 @@
             <span class="italic">Vår referens:</span><br />
             <%= user.name %>
           </p>
+          <% if (invoice.recipient.refPerson) {%>
           <p>
             <span class="italic">Er referens:</span><br />
             <%= invoice.recipient.refPerson %>
           </p>
+          <% } %>
           <p>
             <span class="italic">Betalningsvillkor:</span><br />
             30 dagar netto
@@ -203,8 +202,7 @@
           <div class="right">
             <p><%= invoice.totalBeforeVAT.toFixed(2) %> kr</p>
             <p>
-              <%= (invoice.totalAfterVAT - invoice.totalBeforeVAT).toFixed(2) %>
-              kr
+              <%= (invoice.totalAfterVAT - invoice.totalBeforeVAT).toFixed(2) %> kr
             </p>
             <p class="bold"><%= invoice.totalAfterVAT.toFixed(2) %> kr</p>
           </div>
@@ -229,8 +227,7 @@
         </div>
         <div class="footer-col">
           <p>
-            Organisationsnr: <%= user.registrationNumber ?
-            user.registrationNumber : 'NNNNNN-NNNN' %>
+            Organisationsnr: <%= user.registrationNumber ? user.registrationNumber : 'NNNNNN-NNNN' %>
           </p>
           <p>
             Momsregnr: <%= user.vatNumber ? user.vatNumber : 'NNNNNNNNNNNNNN'%>

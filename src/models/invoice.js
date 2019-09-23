@@ -17,7 +17,6 @@ const invoiceSchema = new Schema(
       },
       refPerson: {
         type: String,
-        required: true,
         trim: true
       },
       street: {
