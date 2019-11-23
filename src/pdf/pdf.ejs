@@ -13,15 +13,13 @@
       html,
       body {
         margin: 0;
-        padding: 0;
+        /* padding: 20mm; */
       }
 
       .wrapper {
-        width: 200mm;
-        height: 290mm;
-        font-family: Arial, Helvetica, sans-serif;
-        border: 1px solid black;
-        margin: 10px auto;
+        font-family: Helvetica, sans-serif;
+        margin: 0 auto;
+        color: rgb(64, 64, 64);
       }
 
       .flex {
@@ -33,8 +31,8 @@
       }
 
       .header {
-        border-bottom: 1.5px solid black;
-        padding-bottom: 20px;
+        border-bottom: 1px solid black;
+        padding-bottom: 100px;
         justify-content: stretch;
       }
 
@@ -43,17 +41,17 @@
       }
       .header-col2 {
         width: 35%;
-        margin-top: 10px;
+        /* margin-top: 10px; */
       }
       .header-col3 {
         width: 35%;
-        margin-top: 20px;
+        /* margin-top: 20px; */
       }
 
       .author {
-        margin-top: 70px;
+        /* margin-top: 70px; */
         font-weight: bold;
-        font-size: 23px;
+        font-size: 16px;
       }
 
       table {
@@ -64,7 +62,7 @@
       }
 
       thead {
-        border-bottom: 2px solid black;
+        border-bottom: 1px solid black;
       }
 
       th,
@@ -78,25 +76,34 @@
         white-space: nowrap;
       }
 
+      .right-align {
+        text-align: right;
+      }
+
       .invoice-footer {
-        margin-top: 200px;
+        margin-top: 100px;
         padding-right: 30px;
-        border-top: 3px solid black;
+        border-top: 1px solid black;
         justify-content: flex-end;
+        page-break-inside: avoid;
       }
       .invoice-footer .right {
         padding: 0 20px;
       }
 
       .footer {
-        border-top: 3px solid black;
+        border-top: 1px solid black;
+        font-size: 10px;
         flex-wrap: wrap;
-        justify-content: flex-end;
+        justify-content: space-around;
+        /* margin-top: 80%; */
+        /* position: absolute;
+        bottom: 20px;
+        right: 5%; */
       }
 
       .footer-col {
         padding: 0 15px;
-        width: 50%;
       }
 
       .bold {
@@ -118,7 +125,14 @@
       }
 
       .large-header {
-        font-size: 43px;
+        margin-top: 0;
+        font-size: 36px;
+        font-weight: 400;
+      }
+      @media print  {
+        .invoice-footer {
+          page-break-inside: avoid;
+        }
       }
     </style>
   </head>
@@ -127,13 +141,14 @@
       <header class="flex header">
         <div class="header-col1">
           <h2 class="author"><%= user.name %></h2>
-          <div class="header-sub-col">
-            <h4><%= user.position ? user.position : 'XXXXXXXX' %></h4>
-          </div>
+          <p><%= user.position && user.position %></p>
         </div>
         <div class="header-col2">
           <h1 class="large-header">Faktura</h1>
-          <p><span class="bold">Fakturanummer: </span><%= invoice.invoiceNumber %></p>
+          <p>
+            <span class="bold">Fakturanummer: </span><%= invoice.invoiceNumber
+            %>
+          </p>
           <div>
             <h3 class="address-header">Mottagare:</h3>
             <p>
@@ -176,8 +191,8 @@
               <th>Beskrivning</th>
               <th>Antal</th>
               <th>Enhet</th>
-              <th>à pris</th>
-              <th>Belopp (SEK)</th>
+              <th class="right-align">à pris</th>
+              <th class="right-align">Belopp (SEK)</th>
             </tr>
           </thead>
           <tbody>
@@ -186,8 +201,8 @@
               <td><%= row.description %></td>
               <td><%= row.quantity %></td>
               <td><%= row.unit %></td>
-              <td><%= row.price %></td>
-              <td><%= row.amount %></td>
+              <td class="right-align"><%= row.price %></td>
+              <td class="right-align"><%= row.amount %></td>
             </tr>
             <% }) %>
           </tbody>
@@ -200,39 +215,53 @@
             <p class="bold">Att betala</p>
           </div>
           <div class="right">
-            <p><%= invoice.totalBeforeVAT.toFixed(2) %> kr</p>
-            <p>
-              <%= (invoice.totalAfterVAT - invoice.totalBeforeVAT).toFixed(2) %> kr
+            <p class="right-align">
+              <%= invoice.totalBeforeVAT.toFixed(2) %> kr
             </p>
-            <p class="bold"><%= invoice.totalAfterVAT.toFixed(2) %> kr</p>
+            <p class="right-align">
+              <%= (invoice.totalAfterVAT - invoice.totalBeforeVAT).toFixed(2) %>
+              kr
+            </p>
+            <p class="bold right-align">
+              <%= invoice.totalAfterVAT.toFixed(2) %> kr
+            </p>
           </div>
         </div>
       </main>
 
-      <footer class="flex footer">
+      <!-- <footer class="flex footer">
         <div class="footer-col">
           <p>
-            <%= user.name %><br />
+            <span class="bold">Adress</span><br />
             <%= user.street %><br />
             <%= user.zip %> <%= user.city %>
           </p>
         </div>
         <div class="footer-col">
-          <p>Bankgiro: <%= user.bankgiro ? user.bankgiro : 'NNNN-NNNN' %></p>
-          <p>Godkänd för F-skatt</p>
-        </div>
-        <div class="footer-col">
-          <p>Telefon: <%= user.phone %></p>
-          <p>Epost: <%= user.email %></p>
+          <p>
+            <span class="bold">Bankgiro:</span><br />
+            <%= user.bankgiro %>
+          </p>
         </div>
         <div class="footer-col">
           <p>
-            Organisationsnr: <%= user.registrationNumber ? user.registrationNumber : 'NNNNNN-NNNN' %>
-          </p>
-          <p>
-            Momsregnr: <%= user.vatNumber ? user.vatNumber : 'NNNNNNNNNNNNNN'%>
+            <span class="bold">Telefon</span><br />
+            <%= user.phone %>
           </p>
         </div>
+        <div class="footer-col">
+          <p>
+            <span class="bold">Epost</span><br />
+            <%= user.email %>
+          </p>
+        </div>
+        <div class="footer-col">
+          <p>
+            <span class="bold">Organisationsnr</span><br />
+            <%= user.registrationNumber %><br />
+            Godkänd för F-skatt
+          </p>
+        </div> -->
       </footer>
     </div>
   </body>
