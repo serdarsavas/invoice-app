@@ -1,8 +1,8 @@
-const bcrypt = require('bcryptjs');
-const { validationResult } = require('express-validator/check');
+const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator/check");
 
-const pdfHandler = require('../pdf/pdf');
-const Invoice = require('../models/invoice');
+const pdfHandler = require("../pdf/pdf");
+const Invoice = require("../models/invoice");
 
 //Helpers
 
@@ -14,6 +14,7 @@ const getInvoiceRows = req => {
     let price = Number(req.body.price[i]);
     rows.push({
       description: req.body.description[i],
+      date: req.body.date[i],
       quantity: quantity,
       unit: req.body.unit[i],
       price: price,
@@ -90,9 +91,9 @@ const getUniqueRecipients = async user => {
 exports.getAddInvoice = async (req, res, next) => {
   try {
     const recipients = await getUniqueRecipients(req.user);
-    res.render('admin/add-invoice', {
-      pageTitle: 'Ny faktura',
-      path: '/add',
+    res.render("admin/add-invoice", {
+      pageTitle: "Ny faktura",
+      path: "/add",
       recipients,
       invoiceId: null,
       inputData: null,
@@ -120,9 +121,9 @@ exports.postSaveInvoice = async (req, res, next) => {
   try {
     const recipients = await getUniqueRecipients(req.user);
     if (!errors.isEmpty()) {
-      return res.render('admin/add-invoice', {
-        pageTitle: 'Ny faktura',
-        path: '/add',
+      return res.render("admin/add-invoice", {
+        pageTitle: "Ny faktura",
+        path: "/add",
         recipients,
         invoiceId: null,
         inputData: req.body,
@@ -133,14 +134,14 @@ exports.postSaveInvoice = async (req, res, next) => {
 
     const invoice = await createInvoice(req);
 
-    res.render('admin/add-invoice', {
-      pageTitle: 'Ny faktura',
-      path: '/add',
+    res.render("admin/add-invoice", {
+      pageTitle: "Ny faktura",
+      path: "/add",
       recipients,
       invoiceId: invoice._id.toString(),
       inputData: req.body,
       validationErrors: [],
-      successMessage: 'Fakturan är sparad!'
+      successMessage: "Fakturan är sparad!"
     });
   } catch (e) {
     next(new Error(e));
@@ -151,9 +152,9 @@ exports.postEmailInvoice = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('admin/add-invoice', {
-      path: '/add',
-      pageTitle: 'Ny faktura',
+    return res.status(422).render("admin/add-invoice", {
+      path: "/add",
+      pageTitle: "Ny faktura",
       recipients: [],
       invoiceId: req.body.invoiceId,
       inputData: req.body,
@@ -187,7 +188,7 @@ exports.postEmailInvoice = async (req, res, next) => {
     }
     await pdfHandler.convertInvoiceToPdf(invoice, req.user);
     await pdfHandler.emailPdf(invoice, req.user);
-    return res.redirect('/admin/invoices');
+    return res.redirect("/admin/invoices");
   } catch (e) {
     next(new Error(e));
   }
@@ -200,9 +201,9 @@ exports.getEditInvoice = async (req, res, next) => {
     if (!invoice) {
       throw new Error();
     }
-    res.render('admin/edit-invoice', {
-      pageTitle: 'Redigera faktura',
-      path: '/invoices',
+    res.render("admin/edit-invoice", {
+      pageTitle: "Redigera faktura",
+      path: "/invoices",
       invoice,
       inputData: null,
       validationErrors: [],
@@ -219,9 +220,9 @@ exports.postEditInvoice = async (req, res, next) => {
   try {
     const invoice = await Invoice.findById(req.body.invoiceId);
     if (!errors.isEmpty()) {
-      return res.render('admin/edit-invoice', {
-        pageTitle: 'Redigera faktura',
-        path: '/invoices',
+      return res.render("admin/edit-invoice", {
+        pageTitle: "Redigera faktura",
+        path: "/invoices",
         invoice: invoice,
         inputData: req.body,
         validationErrors: errors.array({ onlyFirstError: true }),
@@ -243,13 +244,13 @@ exports.postEditInvoice = async (req, res, next) => {
     invoice.totalAfterVAT = total * (invoice.VAT + 1);
     await invoice.save();
 
-    res.render('admin/edit-invoice', {
-      pageTitle: 'Redigera faktura',
-      path: '/invoices',
+    res.render("admin/edit-invoice", {
+      pageTitle: "Redigera faktura",
+      path: "/invoices",
       invoice,
       inputData: null,
       validationErrors: [],
-      successMessage: 'Ändringarna är sparade!'
+      successMessage: "Ändringarna är sparade!"
     });
   } catch (e) {
     next(new Error(e));
@@ -260,18 +261,18 @@ exports.getInvoiceFolders = async (req, res, next) => {
   try {
     const recipients = await getUniqueRecipients(req.user);
     if (!recipients.length > 0) {
-      return res.render('admin/invoice-folders', {
-        path: '/invoices',
-        pageTitle: 'Fakturor',
+      return res.render("admin/invoice-folders", {
+        path: "/invoices",
+        pageTitle: "Fakturor",
         recipients: recipients
       });
     }
     recipients.sort((a, b) =>
       a.authority.toLowerCase() > b.authority.toLowerCase() ? 1 : -1
     );
-    res.render('admin/invoice-folders', {
-      path: '/invoices',
-      pageTitle: 'Fakturor',
+    res.render("admin/invoice-folders", {
+      path: "/invoices",
+      pageTitle: "Fakturor",
       recipients: recipients
     });
   } catch (e) {
@@ -285,12 +286,12 @@ exports.getInvoices = async (req, res, next) => {
   try {
     const documents = await Invoice.find({
       owner: req.user,
-      'recipient.authority': folderName
+      "recipient.authority": folderName
     });
     const invoices = [...documents].reverse();
-    res.render('admin/invoices', {
-      path: '',
-      pageTitle: 'Fakturor',
+    res.render("admin/invoices", {
+      path: "",
+      pageTitle: "Fakturor",
       invoices
     });
   } catch (e) {
@@ -334,9 +335,9 @@ exports.postDeleteInvoice = async (req, res, next) => {
 };
 
 exports.getEditProfile = (req, res) => {
-  res.render('admin/edit-profile', {
-    pageTitle: 'Mina uppgifter',
-    path: '/profile',
+  res.render("admin/edit-profile", {
+    pageTitle: "Mina uppgifter",
+    path: "/profile",
     user: req.user,
     validationErrors: [],
     inputData: null,
@@ -348,9 +349,9 @@ exports.postEditProfile = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('admin/edit-profile', {
-      pageTitle: 'Mina uppgifter',
-      path: '/profile',
+    return res.status(422).render("admin/edit-profile", {
+      pageTitle: "Mina uppgifter",
+      path: "/profile",
       user: req.user,
       validationErrors: errors.array({ onlyFirstError: true }),
       inputData: req.body,
@@ -382,13 +383,13 @@ exports.postEditProfile = async (req, res, next) => {
     await user.save();
 
     req.user = user;
-    res.render('admin/edit-profile', {
-      pageTitle: 'Mina uppgifter',
-      path: '/profile',
+    res.render("admin/edit-profile", {
+      pageTitle: "Mina uppgifter",
+      path: "/profile",
       user: req.user,
       validationErrors: [],
       inputData: null,
-      successMessage: 'Dina uppgifter är nu sparade!'
+      successMessage: "Dina uppgifter är nu sparade!"
     });
   } catch (e) {
     next(new Error(e));

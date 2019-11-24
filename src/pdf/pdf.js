@@ -49,16 +49,16 @@ const emailPdf = async (invoice, user) => {
     sendPdfMail({
       to: user.email,
       from: {
-        email: "serdar.savas@botkyrka.se",
+        email: "ssavas@kth.se",
         name: "Serdar Savas"
       },
-      subject: `Faktura nr ${invoice.invoiceNumber} från Fakturameistern!`,
+      subject: `Faktura nr ${invoice.invoiceNumber}`,
       content: [
         {
           type: "text/html",
           value: `<p>Hej ${
             user.name.split(" ")[0]
-          }! Bifogad finns fakturan du nyss skapade i Fakturameistern.</p>`
+          }! Bifogad finns faktura med nummer ${invoice.invoiceNumber}.</p>`
         }
       ],
       attachments: [

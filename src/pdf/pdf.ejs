@@ -13,7 +13,6 @@
       html,
       body {
         margin: 0;
-        /* padding: 20mm; */
       }
 
       .wrapper {
@@ -41,15 +40,12 @@
       }
       .header-col2 {
         width: 35%;
-        /* margin-top: 10px; */
       }
       .header-col3 {
         width: 35%;
-        /* margin-top: 20px; */
       }
 
       .author {
-        /* margin-top: 70px; */
         font-weight: bold;
         font-size: 16px;
       }
@@ -82,7 +78,7 @@
 
       .invoice-footer {
         margin-top: 100px;
-        padding-right: 30px;
+        text-align: right;
         border-top: 1px solid black;
         justify-content: flex-end;
         page-break-inside: avoid;
@@ -96,14 +92,6 @@
         font-size: 10px;
         flex-wrap: wrap;
         justify-content: space-around;
-        /* margin-top: 80%; */
-        /* position: absolute;
-        bottom: 20px;
-        right: 5%; */
-      }
-
-      .footer-col {
-        padding: 0 15px;
       }
 
       .bold {
@@ -189,6 +177,7 @@
           <thead>
             <tr>
               <th>Beskrivning</th>
+              <th>Datum</th>
               <th>Antal</th>
               <th>Enhet</th>
               <th class="right-align">à pris</th>
@@ -199,10 +188,11 @@
             <% invoice.rows.forEach(row => { %>
             <tr>
               <td><%= row.description %></td>
+              <td><%= row.date && row.date %></td>
               <td><%= row.quantity %></td>
               <td><%= row.unit %></td>
               <td class="right-align"><%= row.price %></td>
-              <td class="right-align"><%= row.amount %></td>
+              <td class="right-align"><%= row.amount.toFixed(2) %></td>
             </tr>
             <% }) %>
           </tbody>
@@ -229,39 +219,7 @@
         </div>
       </main>
 
-      <!-- <footer class="flex footer">
-        <div class="footer-col">
-          <p>
-            <span class="bold">Adress</span><br />
-            <%= user.street %><br />
-            <%= user.zip %> <%= user.city %>
-          </p>
-        </div>
-        <div class="footer-col">
-          <p>
-            <span class="bold">Bankgiro:</span><br />
-            <%= user.bankgiro %>
-          </p>
-        </div>
-        <div class="footer-col">
-          <p>
-            <span class="bold">Telefon</span><br />
-            <%= user.phone %>
-          </p>
-        </div>
-        <div class="footer-col">
-          <p>
-            <span class="bold">Epost</span><br />
-            <%= user.email %>
-          </p>
-        </div>
-        <div class="footer-col">
-          <p>
-            <span class="bold">Organisationsnr</span><br />
-            <%= user.registrationNumber %><br />
-            Godkänd för F-skatt
-          </p>
-        </div> -->
+      
       </footer>
     </div>
   </body>

@@ -102,6 +102,12 @@
                 value="<%= inputData.description[i] %>" 
                 required/>
             </div>
+            <% if (inputData.date) { %>
+            <div class="form-control">
+              <label>Datum</label>
+              <input type="text" name="date[]" value="<%= inputData.date[i] %>" />
+            </div>
+            <% } %>
             <div class="form-control">
               <label">Antal</label>
               <input
@@ -146,6 +152,10 @@
                 id="description"
                 value="<%= row.description ? row.description : '' %>" 
                 required/>
+            </div>
+            <div class="form-control">
+              <label>Datum</label>
+              <input type="text" name="date[]" value="<%= row.date ? row.date : '' %>" />
             </div>
             <div class="form-control">
               <label for="quantity">Antal</label>

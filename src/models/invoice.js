@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -42,6 +42,10 @@ const invoiceSchema = new Schema(
           required: true,
           trim: true
         },
+        date: {
+          type: String,
+          trim: true
+        },
         quantity: {
           type: Number,
           required: true,
@@ -70,7 +74,7 @@ const invoiceSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User'
+      ref: "User"
     }
   },
   {
@@ -78,4 +82,4 @@ const invoiceSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model('Invoice', invoiceSchema);
+module.exports = mongoose.model("Invoice", invoiceSchema);

@@ -123,6 +123,13 @@
                     value="<%= inputData.description[i] %>" 
                     required/>
                 </div>
+                <% if (inputData.date) { %>
+                <div class="form-control">
+                  <label>Datum</label>
+                  <input type="text"
+                    name="date[]" value="<%= inputData.date[i] && inputData.date[i] %>" />
+                </div>
+                <% } %>
                 <div class="form-control">
                   <label>Antal</label>
                   <input
@@ -162,6 +169,10 @@
                   type="text" 
                   name="description[]" 
                   required/>
+              </div>
+              <div class="form-control">
+                <label>Datum</label>
+                <input type="text" name="date[]>" />
               </div>
               <div class="form-control">
                 <label>Antal </label>
