@@ -22,7 +22,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-validator": "^5.3.1",
-    "mongoose": "^5.4.15",
+    "mongoose": "^5.7.12",
     "puppeteer": "^1.13.0"
   },
   "devDependencies": {
