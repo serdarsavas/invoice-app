@@ -64,7 +64,6 @@
       th,
       td {
         padding: 15px;
-        text-align: left;
         vertical-align: top;
       }
 
@@ -72,8 +71,16 @@
         white-space: nowrap;
       }
 
+      .left-align {
+        text-align: left;
+      }
+
       .right-align {
         text-align: right;
+      }
+
+      .center-align {
+        text-align: center;
       }
 
       .invoice-footer {
@@ -176,22 +183,24 @@
         <table>
           <thead>
             <tr>
-              <th>Beskrivning</th>
-              <th>Datum</th>
-              <th>Antal</th>
-              <th>Enhet</th>
+              <th class="left-align">Beskrivning</th>
+              <th class="center-align">Datum</th>
+              <th class="center-align">Antal</th>
+              <th class="center-align">Enhet</th>
               <th class="right-align">à pris</th>
-              <th class="right-align">Belopp (SEK)</th>
+              <th class="right-align">Moms (25%)</th>
+              <th class="right-align">Belopp</th>
             </tr>
           </thead>
           <tbody>
             <% invoice.rows.forEach(row => { %>
             <tr>
-              <td><%= row.description %></td>
-              <td><%= row.date && row.date %></td>
-              <td><%= row.quantity %></td>
-              <td><%= row.unit %></td>
+              <td class="left-align"><%= row.description %></td>
+              <td class="center-align"><%= row.date && row.date %></td>
+              <td class="center-align"><%= row.quantity %></td>
+              <td class="center-align"><%= row.unit %></td>
               <td class="right-align"><%= row.price %></td>
+              <td class="right-align"><%= row.VAT.toFixed(2) %></td>
               <td class="right-align"><%= row.amount.toFixed(2) %></td>
             </tr>
             <% }) %>
@@ -201,7 +210,7 @@
         <div class="flex invoice-footer">
           <div class="left">
             <p>Belopp före moms</p>
-            <p>Total moms (<%= invoice.VAT * 100 %>%)</p>
+            <p>Total moms</p>
             <p class="bold">Att betala</p>
           </div>
           <div class="right">

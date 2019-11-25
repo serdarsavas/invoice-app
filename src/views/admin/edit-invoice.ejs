@@ -92,7 +92,15 @@
         <h3 class="row-header">(Rader på fakturan)</h2>
       <% if (inputData) { %>
         <% for (let i = 0; i < inputData.description.length; i++) { %>
-        <div class="row">
+          <div class="row">
+            <select class="VAT-select" name="hasVAT">
+              <option value="VAT" <% if(inputData.hasVAT[i] === "VAT") { %> selected <% } %>>
+                Moms &#x2714
+              </option>
+              <option value="noVAT" <% if(inputData.hasVAT[i] === "noVAT") { %> selected <% } %>>
+                Ingen moms &#x2714
+              </option>
+            </select>
             <div class="form-control">
               <label>Beskrivning</label>
               <input
@@ -143,6 +151,14 @@
       <% } else { %>
         <% invoice.rows.forEach(row => { %>
           <div class="row">
+            <select class="VAT-select" name="hasVAT">
+              <option value="VAT" <% if(row.hasVAT) { %> selected <% } %>>
+                Moms &#x2714
+              </option>
+              <option value="noVAT" <% if(!row.hasVAT) { %> selected <% } %>>
+                Ingen moms &#x2714
+              </option>
+            </select>
             <div class="form-control">
               <label for="description">Beskrivning</label>
               <input 

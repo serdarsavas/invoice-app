@@ -9,32 +9,42 @@ const Invoice = require("../models/invoice");
 const getInvoiceRows = req => {
   const numRows = req.body.description.length;
   let rows = [];
+
   for (let i = 0; i < numRows; i++) {
-    let quantity = Number(req.body.quantity[i]);
-    let price = Number(req.body.price[i]);
+    const quantity = Number(req.body.quantity[i]);
+    const price = Number(req.body.price[i]);
+    const hasVAT = req.body.hasVAT[i] === "VAT";
+    console.log(hasVAT);
+
     rows.push({
       description: req.body.description[i],
       date: req.body.date[i],
       quantity: quantity,
       unit: req.body.unit[i],
       price: price,
-      amount: Math.ceil(quantity) * price
+      amount: Math.ceil(quantity) * price,
+      hasVAT,
+      VAT: hasVAT ? Math.ceil(quantity) * price * 0.25 : 0
     });
   }
   return rows;
 };
 
-const getTotal = rows => {
-  let total = 0;
-  rows.forEach(row => {
-    total += Number(row.amount);
-  });
-  return total;
+const getTotalBeforeVAT = rows => {
+  const total = rows.reduce((sum, row) => {
+    return sum + Number(row.amount);
+  }, 0);
+  return total.toFixed(2);
+};
+const getTotalAfterVAT = rows => {
+  const total = rows.reduce((sum, row) => {
+    return sum + Number(row.amount) + Number(row.VAT);
+  }, 0);
+  return total.toFixed(2);
 };
 
 const createInvoice = async req => {
   const rows = getInvoiceRows(req);
-  const total = getTotal(rows);
   const invoice = new Invoice({
     invoiceNumber: req.body.invoiceNumber,
     assignmentNumber: req.body.assignmentNumber,
@@ -46,9 +56,8 @@ const createInvoice = async req => {
       city: req.body.city
     },
     rows: rows,
-    totalBeforeVAT: total.toFixed(2),
-    VAT: 0.25,
-    totalAfterVAT: (total * 1.25).toFixed(2),
+    totalBeforeVAT: getTotalBeforeVAT(rows),
+    totalAfterVAT: getTotalAfterVAT(rows),
     owner: req.user
   });
   try {
@@ -118,6 +127,10 @@ exports.getRecipientData = async (req, res, next) => {
 exports.postSaveInvoice = async (req, res, next) => {
   const errors = validationResult(req);
 
+  // req.body.hasVAT.forEach(item => {
+  //   console.log(item.value);
+  // });
+
   try {
     const recipients = await getUniqueRecipients(req.user);
     if (!errors.isEmpty()) {
@@ -169,7 +182,6 @@ exports.postEmailInvoice = async (req, res, next) => {
       invoice = await createInvoice(req);
     } else {
       const rows = getInvoiceRows(req);
-      const total = getTotal(rows);
       invoice = await Invoice.findByIdAndUpdate(invoiceId, {
         invoiceNumber: req.body.invoiceNumber,
         assignmentNumber: req.body.assignmentNumber,
@@ -181,8 +193,8 @@ exports.postEmailInvoice = async (req, res, next) => {
           city: req.body.city
         },
         rows: rows,
-        totalBeforeVAT: total,
-        totalAfterVAT: total * 1.25
+        totalBeforeVAT: getTotalBeforeVAT(rows),
+        totalAfterVAT: getTotalAfterVAT(rows)
       });
       await invoice.save();
     }
@@ -230,7 +242,6 @@ exports.postEditInvoice = async (req, res, next) => {
       });
     }
     const rows = getInvoiceRows(req);
-    const total = getTotal(rows);
 
     invoice.invoiceNumber = req.body.invoiceNumber;
     invoice.assignmentNumber = req.body.assignmentNumber;
@@ -240,8 +251,9 @@ exports.postEditInvoice = async (req, res, next) => {
     invoice.recipient.zip = req.body.zip;
     invoice.recipient.city = req.body.city;
     invoice.rows = rows;
-    invoice.totalBeforeVAT = total;
-    invoice.totalAfterVAT = total * (invoice.VAT + 1);
+    invoice.totalBeforeVAT = getTotalBeforeVAT(rows);
+    invoice.totalAfterVAT = getTotalAfterVAT(rows);
+
     await invoice.save();
 
     res.render("admin/edit-invoice", {
@@ -252,6 +264,7 @@ exports.postEditInvoice = async (req, res, next) => {
       validationErrors: [],
       successMessage: "Ändringarna är sparade!"
     });
+    console.log(invoice);
   } catch (e) {
     next(new Error(e));
   }

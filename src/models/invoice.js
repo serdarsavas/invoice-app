@@ -65,11 +65,16 @@ const invoiceSchema = new Schema(
           type: Number,
           required: true,
           trim: true
+        },
+        hasVAT: Boolean,
+        VAT: {
+          type: Number,
+          required: true,
+          trim: true
         }
       }
     ],
     totalBeforeVAT: Number,
-    VAT: Number,
     totalAfterVAT: Number,
     owner: {
       type: Schema.Types.ObjectId,

@@ -1,9 +1,10 @@
 const html = `
-    <div class="form-control"><label>Beskrivning</label><input type="text" name="description[]" required/></div>
-    <div class="form-control"><label>Datum</label><input type="text" name="date[]" /></div>
-    <div class="form-control"><label>Antal</label><input type="number" name="quantity[]" step=".01" required/></div>
-    <div class="form-control"><label>Enhet</label><input type="text" name="unit[]" required/></div>
-    <div class="form-control"><label>Pris</label><input type="number" name="price[]" step=".01" required/></div>
+  <select class="VAT-select" name="hasVAT"><option value="VAT" selected>Moms &#x2714</option><option value="noVAT">Ingen moms &#x2714</option></select>
+  <div class="form-control"><label>Beskrivning</label><input type="text" name="description[]" required/></div>
+  <div class="form-control"><label>Datum</label><input type="text" name="date[]" /></div>
+  <div class="form-control"><label>Antal</label><input type="number" name="quantity[]" step=".01" required/></div>
+  <div class="form-control"><label>Enhet</label><input type="text" name="unit[]" required/></div>
+  <div class="form-control"><label>Pris</label><input type="number" name="price[]" step=".01" required/></div>
   `;
 const rows = document.querySelector("#rows");
 
