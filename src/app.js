@@ -81,7 +81,8 @@ app.use((error, req, res, next) => {
 mongoose
   .set("useFindAndModify", false)
   .connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
   })
   .then(() => {
     app.listen(port, () => {

@@ -2,6 +2,7 @@ const path = require("path");
 const { promisify } = require("util");
 const { readFile, unlink } = require("fs");
 
+const Intl = require("intl");
 const ejs = require("ejs");
 const puppeteer = require("puppeteer");
 const { sendPdfMail } = require("../email/email");
@@ -78,6 +79,14 @@ const emailPdf = async (invoice, user) => {
   }
 };
 
+//Utility function to use in pdf-template
+const format = num => {
+  return new Intl.NumberFormat("sv-SE", {
+    style: "currency",
+    currency: "SEK"
+  }).format(num);
+};
+
 const convertInvoiceToPdf = async (invoice, user) => {
   try {
     const template = await _readFile(__dirname + "/pdf.ejs", "utf-8");
@@ -88,7 +97,8 @@ const convertInvoiceToPdf = async (invoice, user) => {
       template,
       {
         invoice,
-        user
+        user,
+        format
       },
       true
     );
@@ -107,7 +117,7 @@ const convertInvoiceToPdf = async (invoice, user) => {
       width: "210mm",
       headerTemplate: '<span class="pageNumber"></span>',
       footerTemplate: `
-        <div style="border-top: 1px solid rgb(64, 64, 64); margin: 0 auto; display: flex; justify-content: space-around; font-size: 9px; font-family: 'Helvetica'; width: 90%; ">
+        <div style="border-top: 1px solid rgb(64, 64, 64); padding: 1rem; margin: 20px auto; display: flex; justify-content: space-around; font-size: 9px; font-family: 'Helvetica'; width: 90%; ">
           <p>
             <span style="font-weight: bold;">Adress</span><br />
             ${user.street} <br/>
@@ -130,9 +140,10 @@ const convertInvoiceToPdf = async (invoice, user) => {
             ${user.registrationNumber}<br />
             Godkänd för F-skatt
           </p>
-        </div>`,
+        </div>
+        `,
       margin: {
-        bottom: "200px",
+        bottom: "150px",
         top: "50px",
         right: "20px",
         left: "20px"
