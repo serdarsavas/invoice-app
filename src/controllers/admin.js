@@ -9,24 +9,43 @@ const Invoice = require("../models/invoice");
 const getInvoiceRows = req => {
   const numRows = req.body.description.length;
   let rows = [];
-  console.log(req.body);
 
-  for (let i = 0; i < numRows; i++) {
-    const quantity = Number(req.body.quantity[i]);
-    const price = Number(req.body.price[i]);
-    const hasVAT = req.body.hasVAT[i] === "VAT";
+  if (numRows > 1) {
+    for (let i = 0; i < numRows; i++) {
+      const quantity = Number(req.body.quantity[i]);
+      const price = Number(req.body.price[i]);
+      const hasVAT = req.body.hasVAT[i] === "VAT";
 
-    rows.push({
-      description: req.body.description[i],
-      date: req.body.date[i],
-      quantity: quantity,
-      unit: req.body.unit[i],
-      price: price,
-      amount: Math.ceil(quantity) * price,
-      hasVAT,
-      VAT: hasVAT ? Math.ceil(quantity) * price * 0.25 : 0
-    });
+      rows.push({
+        description: req.body.description[i],
+        date: req.body.date[i],
+        quantity: quantity,
+        unit: req.body.unit[i],
+        price: price,
+        amount: Math.ceil(quantity) * price,
+        hasVAT,
+        VAT: hasVAT ? Math.ceil(quantity) * price * 0.25 : 0
+      });
+    }
+
+    return rows;
   }
+
+  const quantity = Number(req.body.quantity[0]);
+  const price = Number(req.body.price[0]);
+  const hasVAT = req.body.hasVAT === "VAT";
+
+  rows.push({
+    description: req.body.description[0],
+    date: req.body.date[0],
+    quantity: quantity,
+    unit: req.body.unit[0],
+    price: price,
+    amount: Math.ceil(quantity) * price,
+    hasVAT,
+    VAT: hasVAT ? Math.ceil(quantity) * price * 0.25 : 0
+  });
+
   return rows;
 };
 
@@ -126,10 +145,6 @@ exports.getRecipientData = async (req, res, next) => {
 
 exports.postSaveInvoice = async (req, res, next) => {
   const errors = validationResult(req);
-
-  // req.body.hasVAT.forEach(item => {
-  //   console.log(item.value);
-  // });
 
   try {
     const recipients = await getUniqueRecipients(req.user);
@@ -264,7 +279,6 @@ exports.postEditInvoice = async (req, res, next) => {
       validationErrors: [],
       successMessage: "Ändringarna är sparade!"
     });
-    console.log(invoice);
   } catch (e) {
     next(new Error(e));
   }
