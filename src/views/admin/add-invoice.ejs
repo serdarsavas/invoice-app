@@ -72,7 +72,7 @@
           class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : '' %>"
           type="text" 
           name="zip" 
-          id="zip" 
+          id="zip"
           value="<%= inputData ? inputData.zip : '' %>" 
           required/>
       </div>
@@ -94,7 +94,6 @@
           class="<%= validationErrors.find(e => e.param === 'invoiceNumber') ? 'invalid' : ''%>"
           type="number" 
           name="invoiceNumber" 
-          id="invoice-number"
           value="<%= inputData ? inputData.invoiceNumber : '' %>" 
           required/>
       </div>
@@ -104,7 +103,6 @@
           class="<%= validationErrors.find(e => e.param === 'assignmentNumber') ? 'invalid' : ''%>"
           type="text" 
           name="assignmentNumber" 
-          id="assignment-number"
           value="<%= inputData ? inputData.assignmentNumber : '' %>" 
           required/>
       </div>
@@ -180,7 +178,8 @@
                   class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>" 
                   type="text" 
                   name="description[]" 
-                  required/>
+                  required
+                />
               </div>
               <div class="form-control">
                 <label>Datum</label>
@@ -193,7 +192,8 @@
                   type="number" 
                   name="quantity[]" 
                   step=".01" 
-                  required/>
+                  required
+                />
               </div>
               <div class="form-control">
                 <label>Enhet</label>
@@ -201,7 +201,8 @@
                   class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                   type="text" 
                   name="unit[]" 
-                  required/>
+                  required
+                />
               </div>
               <div class="form-control">
                 <label>Pris</label>
@@ -225,8 +226,8 @@
           <i class="fas fa-object-ungroup"><span>Kopiera rad</span></i>
         </div>
         <div class="form-actions">
-          <button formaction="/admin/save-invoice" class="btn" type="submit" id="submitBtn">Spara faktura</button>
-          <button formaction="/admin/add-invoice" class="btn" type="submit" id="submitBtn">Spara och skicka pdf till min epost</button>
+          <button formaction="/admin/save-invoice" class="btn" type="submit">Spara faktura</button>
+          <button formaction="/admin/add-invoice" class="btn" type="submit">Spara och skicka pdf till min epost</button>
           <a class="btn" href="/admin/invoices">Avbryt</a>
           <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
           <input type="hidden" name="invoiceId" value="<%= invoiceId %>"> 

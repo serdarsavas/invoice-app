@@ -9,12 +9,12 @@ const Invoice = require("../models/invoice");
 const getInvoiceRows = req => {
   const numRows = req.body.description.length;
   let rows = [];
+  console.log(req.body);
 
   for (let i = 0; i < numRows; i++) {
     const quantity = Number(req.body.quantity[i]);
     const price = Number(req.body.price[i]);
     const hasVAT = req.body.hasVAT[i] === "VAT";
-    console.log(hasVAT);
 
     rows.push({
       description: req.body.description[i],

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node src/app.js",
-    "dev": "env-cmd ./config/dev.env nodemon src/app.js"
+    "dev": "env-cmd ./config/dev.env nodemon src/app.js -e js,ejs"
   },
   "author": "",
   "license": "ISC",

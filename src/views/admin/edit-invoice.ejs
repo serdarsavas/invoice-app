@@ -21,8 +21,8 @@
         <input
           class="<%= validationErrors.find(e => e.param === 'authority') ? 'invalid' : ''%>" 
           type="text" 
-          name="authority" 
-          id="authority"
+          name="authority"
+          id="authority" 
           value="<%= inputData ? inputData.authority : invoice.recipient.authority %>" 
           required/>
       </div>
@@ -31,8 +31,8 @@
         <input
           class="<%= validationErrors.find(e => e.param === 'refPerson') ? 'invalid' : ''%>" 
           type="text" 
-          name="refPerson" 
           id="ref-person"
+          name="refPerson" 
           value="<%= inputData ? inputData.refPerson : invoice.recipient.refPerson %>"/>
       </div>
       <div class="form-control">
@@ -51,7 +51,7 @@
           class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : ''%>"
           type="text" 
           name="zip" 
-          id="zip" 
+          id="zip"
           value="<%= inputData ? inputData.zip : invoice.recipient.zip %>" 
           required/>
       </div>
@@ -63,7 +63,8 @@
           name="city" 
           id="city"
           value="<%= inputData ? inputData.city :invoice.recipient.city %>" 
-          required/>
+          required
+          />
       </div>
       
       <h2 class="invoice-header">Kostnadsuppgifter</h2>
@@ -73,7 +74,6 @@
           class="<%= validationErrors.find(e => e.param === 'invoiceNumber') ? 'invalid' : ''%>" 
           type="number" 
           name="invoiceNumber" 
-          id="invoice-number"
           value="<%= inputData ? inputData.invoiceNumber : invoice.invoiceNumber %>" 
           required/>
       </div>
@@ -83,7 +83,6 @@
           class="<%= validationErrors.find(e => e.param === 'assignmentNumber') ? 'invalid' : ''%>" 
           type="text" 
           name="assignmentNumber" 
-          id="assignment-number" 
           value="<%= inputData ? inputData.assignmentNumber : invoice.assignmentNumber %>" 
           required/>
       </div> 
@@ -131,7 +130,6 @@
                 class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                 type="text" 
                 name="unit[]" 
-                id="unit"
                 value="<%= inputData.unit[i] ? inputData.unit[i] : '' %>" 
                 required/>
             </div>
@@ -141,7 +139,6 @@
                 class="<%= validationErrors.find(e => e.param === 'price.') ? 'invalid' : ''%>"
                 type="number" 
                 name="price[]" 
-                id="price"
                 value="<%= inputData.price[i] ? inputData.price[i] : '' %>"
                 step=".01" 
                 required/>
@@ -165,7 +162,6 @@
                 class="<%= validationErrors.find(e => e.param === 'description.') ? 'invalid' : ''%>"
                 type="text" 
                 name="description[]" 
-                id="description"
                 value="<%= row.description ? row.description : '' %>" 
                 required/>
             </div>
@@ -179,7 +175,6 @@
                 class="<%= validationErrors.find(e => e.param === 'quantity.') ? 'invalid' : ''%>" 
                 type="number" 
                 name="quantity[]" 
-                id="quantity"
                 value="<%= row.quantity ? row.quantity : '' %>" 
                 required/>
             </div>
@@ -189,7 +184,6 @@
                 class="<%= validationErrors.find(e => e.param === 'unit.') ? 'invalid' : ''%>" 
                 type="text" 
                 name="unit[]" 
-                id="unit"
                 value="<%= row.unit ? row.unit : '' %>" 
                 required/>
             </div>
@@ -199,7 +193,6 @@
                 class="<%= validationErrors.find(e => e.param === 'price.') ? 'invalid' : ''%>"
                 type="number" 
                 name="price[]" 
-                id="price"
                 value="<%= row.price ? row.price : '' %>"
                 step=".01" 
                 required/>
