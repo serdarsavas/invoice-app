@@ -78,6 +78,16 @@
           required/>
       </div>
       <div class="form-control">
+        <label for="invoice-date">Fakturadatum</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'invoiceDate') ? 'invalid' : ''%>" 
+          type="date"
+          id="invoice-date"
+          name="invoiceDate" 
+          value="<%= inputData ? inputData.invoiceDate : '' %>" 
+          required />
+      </div>
+      <div class="form-control">
         <label for="assignment-number">Uppdragsnummer</label>
         <input
           class="<%= validationErrors.find(e => e.param === 'assignmentNumber') ? 'invalid' : ''%>" 
@@ -112,7 +122,7 @@
             <% if (inputData.date) { %>
             <div class="form-control">
               <label>Datum</label>
-              <input type="text" name="date[]" value="<%= inputData.date[i] %>" />
+              <input type="date" name="date[]" value="<%= inputData.date[i] %>" />
             </div>
             <% } %>
             <div class="form-control">
@@ -167,7 +177,7 @@
             </div>
             <div class="form-control">
               <label>Datum</label>
-              <input type="text" name="date[]" value="<%= row.date ? row.date : '' %>" />
+              <input type="date" name="date[]" value="<%= row.date ? row.date : '' %>" />
             </div>
             <div class="form-control">
               <label for="quantity">Antal</label>

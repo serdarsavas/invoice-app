@@ -168,7 +168,9 @@
         <div class="header-col3">
           <p class="date">
             <span class="bold">Fakturadatum:</span>
-            <%= invoice.updatedAt.toISOString().substring(0, 10) %>
+            <%= invoice.invoiceDate ?
+            invoice.invoiceDate.toISOString().substring(0, 10) :
+            invoice.updatedAt.toISOString().substring(0, 10) %>
           </p>
           <p>
             <span class="bold">Uppdragsnummer:</span>
@@ -196,11 +198,11 @@
           <thead>
             <tr>
               <th width="400" class="left-align">Specifikation</th>
-              <th width="120" class="center-align">Datum</th>
+              <th width="170" class="center-align">Datum</th>
               <th width="50" class="center-align">Antal</th>
               <th width="50" class="center-align">Enhet</th>
               <th width="150" class="center-align">à pris</th>
-              <th width="200" class="right-align" style="padding-right: 2rem">
+              <th width="200" class="right-align" style="padding-right: 2rem;">
                 Belopp
               </th>
             </tr>
@@ -210,7 +212,7 @@
             <tr>
               <td width="400" class="left-align"><%= row.description %></td>
               <td width="120" class="center-align">
-                <%= row.date && row.date %>
+                <%= row.date && row.date.toISOString().substring(0, 10) %>
               </td>
               <td width="50" class="center-align"><%= row.quantity %></td>
               <td width="50" class="center-align"><%= row.unit %></td>

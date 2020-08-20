@@ -98,13 +98,23 @@
           required/>
       </div>
       <div class="form-control">
+        <label for="invoice-date">Fakturadatum</label>
+        <input 
+          class="<%= validationErrors.find(e => e.param === 'invoiceDate') ? 'invalid' : ''%>" 
+          type="date"
+          name="invoiceDate" 
+          id="invoice-date"
+          value="<%= inputData ? inputData.invoiceDate : '' %>" 
+          required />
+      </div>
+      <div class="form-control">
         <label for="assignment-number">Uppdragsnummer</label>
         <input 
           class="<%= validationErrors.find(e => e.param === 'assignmentNumber') ? 'invalid' : ''%>"
           type="text" 
           name="assignmentNumber" 
           value="<%= inputData ? inputData.assignmentNumber : '' %>" 
-          required/>
+          />
       </div>
 
       <section class="invoice-rows" id="rows">
@@ -132,8 +142,10 @@
                 <% if (inputData.date) { %>
                 <div class="form-control">
                   <label>Datum</label>
-                  <input type="text"
-                    name="date[]" value="<%= inputData.date[i] && inputData.date[i] %>" />
+                  <input 
+                    type="date"
+                    name="date[]" 
+                    value="<%= inputData.date[i] && inputData.date[i] %>" />
                 </div>
                 <% } %>
                 <div class="form-control">
@@ -183,7 +195,7 @@
               </div>
               <div class="form-control">
                 <label>Datum</label>
-                <input type="text" name="date[]>" />
+                <input type="date" name="date[]>" />
               </div>
               <div class="form-control">
                 <label>Antal </label>
