@@ -84,8 +84,9 @@
           type="date"
           id="invoice-date"
           name="invoiceDate" 
-          value="<%= inputData ? inputData.invoiceDate.toISOString().substring(0, 10) : invoice.invoiceDate.toISOString().substring(0, 10) %>" 
-          required />
+          value="<%= (inputData && inputData.invoiceDate) ? inputData.invoiceDate : invoice.invoiceDate.toISOString().substring(0, 10) %>" 
+          required 
+        />
       </div>
       <div class="form-control">
         <label for="assignment-number">Uppdragsnummer</label>
@@ -121,7 +122,7 @@
             </div>
             <div class="form-control">
               <label>Datum</label>
-              <input type="date" name="date[]" value="<%= inputData.date[i].toISOString().substring(0, 10) %>" />
+              <input type="date" name="date[]" value="<%= inputData.date[i] && inputData.date[i].toISOString().substring(0, 10) %>" />
             </div>
             <div class="form-control">
               <label">Antal</label>
