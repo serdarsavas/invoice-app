@@ -47,8 +47,7 @@ const invoiceSchema = new Schema(
           trim: true
         },
         date: {
-          type: Date,
-          required: true
+          type: Date
         },
         quantity: {
           type: Number,

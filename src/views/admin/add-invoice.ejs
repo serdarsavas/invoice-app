@@ -145,7 +145,7 @@
                   <input 
                     type="date"
                     name="date[]" 
-                    value="<%= inputData.date[i] && inputData.date[i] %>" />
+                    value="<%= inputData.date[i] && inputData.date[i].toISOString().substring(0, 10) %>" />
                 </div>
                 <% } %>
                 <div class="form-control">

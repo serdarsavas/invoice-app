@@ -84,7 +84,7 @@
           type="date"
           id="invoice-date"
           name="invoiceDate" 
-          value="<%= inputData ? inputData.invoiceDate : '' %>" 
+          value="<%= inputData ? inputData.invoiceDate.toISOString().substring(0, 10) : invoice.invoiceDate.toISOString().substring(0, 10) %>" 
           required />
       </div>
       <div class="form-control">
@@ -119,12 +119,10 @@
                 value="<%= inputData.description[i] %>" 
                 required/>
             </div>
-            <% if (inputData.date) { %>
             <div class="form-control">
               <label>Datum</label>
-              <input type="date" name="date[]" value="<%= inputData.date[i] %>" />
+              <input type="date" name="date[]" value="<%= inputData.date[i].toISOString().substring(0, 10) %>" />
             </div>
-            <% } %>
             <div class="form-control">
               <label">Antal</label>
               <input
@@ -177,7 +175,7 @@
             </div>
             <div class="form-control">
               <label>Datum</label>
-              <input type="date" name="date[]" value="<%= row.date ? row.date : '' %>" />
+              <input type="date" name="date[]" value="<%= row.date ? row.date.toISOString().substring(0, 10) : '' %>" />
             </div>
             <div class="form-control">
               <label for="quantity">Antal</label>
