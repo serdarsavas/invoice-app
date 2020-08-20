@@ -211,7 +211,7 @@
             <% invoice.rows.forEach(row => { %>
             <tr>
               <td width="400" class="left-align"><%= row.description %></td>
-              <td width="170" class="center-align">
+              <td width="220" class="center-align">
                 <%= row.date && row.date.toISOString().substring(0, 10) %>
               </td>
               <td width="50" class="center-align"><%= row.quantity %></td>
